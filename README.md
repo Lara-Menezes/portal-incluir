@@ -189,20 +189,21 @@ O diretório `src/` será utilizado para o código-fonte durante a disciplina de
 
 ## Tecnologias previstas
 
-O planejamento inicial considera:
+| Área | Tecnologia | Finalidade |
+|---|---|---|
+| Frontend | React | Desenvolvimento da interface web responsiva |
+| Backend | Java | Implementação das regras de negócio |
+| Framework backend | Spring Boot | Desenvolvimento da API e dos serviços |
+| Segurança | Spring Security | Autenticação e controle de acesso por perfil |
+| Banco de dados | PostgreSQL | Armazenamento e persistência dos dados |
+| Prototipação | Figma | Criação e validação das interfaces |
+| Controle de versão | Git e GitHub | Versionamento do código e da documentação |
+| Integração institucional | SUAP | Aproveitamento de informações institucionais |
+| Acessibilidade | VLibras | Recurso complementar de acessibilidade |
+| Notificações | Serviço de e-mail/SMTP | Envio de notificações do sistema |
+| Hospedagem | A definir | Implantação da aplicação e do banco de dados |
 
-- aplicação web responsiva;
-- arquitetura cliente-servidor em camadas;
-- backend em Python;
-- banco de dados PostgreSQL;
-- autenticação;
-- controle de acesso por perfil;
-- auditoria das operações;
-- prototipação no Figma.
-
-As decisões técnicas definitivas deverão ser justificadas nos registros de decisão arquitetural — ADRs.
-
----
+> As integrações com o SUAP e o VLibras e a plataforma de hospedagem ainda serão avaliadas tecnicamente.
 
 ## Segurança, privacidade e acessibilidade
 
