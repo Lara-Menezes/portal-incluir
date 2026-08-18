@@ -1,12 +1,12 @@
 # Entrevistas: Portal Incluir
 
-As entrevistas foram realizadas ao longo das etapas de levantamento, análise e refinamento de requisitos do projeto. Todas as reuniões ocorreram com a coordenadora da CNPQ, com o objetivo de compreender as necessidades do setor, identificar dificuldades do processo atual, validar requisitos funcionais e não funcionais, definir prioridades para o MVP e 
+As entrevistas foram realizadas ao longo das etapas de levantamento, análise e refinamento de requisitos do projeto. Todas as reuniões ocorreram com a coordenadora da CLAI, com o objetivo de compreender as necessidades do setor, identificar dificuldades do processo atual, validar requisitos funcionais e não funcionais, definir prioridades para o MVP e 
 orientar as decisões relacionadas à arquitetura, prototipação, interface e segurança do sistema.
 ---
 
-## Entrevista 1: Coordenadora Luzia (CNPQ)
+## Entrevista 1: Coordenadora Luzia (CLAI)
 
-**Entrevistado:** Luzia (coordenadora da CNPQ)  
+**Entrevistado:** Luzia (coordenadora da CLAI)  
 **Entrevistador:** Equipe do projeto  
 **Data:** 15/04/2026  
 **Duração aproximada:** 45 minutos
@@ -89,9 +89,9 @@ Durante a conversa também foram identificadas necessidades complementares para 
 
 ---
 
-## Entrevista 2: Coordenadora Luzia (CNPQ)
+## Entrevista 2: Coordenadora Luzia (CLAI)
 
-**Entrevistado:** Luzia (coordenadora da CNPQ)  
+**Entrevistado:** Luzia (coordenadora da CLAI)  
 **Entrevistador:** Equipe do projeto  
 **Data:** 08/05/2026  
 **Duração aproximada:** 40 minutos
@@ -153,9 +153,9 @@ Aprofundar o entendimento sobre as funcionalidades do sistema, definir os perfis
 
 ---
 
-## Entrevista 3: Coordenadora Luzia (CNPQ)
+## Entrevista 3: Coordenadora Luzia (CLAI)
 
-**Entrevistado:** Luzia (coordenadora da CNPQ)  
+**Entrevistado:** Luzia (coordenadora da CLAI)  
 **Entrevistador:** Equipe do projeto  
 **Data:** 12/05/2026  
 **Duração aproximada:** 20 minutos
@@ -230,9 +230,9 @@ Aprofundar o entendimento dos requisitos funcionais e não funcionais, identific
 
 ---
 
-## Entrevista 4: Coordenadora Luzia (CNPQ)
+## Entrevista 4: Coordenadora Luzia (CLAI)
 
-**Entrevistado:** Luzia (coordenadora da CNPQ)  
+**Entrevistado:** Luzia (coordenadora da CLAI)  
 **Entrevistador:** Equipe do projeto  
 **Data:** 16/06/2026  
 **Duração aproximada:** 40 minutos
@@ -319,9 +319,9 @@ Levantar informações para apoiar a elaboração da prototipação, matriz de r
 
 ---
 
-## Entrevista 5: Coordenadora Luzia (CNPQ)
+## Entrevista 5: Coordenadora Luzia (CLAI)
 
-**Entrevistado:** Luzia (coordenadora da CNPQ)  
+**Entrevistado:** Luzia (coordenadora da CLAI)  
 **Entrevistador:** Equipe do projeto  
 **Data:** 19/06/2026  
 **Duração aproximada:** 30 minutos
