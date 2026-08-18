@@ -1,89 +1,161 @@
-# Validação do Protótipo: IFgram
+# Validação do Protótipo — Portal Incluir
 
-## Informações gerais
+## 1. Informações gerais
 
-- **Ferramenta:** Figma (protótipo navegável)
-- **Acesso ao protótipo:** [Ver no Figma →](https://figma.com/proto/ifgram-prototipo)
-  > Link fictício: substitua pelo link real.
-- **Sessões realizadas:** 2 sessões, com 3 participantes cada
-- **Perfil dos participantes:** estudantes do IFPB Campus Monteiro (ADS e Técnico em Informática)
-- **Metodologia:** teste de usabilidade com tarefas definidas + entrevista pós-teste
+- **Projeto:** Portal Incluir — Inclusão e Acompanhamento Educacional
+- **Ferramenta de prototipação:** Figma
+- **Tipo de protótipo:** navegável, em alta fidelidade
+- **Protótipo:** [Acessar protótipo no Figma](https://www.figma.com/design/vFjSKJomALDbPFoxTb5RvQ/Prototipa%C3%A7%C3%A3o---Portal-Incluir?m=auto&t=b3gqbFZ6KjZkovY8-6)
+- **Apresentação utilizada:** [Acessar apresentação da Fase 1](https://www.figma.com/slides/qpQbdmK8aFWRGKVYal0dZ5/Apresenta%C3%A7%C3%A3o-Portal-Incluir---Fase-1?t=b3gqbFZ6KjZkovY8-6)
+- **Método de validação:** entrevistas, reuniões de levantamento, apresentação guiada do protótipo e formulário de aceitação
+- **Situação:** aprovada pelo cliente
 
----
+## 2. Objetivo
 
-## Tarefas testadas
+A validação teve como objetivo verificar se os requisitos, o escopo, os casos de uso e as interfaces prototipadas representavam adequadamente as necessidades identificadas para o Portal Incluir.
 
-1. Criar uma conta no IFgram
-2. Fazer login
-3. Publicar uma foto com legenda
-4. Encontrar e seguir um usuário
-5. Curtir uma publicação no feed
+Também se buscou confirmar se o entendimento construído pela equipe estava alinhado às expectativas do cliente antes do início da fase de desenvolvimento.
 
----
+## 3. Processo de levantamento e prototipação
 
-## Resultados por tarefa
+A construção do protótipo foi realizada de forma evolutiva, a partir das informações obtidas durante entrevistas e reuniões com o cliente.
 
-### Tarefa 1: Criar conta
+O processo foi composto pelas seguintes etapas:
 
-| Participante | Concluiu? | Tempo | Dificuldades |
-|---|---|---|---|
-| P1 | Sim | 1min 20s | Não entendeu que o e-mail precisava ser @ifpb.edu.br |
-| P2 | Sim | 58s | Nenhuma |
-| P3 | Sim | 1min 45s | Ficou em dúvida sobre o campo "nome de usuário" |
-| P4 | Sim | 1min 05s | Nenhuma |
-| P5 | Não | - | Não encontrou o botão de confirmação após o cadastro |
-| P6 | Sim | 2min 10s | Leu o e-mail de confirmação mas não entendeu que precisava clicar no link |
+1. realização de entrevistas e reuniões de levantamento;
+2. identificação dos usuários, necessidades e processos envolvidos;
+3. definição inicial dos requisitos e do escopo;
+4. elaboração dos casos de uso;
+5. construção das interfaces no Figma;
+6. criação dos fluxos navegáveis do protótipo;
+7. elaboração de uma apresentação para demonstrar a proposta;
+8. apresentação do protótipo ao cliente;
+9. coleta de comentários e esclarecimento de dúvidas;
+10. disponibilização de formulário para aprovação formal dos artefatos.
 
-**Conclusão:** 5 de 6 concluíram. Principal problema: o fluxo de confirmação de e-mail não estava claro no protótipo.
+## 4. Abordagem de prototipação
 
----
+Embora o Guia 02 apresente a possibilidade de prototipação em baixa fidelidade, a equipe optou por desenvolver diretamente um protótipo em alta fidelidade no Figma.
 
-### Tarefa 2: Login
+Essa decisão teve como objetivos:
 
-Todos os 6 participantes concluíram sem dificuldades. Tempo médio: 25 segundos.
+- representar de forma mais próxima a futura interface;
+- facilitar a compreensão do cliente;
+- demonstrar os fluxos de navegação;
+- antecipar feedback sobre organização, funcionalidades e aparência;
+- reduzir ambiguidades antes do desenvolvimento.
 
----
+O protótipo contempla versões desktop e mobile das principais telas do Portal Incluir.
 
-### Tarefa 3: Publicar foto
+## 5. Telas apresentadas
 
-| Participante | Concluiu? | Dificuldades |
+As seguintes telas foram apresentadas ao cliente:
+
+| Código | Tela | Objetivo |
 |---|---|---|
-| P1 | Sim | Não encontrou o botão de nova publicação de imediato |
-| P2 | Sim | Nenhuma |
-| P3 | Sim | Nenhuma |
-| P4 | Sim | Tentou arrastar a foto direto para a tela |
-| P5 | Sim | Nenhuma |
-| P6 | Não | Não entendeu que precisava selecionar uma imagem antes de publicar |
+| TELA01 | Login | Permitir a autenticação dos usuários |
+| TELA02 | Dashboard do coordenador | Centralizar indicadores, notificações e acessos rápidos |
+| TELA03 | Gerenciar estudantes | Cadastrar, consultar, filtrar e acessar estudantes |
+| TELA04 | Perfil do estudante | Reunir dados, documentos e histórico de acompanhamento |
+| MOBILE | Versões responsivas | Demonstrar a adaptação das telas para dispositivos móveis |
 
-**Conclusão:** Botão de nova publicação pouco visível. O ícone (+) na barra inferior não foi associado à ação de publicar por 2 participantes.
+## 6. Rastreabilidade entre telas e casos de uso
 
----
+| Tela | Casos de uso relacionados | Requisitos relacionados |
+|---|---|---|
+| Login | UC08 — Autenticar usuário | RF08 |
+| Dashboard do coordenador | UC06 — Buscar estudante; UC09 — Visualizar informações centralizadas | RF06 e RF09 |
+| Gerenciar estudantes | UC01 — Gerenciar estudante; UC05 — Filtrar estudantes; UC06 — Buscar estudante | RF01, RF05 e RF06 |
+| Perfil do estudante | UC02 — Registrar acompanhamento; UC03 — Gerenciar documentos; UC09 — Visualizar informações centralizadas | RF02, RF03 e RF09 |
 
-### Tarefa 4: Seguir usuário
+## 7. Apresentação ao cliente
 
-Todos concluíram. 2 participantes foram pela busca; 4 foram pelo perfil sugerido na tela inicial. O botão "Seguir" foi reconhecido por todos imediatamente.
+Após a elaboração do protótipo, a equipe preparou uma apresentação em Figma Slides para demonstrar:
 
----
+- o problema identificado;
+- a proposta do Portal Incluir;
+- os usuários envolvidos;
+- os requisitos levantados;
+- os casos de uso;
+- as principais telas;
+- os fluxos de navegação;
+- o funcionamento esperado da solução;
+- o escopo previsto para a próxima etapa.
 
-### Tarefa 5: Curtir publicação
+Durante a apresentação, o cliente pôde analisar as telas, esclarecer dúvidas e comparar a solução proposta com as necessidades apresentadas nas reuniões anteriores.
 
-Todos concluíram sem dificuldades. O ícone de coração foi reconhecido por todos.
+## 8. Técnica de validação utilizada
 
----
+A validação foi realizada como uma apresentação guiada do protótipo, semelhante à técnica de walkthrough.
 
-## Problemas identificados e ações tomadas
+A equipe percorreu as principais telas e explicou:
 
-| # | Problema | Severidade | Ação tomada |
-|---|----------|-----------|-------------|
-| 1 | Fluxo de confirmação de e-mail confuso | Alta | Adicionado texto explicativo após o cadastro: "Acesse seu e-mail e clique no link de confirmação antes de entrar." |
-| 2 | Botão de nova publicação (ícone +) pouco visível | Média | Substituído por botão com rótulo "Publicar" na barra inferior |
-| 3 | Campo "nome de usuário" sem explicação | Baixa | Adicionado placeholder: "Ex: lucas.mendes (será seu @)" |
-| 4 | Usuário tentou arrastar foto diretamente | Baixa | Mantido comportamento atual; drag-and-drop pode ser avaliado no futuro |
+- como o usuário entraria no sistema;
+- como o coordenador visualizaria o dashboard;
+- como seria realizada a gestão dos estudantes;
+- como as informações seriam exibidas no perfil;
+- como documentos e acompanhamentos seriam centralizados;
+- como a interface se adaptaria a dispositivos móveis.
 
----
+Após a apresentação, foi disponibilizado ao cliente um formulário de aceitação dos materiais produzidos.
 
-## Conclusão geral
+## 9. Formulário de aceitação
 
-O protótipo validou os fluxos principais com taxa de sucesso acima de 80% em todas as tarefas críticas. As correções de maior impacto (confirmação de e-mail e botão de publicação) foram aplicadas antes da entrega da Fase 2.
+O formulário teve como objetivo registrar formalmente a validação dos artefatos produzidos durante a fase de levantamento e especificação de requisitos.
 
-O fluxo de busca e perfil não foi testado por limitação de tempo: fica como pendência para a validação da Fase 4.
+Foram avaliados:
+
+- participação nas reuniões de levantamento;
+- adequação dos requisitos;
+- representação das funcionalidades pelos casos de uso;
+- adequação dos protótipos à solução proposta;
+- clareza do escopo para a fase de desenvolvimento;
+- aceitação geral da etapa.
+
+## 10. Resultado da avaliação
+
+| Item avaliado | Resultado |
+|---|---|
+| Participação nas reuniões de levantamento | Sim |
+| Requisitos representam as necessidades identificadas | Concordo totalmente |
+| Casos de uso representam as funcionalidades esperadas | Sim |
+| Protótipos representam adequadamente a solução | Sim |
+| Escopo está claro para a etapa de desenvolvimento | Sim |
+| Resultado geral da etapa | Aceito |
+| Confirmação da aprovação | Estou de acordo |
+
+## 11. Parecer de aceitação
+
+Após analisar os requisitos, diagramas, casos de uso, escopo e protótipos apresentados, o cliente considerou que os materiais representam adequadamente o entendimento atual das necessidades do Portal Incluir.
+
+A etapa foi classificada como:
+
+> **ACEITA — Os requisitos, diagramas e protótipos estão adequados para prosseguir.**
+
+Não foram registradas ressalvas formais no formulário de aceitação.
+
+## 12. Evidências
+
+- [Protótipo do Portal Incluir no Figma](https://www.figma.com/design/vFjSKJomALDbPFoxTb5RvQ/Prototipa%C3%A7%C3%A3o---Portal-Incluir?m=auto&t=b3gqbFZ6KjZkovY8-6)
+- [Apresentação do Portal Incluir — Fase 1](https://www.figma.com/slides/qpQbdmK8aFWRGKVYal0dZ5/Apresenta%C3%A7%C3%A3o-Portal-Incluir---Fase-1?t=b3gqbFZ6KjZkovY8-6)
+- [Formulário de aceitação](../assets/evidencias/formulario-aceitacao-requisitos.pdf)
+
+## 13. Conclusão
+
+A validação confirmou que os requisitos, casos de uso, protótipos e escopo inicial representam as necessidades identificadas durante o levantamento.
+
+A aprovação formal do cliente fornece evidência de que a equipe pode avançar para o detalhamento técnico e para a futura etapa de desenvolvimento, mantendo a possibilidade de refinamento conforme novas necessidades sejam identificadas.
+
+A validação realizada comprova a aceitação da proposta e do entendimento funcional. Ela não substitui testes futuros de usabilidade, acessibilidade e aceitação do software implementado.
+
+## 14. Próximas validações
+
+Nas próximas etapas, recomenda-se:
+
+- validar os casos de uso detalhados;
+- testar tarefas diretamente no protótipo com usuários representativos;
+- verificar navegação por teclado e tecnologias assistivas;
+- validar os fluxos de cadastro e acompanhamento;
+- validar a geração e organização de documentos;
+- realizar testes de aceitação após a implementação;
+- registrar solicitações de mudança como itens do backlog.
