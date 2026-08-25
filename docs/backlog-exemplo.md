@@ -1,31 +1,27 @@
-# Backlog de Exemplo: GitHub Projects
+# Backlog do Sistema: Portal Incluir
 
-Este documento mostra como popular o GitHub Projects. Cada seção abaixo representa um Issue no board, com os campos customizados e o checklist de tasks técnicas que ficam dentro do issue.
+Este documento organiza o backlog do Portal Incluir. Cada seção representa um Issue no GitHub Projects, com campos customizados (Épico, MoSCoW, Size, Sprint) e checklist de tasks técnicas que devem ser implementadas.
 
 ---
 
 ## Visão geral do backlog
 
-| ID | Épico | MoSCoW | Size | Sprint |
-|----|-------|--------|------|--------|
-| HU001 | Autenticação | Must | G | Sprint 1 |
-| HU002 | Autenticação | Must | P | Sprint 1 |
-| HU003 | Autenticação | Must | P | Sprint 1 |
-| HU004 | Publicações | Must | G | Sprint 1 |
-| HU007 | Feed | Must | G | Sprint 2 |
-| HU009 | Interações | Must | P | Sprint 2 |
-| HU010 | Interações | Must | P | Sprint 2 |
-| HU013 | Perfil | Must | M | Sprint 2 |
-| HU014 | Perfil | Must | M | Sprint 2 |
-| HU005 | Publicações | Should | P | Sprint 3 |
-| HU006 | Publicações | Should | P | Sprint 3 |
-| HU008 | Feed | Should | M | Sprint 3 |
-| HU011 | Interações | Should | M | Sprint 3 |
-| HU012 | Interações | Should | P | Sprint 3 |
-| HU015 | Perfil | Should | P | Sprint 3 |
-| HU016 | Perfil | Should | M | Sprint 4 |
-| HU017 | Busca | Should | M | Sprint 4 |
-| HU018 | Busca | Could | G | Sprint 4 |
+| ID    | Épico                  | MoSCoW | Size | Sprint   |
+|-------|------------------------|--------|------|----------|
+| HU001 | Gestão de Estudantes   | Must   | L    | Sprint 1 |
+| HU002 | Gestão de Estudantes   | Must   | M    | Sprint 1 |
+| HU003 | Gestão Pedagógica      | Must   | L    | Sprint 2 |
+| HU004 | Documentação           | Must   | M    | Sprint 2 |
+| HU005 | Relatórios             | Must   | L    | Sprint 3 |
+| HU006 | Inclusão               | Should | M    | Sprint 3 |
+| HU007 | Consulta de Dados      | Must   | L    | Sprint 4 |
+| HU008 | Consulta de Dados      | Must   | XL   | Sprint 4 |
+| HU009 | Comunicação Institucional | Should | S | Sprint 5 |
+| HU010 | Comunicação Institucional | Should | M | Sprint 5 |
+| HU011 | Segurança e Acesso     | Must   | L    | Sprint 6 |
+| HU012 | Armazenamento          | Should | M    | Sprint 6 |
+| HU013 | Multidispositivos      | Must   | L    | Sprint 7 |
+| HU014 | Acessibilidade         | Must   | L    | Sprint 7 |
 
 ---
 
@@ -33,278 +29,230 @@ Este documento mostra como popular o GitHub Projects. Cada seção abaixo repres
 
 ---
 
-### HU001: Cadastro com e-mail institucional
+### HU001: Cadastrar estudante
+**Épico:** Gestão de Estudantes | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 1  
 
-**Épico:** Autenticação | **MoSCoW:** Must | **Size:** G | **Sprint:** Sprint 1
-
-> Como estudante ou professor do IFPB, quero criar uma conta usando meu e-mail institucional, para ter acesso ao IFgram com identidade da comunidade.
+> Como coordenador, quero cadastrar um novo estudante com seus dados completos, para manter suas informações registradas e disponíveis para acompanhamento.
 
 **Tasks:**
-- [ ] Criar migration da tabela `users` (id, username, email, password_hash, bio, avatar_url, created_at, confirmed)
-- [ ] Criar endpoint `POST /auth/register` no backend
-- [ ] Validar que o e-mail tem domínio `@ifpb.edu.br`
-- [ ] Aplicar hash de senha com bcrypt antes de salvar
-- [ ] Disparar e-mail de confirmação após o cadastro
-- [ ] Criar endpoint `GET /auth/confirm?token=...` para ativar a conta
-- [ ] Criar página de cadastro no React com formulário (nome, e-mail, username, senha)
-- [ ] Exibir mensagem de sucesso orientando o usuário a confirmar o e-mail
-- [ ] Tratar e exibir erros: e-mail já cadastrado, domínio inválido, senha fraca
+- [ ] Criar formulário de cadastro do estudante  
+- [ ] Definir campos obrigatórios e opcionais  
+- [ ] Implementar validação dos campos obrigatórios  
+- [ ] Implementar validação de dados inválidos  
+- [ ] Implementar armazenamento dos dados do estudante  
+- [ ] Disponibilizar o estudante para consulta após o cadastro  
+- [ ] Implementar proteção dos dados conforme LGPD  
+- [ ] Garantir que a interface seja intuitiva  
 
 ---
 
-### HU002: Login
+### HU002: Atualizar dados do estudante
+**Épico:** Gestão de Estudantes | **MoSCoW:** Must | **Size:** M | **Sprint:** Sprint 1  
 
-**Épico:** Autenticação | **MoSCoW:** Must | **Size:** P | **Sprint:** Sprint 1
-
-> Como usuário cadastrado, quero fazer login com e-mail e senha, para acessar minha conta no IFgram.
+> Como coordenador, quero atualizar os dados de um estudante cadastrado, para manter suas informações sempre atualizadas.
 
 **Tasks:**
-- [ ] Criar endpoint `POST /auth/login` que valida credenciais e retorna JWT
-- [ ] Configurar expiração do token (ex: 7 dias)
-- [ ] Criar página de login no React com formulário (e-mail, senha)
-- [ ] Armazenar o JWT no localStorage após login bem-sucedido
-- [ ] Redirecionar para o feed após login
-- [ ] Exibir mensagem de erro genérica em caso de credenciais inválidas (sem dizer qual campo errou)
+- [ ] Criar funcionalidade para localizar um estudante  
+- [ ] Criar tela de edição dos dados  
+- [ ] Permitir alterar os dados cadastrados  
+- [ ] Implementar validação dos campos obrigatórios  
+- [ ] Implementar validação dos dados atualizados  
+- [ ] Implementar salvamento das alterações  
+- [ ] Atualizar informações exibidas nas consultas  
+- [ ] Aplicar permissões de acesso à edição  
 
 ---
 
-### HU003: Logout
+### HU003: Registrar acompanhamento pedagógico
+**Épico:** Gestão Pedagógica | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 2  
 
-**Épico:** Autenticação | **MoSCoW:** Must | **Size:** P | **Sprint:** Sprint 1
-
-> Como usuário logado, quero fazer logout, para sair da minha conta com segurança.
+> Como professor ou coordenador, quero registrar entrevistas, acompanhamentos e procedimentos realizados com o estudante, para manter seu histórico pedagógico atualizado.
 
 **Tasks:**
-- [ ] Criar botão de logout acessível no menu/header em todas as páginas
-- [ ] Remover o JWT do localStorage ao clicar em logout
-- [ ] Redirecionar para a página de login após logout
-- [ ] Garantir que rotas protegidas redirecionam para login se não houver token válido
+- [ ] Criar área de acompanhamento pedagógico  
+- [ ] Permitir selecionar um estudante  
+- [ ] Criar formulário para registrar entrevistas  
+- [ ] Criar formulário para registrar acompanhamentos  
+- [ ] Criar formulário para registrar procedimentos  
+- [ ] Associar cada registro ao estudante correspondente  
+- [ ] Exibir o histórico de acompanhamentos  
+- [ ] Garantir a proteção dos registros  
 
 ---
 
-### HU004: Criar publicação
+### HU004: Gerar documentos do estudante
+**Épico:** Documentação | **MoSCoW:** Must | **Size:** M | **Sprint:** Sprint 2  
 
-**Épico:** Publicações | **MoSCoW:** Must | **Size:** G | **Sprint:** Sprint 1
-
-> Como usuário logado, quero publicar uma foto com legenda, para compartilhar um momento ou projeto acadêmico.
+> Como coordenador, quero gerar documentos estruturados a partir das informações do estudante, para facilitar a organização e padronização da documentação.
 
 **Tasks:**
-- [ ] Criar migration da tabela `posts` (id, user_id, image_url, caption, created_at)
-- [ ] Configurar upload de imagem no backend (armazenamento local ou S3)
-- [ ] Criar endpoint `POST /posts` que recebe imagem e legenda
-- [ ] Validar tipo de arquivo (JPG/PNG) e tamanho máximo (5 MB) no backend
-- [ ] Criar componente de nova publicação no React (seleção de imagem + campo de legenda)
-- [ ] Integrar com o endpoint de upload
-- [ ] Exibir preview da imagem antes de publicar
-- [ ] Exibir mensagem de sucesso após publicação e redirecionar para o perfil
+- [ ] Criar funcionalidade para selecionar um estudante  
+- [ ] Criar modelos para os documentos  
+- [ ] Buscar as informações cadastradas do estudante  
+- [ ] Preencher o documento com os dados correspondentes  
+- [ ] Definir estrutura padronizada para os documentos  
+- [ ] Gerar o documento do estudante  
+- [ ] Implementar controle de acesso aos documentos  
 
 ---
 
-### HU007: Ver feed personalizado
+### HU005: Emitir relatório de estudantes
+**Épico:** Relatórios | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 3  
 
-**Épico:** Feed | **MoSCoW:** Must | **Size:** G | **Sprint:** Sprint 2
-
-> Como usuário logado, quero ver as publicações de quem sigo em ordem cronológica reversa, para acompanhar o que está acontecendo na comunidade.
+> Como coordenador, quero gerar relatórios com informações dos estudantes, para acompanhar e analisar os dados da instituição.
 
 **Tasks:**
-- [ ] Criar endpoint `GET /feed?page=0&size=20` que retorna posts de quem o usuário segue
-- [ ] Ordenar resultado por `created_at` decrescente
-- [ ] Adicionar índice em `follows(follower_id)` e `posts(user_id, created_at)` para performance
-- [ ] Criar página de feed no React
-- [ ] Criar componente de card de publicação (foto, username, legenda, contador de curtidas)
-- [ ] Exibir mensagem de boas-vindas se o usuário não segue ninguém ainda
+- [ ] Criar área de geração de relatórios  
+- [ ] Criar filtros para seleção dos dados  
+- [ ] Implementar busca das informações atualizadas  
+- [ ] Criar estrutura do relatório  
+- [ ] Implementar geração do relatório em PDF  
+- [ ] Implementar geração do relatório em Excel  
+- [ ] Aplicar controle de acesso aos dados do relatório  
 
 ---
 
-### HU009: Curtir publicação
+### HU006: Agrupar estudantes por deficiência
+**Épico:** Inclusão | **MoSCoW:** Should | **Size:** M | **Sprint:** Sprint 3  
 
-**Épico:** Interações | **MoSCoW:** Must | **Size:** P | **Sprint:** Sprint 2
-
-> Como usuário logado, quero curtir uma publicação, para demonstrar que apreciei o conteúdo.
+> Como coordenador, quero agrupar estudantes de acordo com o tipo de deficiência, para facilitar o acompanhamento e o planejamento de ações de inclusão.
 
 **Tasks:**
-- [ ] Criar migration da tabela `likes` (user_id, post_id, created_at)
-- [ ] Criar endpoint `POST /posts/{id}/likes`
-- [ ] Criar componente de ícone de curtida no React
-- [ ] Atualizar contador de curtidas na tela sem recarregar a página
-- [ ] Destacar o ícone quando o usuário já curtiu
+- [ ] Identificar o tipo de deficiência cadastrado para cada estudante  
+- [ ] Implementar agrupamento dos estudantes por tipo de deficiência  
+- [ ] Criar visualização dos grupos  
+- [ ] Permitir consultar os estudantes de cada grupo  
+- [ ] Aplicar controle de acesso à consulta  
+- [ ] Implementar recursos de acessibilidade na funcionalidade  
 
 ---
 
-### HU010: Descurtir publicação
+### HU007: Buscar estudante
+**Épico:** Consulta de Dados | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 4  
 
-**Épico:** Interações | **MoSCoW:** Must | **Size:** P | **Sprint:** Sprint 2
-
-> Como usuário logado, quero desfazer uma curtida, para remover minha reação de uma publicação.
+> Como usuário autorizado, quero buscar estudantes cadastrados, para localizar rapidamente suas informações.
 
 **Tasks:**
-- [ ] Criar endpoint `DELETE /posts/{id}/likes`
-- [ ] Alternar estado do ícone de curtida no clique (curtir/descurtir)
-- [ ] Decrementar contador de curtidas na tela sem recarregar
+- [ ] Criar campo de busca  
+- [ ] Definir os critérios de pesquisa  
+- [ ] Implementar mecanismo de busca  
+- [ ] Exibir os estudantes correspondentes aos critérios  
+- [ ] Permitir acessar os dados do estudante a partir dos resultados  
+- [ ] Otimizar a busca para atender ao tempo máximo de 3 segundos  
+- [ ] Adaptar a busca para computadores e dispositivos móveis  
+- [ ] Garantir acessibilidade da interface  
 
 ---
 
-### HU013: Visualizar perfil de usuário
+### HU008: Visualizar informações centralizadas
+**Épico:** Consulta de Dados | **MoSCoW:** Must | **Size:** XL | **Sprint:** Sprint 4  
 
-**Épico:** Perfil | **MoSCoW:** Must | **Size:** M | **Sprint:** Sprint 2
-
-> Como usuário logado, quero visualizar o perfil de outro usuário, para ver suas publicações e informações.
+> Como usuário autorizado, quero visualizar documentos e informações do estudante em um único local, para ter acesso centralizado ao seu histórico.
 
 **Tasks:**
-- [ ] Criar endpoint `GET /users/{username}` retornando dados do perfil e posts do usuário
-- [ ] Criar página de perfil no React
-- [ ] Exibir foto, username, bio, contadores (publicações, seguidores, seguindo)
-- [ ] Exibir posts em grade de 3 colunas, do mais recente ao mais antigo
-- [ ] Mostrar botão "Seguir" ou "Seguindo" dependendo do estado
+- [ ] Criar página de informações centralizadas do estudante  
+- [ ] Exibir os dados cadastrais  
+- [ ] Exibir os registros de acompanhamento  
+- [ ] Exibir os documentos relacionados  
+- [ ] Organizar as informações de forma clara  
+- [ ] Implementar controle de acesso conforme o perfil  
+- [ ] Garantir proteção dos dados conforme LGPD  
 
 ---
 
-### HU014: Seguir usuário
+### HU009: Comunicar-se com professores
+**Épico:** Comunicação Institucional | **MoSCoW:** Should | **Size:** S | **Sprint:** Sprint 5  
 
-**Épico:** Perfil | **MoSCoW:** Must | **Size:** M | **Sprint:** Sprint 2
-
-> Como usuário logado, quero seguir outro usuário, para receber suas publicações no meu feed.
+> Como coordenador, quero ter acesso aos dados de contato dos professores, para realizar comunicações institucionais por meios externos ao sistema.
 
 **Tasks:**
-- [ ] Criar migration da tabela `follows` (follower_id, following_id)
-- [ ] Criar endpoint `POST /users/{username}/follow`
-- [ ] Atualizar botão para "Seguindo" após a ação
-- [ ] Atualizar contadores de seguidores/seguindo no perfil sem recarregar
+- [ ] Cadastrar os dados de contato dos professores  
+- [ ] Criar consulta dos contatos dos professores  
+- [ ] Exibir os dados de contato para usuários autorizados  
+- [ ] Definir os meios externos de comunicação utilizados pela instituição  
+- [ ] Garantir proteção dos dados de contato  
+- [ ] Avaliar futuramente a implementação de chat interno  
 
 ---
 
-### HU005: Editar legenda de publicação
+### HU010: Comunicar-se com pais e responsáveis
+**Épico:** Comunicação Institucional | **MoSCoW:** Should | **Size:** M | **Sprint:** Sprint 5  
 
-**Épico:** Publicações | **MoSCoW:** Should | **Size:** P | **Sprint:** Sprint 3
-
-> Como autor de uma publicação, quero editar a legenda, para corrigir erros ou complementar o texto.
+> Como professor ou coordenador, quero ter acesso aos dados de contato dos pais ou responsáveis pelo estudante, para realizar comunicações necessárias por meios externos ao sistema.
 
 **Tasks:**
-- [ ] Criar endpoint `PUT /posts/{id}` que aceita nova legenda
-- [ ] Validar que apenas o autor pode editar (comparar user_id do token com o do post)
-- [ ] Exibir opção de editar apenas nos próprios posts
-- [ ] Criar campo de edição inline na legenda
-- [ ] Salvar e exibir a legenda atualizada sem recarregar a página
+- [ ] Adicionar os dados de contato do responsável ao cadastro do estudante  
+- [ ] Criar consulta dos dados de contato do responsável  
+- [ ] Exibir os contatos somente para usuários autorizados  
+- [ ] Permitir identificar o responsável associado a cada estudante  
+- [ ] Garantir proteção dos dados pessoais do responsável  
+- [ ] Definir os meios externos de comunicação utilizados pela instituição  
+- [ ] Avaliar futuramente a necessidade de comunicação interna  
 
 ---
 
-### HU006: Excluir publicação
+### HU011: Controlar acesso por perfil
+**Épico:** Segurança e Acesso | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 6  
 
-**Épico:** Publicações | **MoSCoW:** Should | **Size:** P | **Sprint:** Sprint 3
-
-> Como autor de uma publicação, quero excluir uma publicação, para removê-la do meu perfil e do feed dos meus seguidores.
+> Como administrador, quero definir permissões de acesso conforme o perfil do usuário, para garantir que cada usuário tenha acesso somente às funcionalidades autorizadas.
 
 **Tasks:**
-- [ ] Criar endpoint `DELETE /posts/{id}`
-- [ ] Validar que apenas o autor pode excluir
-- [ ] Remover o arquivo de imagem do storage ao excluir o post
-- [ ] Exibir opção de excluir apenas nos próprios posts
-- [ ] Exibir modal de confirmação antes de excluir
-- [ ] Remover o card da tela após exclusão confirmada
+- [ ] Criar os perfis de usuário  
+- [ ] Definir as permissões de cada perfil  
+- [ ] Implementar controle de acesso às funcionalidades  
+- [ ] Implementar controle de acesso aos dados dos estudantes  
+- [ ] Impedir acesso a funcionalidades não autorizadas  
+- [ ] Implementar proteção das informações restritas  
+- [ ] Testar as permissões de cada perfil  
+
+Claro, Lívia! Vamos finalizar os **issues detalhados** restantes no mesmo padrão:
 
 ---
 
-### HU008: Scroll infinito no feed
+### HU012: Preservar histórico dos estudantes
+**Épico:** Armazenamento | **MoSCoW:** Should | **Size:** M | **Sprint:** Sprint 6  
 
-**Épico:** Feed | **MoSCoW:** Should | **Size:** M | **Sprint:** Sprint 3
-
-> Como usuário logado, quero carregar mais publicações conforme rolo o feed, para não precisar esperar carregar tudo de uma vez.
+> Como instituição de ensino, quero manter os dados dos estudantes armazenados após sua conclusão, para preservar seu histórico para consultas futuras.
 
 **Tasks:**
-- [ ] Garantir que o endpoint `GET /feed` suporta paginação por offset/cursor
-- [ ] Implementar detecção de fim de página com Intersection Observer no React
-- [ ] Carregar próximo bloco de 20 posts ao chegar no fim
-- [ ] Exibir spinner de carregamento durante a busca
-- [ ] Exibir mensagem "Você chegou ao fim do feed" quando não houver mais posts
+- [ ] Definir política de armazenamento do histórico  
+- [ ] Implementar armazenamento dos dados após a conclusão do estudante  
+- [ ] Garantir a integridade dos dados armazenados  
+- [ ] Implementar controle de acesso ao histórico  
+- [ ] Definir o período de retenção de até 5 anos  
+- [ ] Implementar mecanismos de proteção dos dados  
+- [ ] Verificar conformidade com a LGPD  
 
 ---
 
-### HU011: Comentar em publicação
+### HU013: Utilizar o sistema em diferentes dispositivos
+**Épico:** Multidispositivos | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 7  
 
-**Épico:** Interações | **MoSCoW:** Should | **Size:** M | **Sprint:** Sprint 3
-
-> Como usuário logado, quero comentar em uma publicação, para interagir com o autor e outros usuários.
+> Como usuário, quero acessar o sistema em computadores e dispositivos móveis, para utilizar suas funcionalidades independentemente do dispositivo.
 
 **Tasks:**
-- [ ] Criar migration da tabela `comments` (id, user_id, post_id, content, created_at)
-- [ ] Criar endpoint `POST /posts/{id}/comments`
-- [ ] Criar endpoint `GET /posts/{id}/comments` para listar comentários
-- [ ] Criar seção de comentários na página da publicação
-- [ ] Criar campo de texto para novo comentário com botão de envio
-- [ ] Exibir comentário na lista imediatamente após o envio
-- [ ] Bloquear envio de comentário vazio
+- [ ] Desenvolver interface responsiva  
+- [ ] Adaptar as telas para diferentes tamanhos de tela  
+- [ ] Testar as principais funcionalidades em computadores  
+- [ ] Testar as principais funcionalidades em dispositivos móveis  
+- [ ] Garantir consistência dos dados entre dispositivos  
+- [ ] Corrigir problemas de interface encontrados nos diferentes dispositivos  
 
 ---
 
-### HU012: Excluir comentário
+### HU014: Utilizar recursos de acessibilidade
+**Épico:** Acessibilidade | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 7  
 
-**Épico:** Interações | **MoSCoW:** Should | **Size:** P | **Sprint:** Sprint 3
-
-> Como autor de um comentário, quero excluir meu comentário, para removê-lo de uma publicação.
+> Como usuário com necessidade de acessibilidade, quero utilizar recursos de acessibilidade digital, para conseguir utilizar o sistema de forma adequada.
 
 **Tasks:**
-- [ ] Criar endpoint `DELETE /comments/{id}`
-- [ ] Validar que apenas o autor do comentário pode excluí-lo
-- [ ] Exibir ícone de excluir apenas nos próprios comentários
-- [ ] Remover o comentário da lista imediatamente após exclusão
+- [ ] Definir os recursos de acessibilidade necessários  
+- [ ] Implementar recursos de acessibilidade nas principais funcionalidades  
+- [ ] Garantir navegação clara e compreensível  
+- [ ] Aplicar recursos de acessibilidade aos elementos da interface  
+- [ ] Verificar acessibilidade na funcionalidade de consulta  
+- [ ] Verificar acessibilidade na funcionalidade de agrupamento de estudantes  
+- [ ] Realizar testes de acessibilidade  
+- [ ] Corrigir problemas identificados nos testes  
 
 ---
-
-### HU015: Deixar de seguir usuário
-
-**Épico:** Perfil | **MoSCoW:** Should | **Size:** P | **Sprint:** Sprint 3
-
-> Como usuário logado, quero deixar de seguir um usuário, para que suas publicações não apareçam mais no meu feed.
-
-**Tasks:**
-- [ ] Criar endpoint `DELETE /users/{username}/follow`
-- [ ] Exibir modal de confirmação ao clicar em "Seguindo"
-- [ ] Atualizar botão para "Seguir" após confirmar
-- [ ] Atualizar contadores de seguidores/seguindo no perfil
-
----
-
-### HU016: Editar perfil
-
-**Épico:** Perfil | **MoSCoW:** Should | **Size:** M | **Sprint:** Sprint 4
-
-> Como usuário logado, quero editar minha foto de perfil e bio, para personalizar como apareço para outros usuários.
-
-**Tasks:**
-- [ ] Criar endpoint `PUT /users/me` que aceita nova foto e bio
-- [ ] Validar tamanho máximo da foto (2 MB) e tipo de arquivo no backend
-- [ ] Criar página de edição de perfil no React
-- [ ] Exibir preview da nova foto antes de salvar
-- [ ] Limitar campo de bio a 150 caracteres com contador visível
-- [ ] Exibir perfil atualizado após salvar
-
----
-
-### HU017: Buscar usuário por nome
-
-**Épico:** Busca | **MoSCoW:** Should | **Size:** M | **Sprint:** Sprint 4
-
-> Como usuário logado, quero buscar por nome de usuário, para encontrar pessoas da comunidade do IFPB.
-
-**Tasks:**
-- [ ] Criar endpoint `GET /search/users?q=...` com busca parcial por username
-- [ ] Criar barra de busca acessível no header em todas as páginas
-- [ ] Exibir resultados em tempo real conforme o usuário digita (debounce de 300ms)
-- [ ] Cada resultado exibe foto e username clicável
-- [ ] Clicar no resultado navega para o perfil do usuário
-
----
-
-### HU018: Buscar por hashtag
-
-**Épico:** Busca | **MoSCoW:** Could | **Size:** G | **Sprint:** Sprint 4
-
-> Como usuário logado, quero buscar por hashtag, para encontrar publicações sobre um tema específico.
-
-**Tasks:**
-- [ ] Implementar parser de hashtags na legenda ao criar/editar post (extrair e salvar tags)
-- [ ] Criar tabela de relacionamento `post_hashtags` ou extrair hashtags via query
-- [ ] Criar endpoint `GET /search/hashtags?tag=...` retornando posts com a hashtag
-- [ ] Tornar hashtags clicáveis na legenda e nos comentários
-- [ ] Criar página de resultados de busca por hashtag
-- [ ] Exibir mensagem quando nenhuma publicação for encontrada para a hashtag
