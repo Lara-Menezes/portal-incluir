@@ -6,22 +6,27 @@ Este documento organiza o backlog do Portal Incluir. Cada seção representa um 
 
 ## Visão geral do backlog
 
-| ID    | Épico                  | MoSCoW | Size | Sprint   |
-|-------|------------------------|--------|------|----------|
-| HU001 | Gestão de Estudantes   | Must   | L    | Sprint 1 |
-| HU002 | Gestão de Estudantes   | Must   | M    | Sprint 1 |
-| HU003 | Gestão Pedagógica      | Must   | L    | Sprint 2 |
-| HU004 | Documentação           | Must   | M    | Sprint 2 |
-| HU005 | Relatórios             | Must   | L    | Sprint 3 |
-| HU006 | Inclusão               | Should | M    | Sprint 3 |
-| HU007 | Consulta de Dados      | Must   | L    | Sprint 4 |
-| HU008 | Consulta de Dados      | Must   | XL   | Sprint 4 |
-| HU009 | Comunicação Institucional | Should | S | Sprint 5 |
-| HU010 | Comunicação Institucional | Should | M | Sprint 5 |
-| HU011 | Segurança e Acesso     | Must   | L    | Sprint 6 |
-| HU012 | Armazenamento          | Should | M    | Sprint 6 |
-| HU013 | Multidispositivos      | Must   | L    | Sprint 7 |
-| HU014 | Acessibilidade         | Must   | L    | Sprint 7 |
+| ID    | Épico                     | MoSCoW | Size | Sprint   |
+|-------|---------------------------|--------|------|----------|
+| HU001 | Gestão de Estudantes      | Must   | L    | Sprint 1 |
+| HU002 | Gestão de Estudantes      | Must   | M    | Sprint 1 |
+| HU003 | Gestão de Estudantes      | Must   | M    | Sprint 1 |
+| HU004 | Gestão Pedagógica         | Must   | L    | Sprint 2 |
+| HU005 | Documentação              | Must   | L    | Sprint 1 |
+| HU006 | Documentação              | Must   | L    | Sprint 2 |
+| HU007 | Relatórios                | Must   | L    | Sprint 3 |
+| HU008 | Inclusão                  | Should | M    | Sprint 3 |
+| HU009 | Consulta de Dados         | Must   | L    | Sprint 4 |
+| HU010 | Consulta de Dados         | Must   | XL   | Sprint 4 |
+| HU011 | Comunicação Institucional | Should | S    | Sprint 5 |
+| HU012 | Comunicação Institucional | Should | M    | Sprint 5 |
+| HU013 | Segurança e Acesso        | Must   | L    | Sprint 6 |
+| HU014 | Gestão de Usuários        | Must   | L    | Sprint 1 |
+| HU015 | Gestão de Usuários        | Must   | M    | Sprint 1 |
+| HU016 | Gestão de Usuários        | Must   | M    | Sprint 1 |
+| HU017 | Armazenamento             | Should | M    | Sprint 6 |
+| HU018 | Acessibilidade            | Must   | L    | Sprint 7 |
+| HU019 | Acessibilidade            | Must   | L    | Sprint 7 |
 
 ---
 
@@ -63,7 +68,31 @@ Este documento organiza o backlog do Portal Incluir. Cada seção representa um 
 
 ---
 
-### HU003: Registrar acompanhamento pedagógico
+### HU003: Gerenciar status do estudante
+**Épico:** Gestão de Estudantes | **MoSCoW:** Must | **Size:** M | **Sprint:** Sprint 1
+
+> Como coordenador, quero ativar ou inativar um estudante cadastrado, para controlar seu status de acompanhamento no sistema sem perder seu histórico.
+
+**Tasks:**
+- [ ] Exibir o status atual do estudante
+- [ ] Permitir inativar um estudante ativo
+- [ ] Solicitar confirmação antes da inativação
+- [ ] Atualizar o status do estudante para inativo
+- [ ] Permitir reativar um estudante inativo
+- [ ] Solicitar confirmação antes da reativação
+- [ ] Atualizar o status do estudante para ativo
+- [ ] Impedir a exclusão dos dados durante a alteração de status
+- [ ] Preservar os dados cadastrais do estudante
+- [ ] Preservar os registros de acompanhamento pedagógico
+- [ ] Preservar o PEI e o Plano de Ação associados ao estudante
+- [ ] Permitir consultar estudantes ativos e inativos
+- [ ] Identificar visualmente o status do estudante
+- [ ] Aplicar permissões para alteração do status
+- [ ] Registrar a alteração de status do estudante
+
+---
+
+### HU004: Registrar acompanhamento pedagógico
 **Épico:** Gestão Pedagógica | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 2  
 
 > Como professor ou coordenador, quero registrar entrevistas, acompanhamentos e procedimentos realizados com o estudante, para manter seu histórico pedagógico atualizado.
@@ -80,23 +109,52 @@ Este documento organiza o backlog do Portal Incluir. Cada seção representa um 
 
 ---
 
-### HU004: Gerar documentos do estudante
-**Épico:** Documentação | **MoSCoW:** Must | **Size:** M | **Sprint:** Sprint 2  
+### HU005: Cadastrar documento PEI
+**Épico:** Documentação | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 1
 
-> Como coordenador, quero gerar documentos estruturados a partir das informações do estudante, para facilitar a organização e padronização da documentação.
+> Como coordenador, quero cadastrar um Plano Educacional Individualizado (PEI) para um estudante, para registrar suas necessidades educacionais, objetivos e estratégias de acompanhamento de forma individualizada.
 
 **Tasks:**
-- [ ] Criar funcionalidade para selecionar um estudante  
-- [ ] Criar modelos para os documentos  
-- [ ] Buscar as informações cadastradas do estudante  
-- [ ] Preencher o documento com os dados correspondentes  
-- [ ] Definir estrutura padronizada para os documentos  
-- [ ] Gerar o documento do estudante  
-- [ ] Implementar controle de acesso aos documentos  
+- [ ] Criar formulário para cadastro do PEI
+- [ ] Definir os campos e informações necessárias para o PEI
+- [ ] Permitir registrar as necessidades educacionais do estudante
+- [ ] Permitir registrar os objetivos educacionais
+- [ ] Permitir registrar as estratégias de acompanhamento
+- [ ] Definir os campos obrigatórios do PEI
+- [ ] Implementar validação dos campos obrigatórios
+- [ ] Associar o PEI ao estudante selecionado
+- [ ] Implementar armazenamento do PEI
+- [ ] Permitir consultar o PEI a partir dos dados do estudante
+- [ ] Permitir editar o PEI para atualização das informações
+- [ ] Aplicar controle de acesso ao PEI
+- [ ] Garantir proteção dos dados conforme LGPD
 
 ---
 
-### HU005: Emitir relatório de estudantes
+### HU006: Cadastrar documento de Plano de Ação
+**Épico:** Documentação | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 2
+
+> Como coordenador, quero cadastrar um Plano de Ação para um estudante, para registrar as ações, estratégias e responsáveis necessários para seu acompanhamento e desenvolvimento.
+
+**Tasks:**
+- [ ] Criar formulário para cadastro do Plano de Ação
+- [ ] Definir os campos e informações necessárias para o Plano de Ação
+- [ ] Permitir registrar as ações planejadas
+- [ ] Permitir registrar as estratégias a serem utilizadas
+- [ ] Permitir informar os responsáveis pelas ações
+- [ ] Permitir registrar prazos ou períodos para realização das ações
+- [ ] Definir os campos obrigatórios do Plano de Ação
+- [ ] Implementar validação dos campos obrigatórios
+- [ ] Associar o Plano de Ação ao estudante selecionado
+- [ ] Implementar armazenamento do Plano de Ação
+- [ ] Permitir consultar o Plano de Ação a partir dos dados do estudante
+- [ ] Permitir atualizar as informações do Plano de Ação
+- [ ] Aplicar controle de acesso ao Plano de Ação
+- [ ] Garantir proteção dos dados conforme LGPD
+
+---
+
+### HU007: Emitir relatório de estudantes
 **Épico:** Relatórios | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 3  
 
 > Como coordenador, quero gerar relatórios com informações dos estudantes, para acompanhar e analisar os dados da instituição.
@@ -112,7 +170,7 @@ Este documento organiza o backlog do Portal Incluir. Cada seção representa um 
 
 ---
 
-### HU006: Agrupar estudantes por deficiência
+### HU008: Agrupar estudantes por deficiência
 **Épico:** Inclusão | **MoSCoW:** Should | **Size:** M | **Sprint:** Sprint 3  
 
 > Como coordenador, quero agrupar estudantes de acordo com o tipo de deficiência, para facilitar o acompanhamento e o planejamento de ações de inclusão.
@@ -127,7 +185,7 @@ Este documento organiza o backlog do Portal Incluir. Cada seção representa um 
 
 ---
 
-### HU007: Buscar estudante
+### HU009: Buscar estudante
 **Épico:** Consulta de Dados | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 4  
 
 > Como usuário autorizado, quero buscar estudantes cadastrados, para localizar rapidamente suas informações.
@@ -144,7 +202,7 @@ Este documento organiza o backlog do Portal Incluir. Cada seção representa um 
 
 ---
 
-### HU008: Visualizar informações centralizadas
+### HU010: Visualizar informações centralizadas
 **Épico:** Consulta de Dados | **MoSCoW:** Must | **Size:** XL | **Sprint:** Sprint 4  
 
 > Como usuário autorizado, quero visualizar documentos e informações do estudante em um único local, para ter acesso centralizado ao seu histórico.
@@ -160,7 +218,7 @@ Este documento organiza o backlog do Portal Incluir. Cada seção representa um 
 
 ---
 
-### HU009: Comunicar-se com professores
+### HU011: Comunicar-se com professores
 **Épico:** Comunicação Institucional | **MoSCoW:** Should | **Size:** S | **Sprint:** Sprint 5  
 
 > Como coordenador, quero ter acesso aos dados de contato dos professores, para realizar comunicações institucionais por meios externos ao sistema.
@@ -175,7 +233,7 @@ Este documento organiza o backlog do Portal Incluir. Cada seção representa um 
 
 ---
 
-### HU010: Comunicar-se com pais e responsáveis
+### HU012: Comunicar-se com pais e responsáveis
 **Épico:** Comunicação Institucional | **MoSCoW:** Should | **Size:** M | **Sprint:** Sprint 5  
 
 > Como professor ou coordenador, quero ter acesso aos dados de contato dos pais ou responsáveis pelo estudante, para realizar comunicações necessárias por meios externos ao sistema.
@@ -191,7 +249,7 @@ Este documento organiza o backlog do Portal Incluir. Cada seção representa um 
 
 ---
 
-### HU011: Controlar acesso por perfil
+### HU013: Controlar acesso por perfil
 **Épico:** Segurança e Acesso | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 6  
 
 > Como administrador, quero definir permissões de acesso conforme o perfil do usuário, para garantir que cada usuário tenha acesso somente às funcionalidades autorizadas.
@@ -209,7 +267,79 @@ Claro, Lívia! Vamos finalizar os **issues detalhados** restantes no mesmo padr�
 
 ---
 
-### HU012: Preservar histórico dos estudantes
+### HU014: Cadastrar coordenador
+**Épico:** Segurança e Acesso | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 1
+
+> Como administrador, quero cadastrar um coordenador com seus dados de acesso e informações profissionais, para permitir que ele utilize o sistema de acordo com suas responsabilidades e permissões.
+
+**Tasks:**
+- [ ] Criar funcionalidade para cadastro de coordenadores
+- [ ] Criar formulário de cadastro do coordenador
+- [ ] Definir os dados cadastrais e profissionais do coordenador
+- [ ] Definir os dados necessários para acesso ao sistema
+- [ ] Definir os campos obrigatórios e opcionais
+- [ ] Implementar validação dos campos obrigatórios
+- [ ] Implementar validação de dados inválidos
+- [ ] Verificar se o identificador de acesso já está sendo utilizado
+- [ ] Impedir o cadastro de identificador de acesso duplicado
+- [ ] Associar o perfil de coordenador ao usuário cadastrado
+- [ ] Definir as permissões correspondentes ao perfil de coordenador
+- [ ] Armazenar os dados do coordenador de forma segura
+- [ ] Disponibilizar o coordenador para consulta e gerenciamento
+- [ ] Definir o coordenador como ativo após o cadastro
+- [ ] Aplicar controle de acesso à funcionalidade
+- [ ] Garantir proteção dos dados conforme LGPD
+
+---
+
+### HU015: Atualizar dados do coordenador
+**Épico:** Segurança e Acesso | **MoSCoW:** Must | **Size:** M | **Sprint:** Sprint 1
+
+> Como administrador, quero atualizar os dados de um coordenador cadastrado, para manter suas informações cadastrais, profissionais e de acesso atualizadas.
+
+**Tasks:**
+- [ ] Criar funcionalidade para localizar um coordenador
+- [ ] Criar tela de visualização dos dados do coordenador
+- [ ] Criar tela de edição dos dados
+- [ ] Permitir alterar os dados cadastrais do coordenador
+- [ ] Permitir atualizar os dados profissionais do coordenador
+- [ ] Permitir atualizar os dados de acesso quando autorizado
+- [ ] Implementar validação dos campos obrigatórios
+- [ ] Implementar validação dos dados atualizados
+- [ ] Verificar possíveis conflitos no identificador de acesso
+- [ ] Implementar salvamento das alterações
+- [ ] Registrar a data da atualização
+- [ ] Atualizar as informações exibidas nas consultas
+- [ ] Aplicar permissões de acesso à edição
+- [ ] Garantir a proteção dos dados atualizados
+
+---
+
+### HU016: Gerenciar status do coordenador
+**Épico:** Segurança e Acesso | **MoSCoW:** Must | **Size:** M | **Sprint:** Sprint 6
+
+> Como administrador, quero ativar ou inativar um coordenador cadastrado, para controlar seu acesso ao sistema sem perder seu histórico.
+
+**Tasks:**
+- [ ] Exibir o status atual do coordenador
+- [ ] Permitir inativar um coordenador ativo
+- [ ] Solicitar confirmação antes da inativação
+- [ ] Atualizar o status do coordenador para inativo
+- [ ] Impedir o acesso do coordenador inativo ao sistema
+- [ ] Permitir reativar um coordenador inativo
+- [ ] Solicitar confirmação antes da reativação
+- [ ] Atualizar o status do coordenador para ativo
+- [ ] Restaurar as permissões correspondentes ao perfil do coordenador
+- [ ] Preservar os dados cadastrais e profissionais do coordenador
+- [ ] Preservar o histórico de registros associados ao coordenador
+- [ ] Permitir consultar coordenadores ativos e inativos
+- [ ] Identificar visualmente o status do coordenador
+- [ ] Aplicar permissões para alteração do status
+- [ ] Registrar a alteração de status do coordenador
+
+---
+
+### HU017: Preservar histórico dos estudantes
 **Épico:** Armazenamento | **MoSCoW:** Should | **Size:** M | **Sprint:** Sprint 6  
 
 > Como instituição de ensino, quero manter os dados dos estudantes armazenados após sua conclusão, para preservar seu histórico para consultas futuras.
@@ -225,7 +355,7 @@ Claro, Lívia! Vamos finalizar os **issues detalhados** restantes no mesmo padr�
 
 ---
 
-### HU013: Utilizar o sistema em diferentes dispositivos
+### HU018: Utilizar o sistema em diferentes dispositivos
 **Épico:** Multidispositivos | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 7  
 
 > Como usuário, quero acessar o sistema em computadores e dispositivos móveis, para utilizar suas funcionalidades independentemente do dispositivo.
@@ -240,7 +370,7 @@ Claro, Lívia! Vamos finalizar os **issues detalhados** restantes no mesmo padr�
 
 ---
 
-### HU014: Utilizar recursos de acessibilidade
+### HU019: Utilizar recursos de acessibilidade
 **Épico:** Acessibilidade | **MoSCoW:** Must | **Size:** L | **Sprint:** Sprint 7  
 
 > Como usuário com necessidade de acessibilidade, quero utilizar recursos de acessibilidade digital, para conseguir utilizar o sistema de forma adequada.

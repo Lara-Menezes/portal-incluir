@@ -26,30 +26,35 @@ O mapa está organizado em 3 linhas:
 4. **Gerenciar documentação**: Gerar documentos e acessar as informações e documentos associados aos estudantes.
 5. **Analisar informações**: Emitir relatórios e organizar estudantes de acordo com suas características.
 6. **Realizar comunicação institucional**: Consultar dados de contato de professores, pais e responsáveis para comunicação externa.
-7. **Garantir acesso e preservação**: Manter o histórico dos estudantes e garantir que o sistema possa ser utilizado em diferentes dispositivos e com recursos de acessibilidade.
+7. **Gerenciar usuários**: Cadastrar, atualizar, inativar e reativar coordenadores.
+8. **Garantir acesso e preservação**: Manter o histórico dos estudantes e garantir que o sistema possa ser utilizado em diferentes dispositivos e com recursos de acessibilidade.
 
 ---
 
 ## Mapa de atividades, tarefas e histórias
 
-| Atividade                              | Tarefa                             | História                                                  |
-| -------------------------------------- | ---------------------------------- | --------------------------------------------------------- |
-| **Acessar o sistema**                  | Controlar permissões               | **HU011** – Controlar acesso por perfil                   |
-| **Gerenciar estudantes**               | Cadastrar estudante                | **HU001** – Cadastrar estudante                           |
-|                                        | Atualizar estudante                | **HU002** – Atualizar dados do estudante                  |
-|                                        | Buscar estudante                   | **HU007** – Buscar estudante                              |
-|                                        | Consultar estudante                | **HU008** – Visualizar informações centralizadas          |
-| **Realizar acompanhamento**            | Registrar acompanhamento           | **HU003** – Registrar acompanhamento pedagógico           |
-| **Gerenciar documentação**             | Gerar documentos                   | **HU004** – Gerar documentos do estudante                 |
-|                                        | Consultar histórico e documentos   | **HU008** – Visualizar informações centralizadas          |
-| **Analisar informações**               | Emitir relatórios                  | **HU005** – Emitir relatório de estudantes                |
-|                                        | Agrupar estudantes                 | **HU006** – Agrupar estudantes por deficiência            |
-| **Realizar comunicação institucional** | Consultar contato de professores   | **HU009** – Comunicar-se com professores                  |
-|                                        | Consultar contato de responsáveis  | **HU010** – Comunicar-se com pais e responsáveis          |
-| **Garantir acesso e preservação**      | Preservar histórico                | **HU012** – Preservar histórico dos estudantes            |
-|                                        | Acessar em diferentes dispositivos | **HU013** – Utilizar o sistema em diferentes dispositivos |
-|                                        | Utilizar acessibilidade            | **HU014** – Utilizar recursos de acessibilidade           |
-
+| Atividade                              | Tarefa                             | História                                                    |
+| -------------------------------------- | ---------------------------------- |-------------------------------------------------------------|
+| **Acessar o sistema**                  | Controlar permissões               | **HU013** – Controlar acesso por perfil                     |
+| **Gerenciar estudantes**               | Cadastrar estudante                | **HU001** – Cadastrar estudante                             |
+|                                        | Atualizar estudante                | **HU002** – Atualizar dados do estudante                    |
+|                                        | Gerenciar status do estudante      | **HU003** – Gerenciar status do estudante                   |
+|                                        | Buscar estudante                   | **HU009** – Buscar estudante                                |
+|                                        | Consultar estudante                | **HU010** – Visualizar informações centralizadas            |
+| **Realizar acompanhamento**            | Registrar acompanhamento           | **HU004** – Registrar acompanhamento pedagógico             |
+| **Gerenciar documentação**             | Cadastrar PEI                      | **HU005** – Cadastrar documento PEI                         |
+|                                        | Cadastrar Plano de Ação            | **HU006** – Cadastrar documento de Plano de Ação            |
+|                                        | Consultar histórico e documentos   | **HU010** – Visualizar informações centralizadas            |
+| **Analisar informações**               | Emitir relatórios                  | **HU007** – Emitir relatório de estudantes                  |
+|                                        | Agrupar estudantes                 | **HU008** – Agrupar estudantes por deficiência              |
+| **Realizar comunicação institucional** | Consultar contato de professores   | **HU011** – Comunicar-se com professores                    |
+|                                        | Consultar contato de responsáveis  | **HU012** – Comunicar-se com pais e responsáveis            |
+| **Gerenciar usuários**                 | Cadastrar coordenador              | **HU014** – Cadastrar coordenador                           |
+|                                        | Atualizar coordenador              | **HU015** – Atualizar dados do coordenador                  |
+|                                        | Gerenciar status do coordenador    | **HU016** – Gerenciar status do coordenador                 |
+| **Garantir acesso e preservação**      | Preservar histórico                | **HU017** – Preservar histórico dos estudantes              |
+|                                        | Acessar em diferentes dispositivos | **HU018** – Utilizar o sistema em diferentes dispositivos   |
+|                                        | Utilizar acessibilidade            | **HU019** – Utilizar recursos de acessibilidade             |
 ---
 
 # Definição do MVP
@@ -59,34 +64,39 @@ O MVP do **Portal Incluir** cobre o fluxo essencial para que a equipe responsáv
 ## Histórias incluídas no MVP
 
 | História  | Descrição                                     |
-| --------- | --------------------------------------------- |
+|-----------|-----------------------------------------------|
 | **HU001** | Cadastrar estudante                           |
 | **HU002** | Atualizar dados do estudante                  |
-| **HU003** | Registrar acompanhamento pedagógico           |
-| **HU004** | Gerar documentos do estudante                 |
-| **HU007** | Buscar estudante                              |
-| **HU008** | Visualizar informações centralizadas          |
-| **HU011** | Controlar acesso por perfil                   |
-| **HU013** | Utilizar o sistema em diferentes dispositivos |
-| **HU014** | Utilizar recursos de acessibilidade           |
+| **HU003** | Gerenciar status do estudante                 |
+| **HU004** | Registrar acompanhamento pedagógico           |
+| **HU005** | Cadastrar documento PEI                       |
+| **HU006** | Cadastrar documento Plano de Ação             |
+| **HU009** | Buscar estudante                              |
+| **HU010** | Visualizar informações centralizadas          |
+| **HU013** | Controlar acesso por perfil                   |
+| **HU014** | Cadastrar coordenador                         |
+| **HU015** | Atualizar dados do coordenador                |
+| **HU016** | Gerenciar status do coordenador               |
+| **HU018** | Utilizar o sistema em diferentes dispositivos |
+| **HU019** | Utilizar recursos de acessibilidade           |
 
-Essas histórias formam o núcleo funcional do Portal Incluir. Com elas, usuários autorizados conseguem cadastrar estudantes, manter suas informações atualizadas, registrar acompanhamentos, gerar documentação e consultar o histórico de forma centralizada.
+Essas histórias formam o núcleo funcional do Portal Incluir. Com elas, usuários autorizados conseguem cadastrar estudantes, manter suas informações atualizadas, gerenciar seus status, registrar acompanhamentos, cadastrar a documentação necessária e consultar as informações de forma centralizada e segura.
 
-O controle de acesso (**HU011**) é considerado essencial desde a primeira versão devido à natureza das informações armazenadas pelo sistema.
+O controle de acesso (**HU013**) é considerado essencial desde a primeira versão devido à natureza das informações armazenadas pelo sistema.
 
-Da mesma forma, responsividade (**HU013**) e acessibilidade digital (**HU014**) devem ser consideradas desde o início do desenvolvimento, pois fazem parte da proposta de inclusão e da experiência de utilização do Portal Incluir.
+Da mesma forma, a utilização em diferentes dispositivos (**HU018**) e os recursos de acessibilidade (**HU019**) devem ser considerados desde o início do desenvolvimento, pois fazem parte da proposta de inclusão e da experiência de utilização do Portal Incluir.
 
 ---
 
 ## Histórias fora do MVP — Incremento seguinte
 
 | História  | Descrição                            |
-| --------- | ------------------------------------ |
-| **HU005** | Emitir relatório de estudantes       |
-| **HU006** | Agrupar estudantes por deficiência   |
-| **HU009** | Comunicar-se com professores         |
-| **HU010** | Comunicar-se com pais e responsáveis |
-| **HU012** | Preservar histórico dos estudantes   |
+|-----------| ------------------------------------ |
+| **HU007** | Emitir relatório de estudantes       |
+| **HU008** | Agrupar estudantes por deficiência   |
+| **HU011** | Comunicar-se com professores         |
+| **HU012** | Comunicar-se com pais e responsáveis |
+| **HU017** | Preservar histórico dos estudantes   |
 
 Essas funcionalidades complementam o sistema, mas não impedem o funcionamento do fluxo principal do Portal Incluir em sua primeira versão.
 
@@ -116,15 +126,16 @@ Funcionalidades complementares, como **relatórios, agrupamentos e apoio à comu
 
 # Visão resumida do Story Map
 
-| Atividade                         | MVP                        | Incremento seguinte |
-| --------------------------------- | -------------------------- | ------------------- |
-| **Acessar o sistema**             | HU011                      | —                   |
-| **Gerenciar estudantes**          | HU001, HU002, HU007, HU008 | —                   |
-| **Realizar acompanhamento**       | HU003                      | —                   |
-| **Gerenciar documentação**        | HU004, HU008               | —                   |
-| **Analisar informações**          | —                          | HU005, HU006        |
-| **Comunicação institucional**     | —                          | HU009, HU010        |
-| **Garantir acesso e preservação** | HU013, HU014               | HU012               |
+| Atividade                              | MVP                               | Incremento seguinte |
+|----------------------------------------|-----------------------------------|---------------------|
+| **Acessar o sistema**                  | HU013                             | —                   |
+| **Gerenciar estudantes**               | HU001, HU002, HU003, HU009, HU010 | —                   |
+| **Realizar acompanhamento**            | HU004                             | —                   |
+| **Gerenciar documentação**             | HU005, HU006                      | —                   |
+| **Analisar informações**               | —                                 | HU007, HU008        |
+| **Realizar comunicação institucional** | —                                 | HU011, HU012        |
+| **Gerenciar usuários**                 | HU014, HU015, HU016               | —                   |
+| **Garantir acesso e preservação**      | HU018, HU019                      | HU017               |
 
 ---
 
