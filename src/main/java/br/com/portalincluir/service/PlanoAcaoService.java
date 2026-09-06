@@ -1,9 +1,10 @@
 package br.com.portalincluir.service;
 
-import br.com.portalincluir.dto.PlanoAcaoRequest;
+import br.com.portalincluir.dto.request.PlanoAcaoRequest;
 import br.com.portalincluir.enums.StatusPlanoAcao;
 import br.com.portalincluir.model.PlanoAcao;
 import br.com.portalincluir.repository.PlanoAcaoRepository;
+import br.com.portalincluir.dto.response.PlanoAcaoResponse;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class PlanoAcaoService {
     }
 
     // Criar Plano Ação
-    public PlanoAcao criar(PlanoAcaoRequest request) {
+    public PlanoAcaoResponse criar(PlanoAcaoRequest request) {
 
         PlanoAcao plano = new PlanoAcao();
 
@@ -57,28 +58,48 @@ public class PlanoAcaoService {
         plano.setArquivado(false);
         plano.setDataCriacao(LocalDateTime.now());
 
-        return planoAcaoRepository.save(plano);
+        PlanoAcao salvo = planoAcaoRepository.save(plano);
+
+        return new PlanoAcaoResponse(salvo);
     }
 
     //Listar Tudo
-    public List<PlanoAcao> listarTodos() {
-        return planoAcaoRepository.findAll();
+    public List<PlanoAcaoResponse> listarTodos() {
+        return planoAcaoRepository.findAll()
+                .stream()
+                .map(PlanoAcaoResponse::new)
+                .toList();
     }
 
-    //Buscar por ID
-    public PlanoAcao buscarPorId(Long id) {
+    //Listar Status
+    public List<PlanoAcaoResponse> listarPorStatus(StatusPlanoAcao status) {
+        return planoAcaoRepository.findByStatus(status)
+                .stream()
+                .map(PlanoAcaoResponse::new)
+                .toList();
+    }
+
+    //Buscar ID
+    public PlanoAcaoResponse buscarPorId(Long id) {
+        return new PlanoAcaoResponse(buscarEntidadePorId(id));
+    }
+
+    private PlanoAcao buscarEntidadePorId(Long id) {
         return planoAcaoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Plano de Ação não encontrado"));
     }
 
-
     //Atualizar
-    public PlanoAcao atualizar(Long id, PlanoAcaoRequest request) {
+    public PlanoAcaoResponse atualizar(Long id, PlanoAcaoRequest request) {
 
-        PlanoAcao plano = buscarPorId(id);
+        PlanoAcao plano = buscarEntidadePorId(id);
 
         if (plano.getStatus() == StatusPlanoAcao.ASSINADO) {
             throw new RuntimeException("Não é possível atualizar um plano assinado");
+        }
+
+        if (plano.isArquivado()) {
+            throw new RuntimeException("Não é possível atualizar um plano arquivado");
         }
 
         plano.setPeriodoLetivo(request.getPeriodoLetivo());
@@ -114,13 +135,15 @@ public class PlanoAcaoService {
 
         plano.setDataAtualizacao(LocalDateTime.now());
 
-        return planoAcaoRepository.save(plano);
+        PlanoAcao atualizado = planoAcaoRepository.save(plano);
+
+        return new PlanoAcaoResponse(atualizado);
     }
 
     //Deletar
     public void excluir(Long id) {
 
-        PlanoAcao plano = buscarPorId(id);
+        PlanoAcao plano = buscarEntidadePorId(id);
 
         if (plano.getStatus() == StatusPlanoAcao.ASSINADO) {
             throw new RuntimeException("Não é possível excluir um plano assinado"); //só exclui se não estiver assinado
@@ -129,5 +152,52 @@ public class PlanoAcaoService {
         planoAcaoRepository.delete(plano);
     }
 
+    //Arquivar
+    public PlanoAcaoResponse arquivar(Long id) {
 
+        PlanoAcao plano = buscarEntidadePorId(id);
+
+        if (plano.isArquivado()) {
+            throw new RuntimeException("O plano já está arquivado");
+        }
+
+        plano.setArquivado(true);
+
+        PlanoAcao arquivado = planoAcaoRepository.save(plano);
+
+        return new PlanoAcaoResponse(arquivado);
+    }
+
+    //Desarquivar
+    public PlanoAcaoResponse desarquivar(Long id) {
+
+        PlanoAcao plano = buscarEntidadePorId(id);
+
+        if (!plano.isArquivado()) {
+            throw new RuntimeException("O plano não está arquivado");
+        }
+
+        plano.setArquivado(false);
+
+        PlanoAcao desarquivado = planoAcaoRepository.save(plano);
+
+        return new PlanoAcaoResponse(desarquivado);
+    }
+
+    //Assinar Plano Ação
+    public PlanoAcaoResponse assinar(Long id) {
+
+        PlanoAcao plano = buscarEntidadePorId(id);
+
+        if (plano.getStatus() == StatusPlanoAcao.ASSINADO) {
+            throw new RuntimeException("O plano já está assinado");
+        }
+
+        plano.setStatus(StatusPlanoAcao.ASSINADO);
+        plano.setDataAssinatura(LocalDateTime.now());
+
+        PlanoAcao assinado = planoAcaoRepository.save(plano);
+
+        return new PlanoAcaoResponse(assinado);
+    }
 }
