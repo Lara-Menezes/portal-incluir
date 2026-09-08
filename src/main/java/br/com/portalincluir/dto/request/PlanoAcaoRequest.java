@@ -7,6 +7,12 @@ import jakarta.validation.constraints.Size;
 
 public class PlanoAcaoRequest {
 
+    @NotNull
+    private Long estudanteId;
+
+    @NotNull
+    private Long coordenadorResponsavelId;
+
     @NotBlank
     private String periodoLetivo;
 
@@ -26,25 +32,21 @@ public class PlanoAcaoRequest {
     @NotNull
     private Boolean possuiComorbidade;
 
-    @NotBlank
     private String comorbidades;
 
     @NotNull
     private Boolean usaMedicacaoContinua;
 
-    @NotBlank
     private String medicacoes;
 
     @NotNull
     private Boolean frequentaServicoApoio;
 
-    @NotBlank
     private String servicosApoio;
 
     @NotNull
     private Boolean possuiDocumentosComprobatorios;
 
-    @NotBlank
     private String documentosComprobatorios;
 
     @NotBlank
@@ -69,6 +71,21 @@ public class PlanoAcaoRequest {
 
     // getters e setters
 
+    public Long getEstudanteId() {
+        return estudanteId;
+    }
+
+    public void setEstudanteId(Long estudanteId) {
+        this.estudanteId = estudanteId;
+    }
+
+    public Long getCoordenadorResponsavelId() {
+        return coordenadorResponsavelId;
+    }
+
+    public void setCoordenadorResponsavelId(Long coordenadorResponsavelId) {
+        this.coordenadorResponsavelId = coordenadorResponsavelId;
+    }
 
     public String getPeriodoLetivo() {
         return periodoLetivo;

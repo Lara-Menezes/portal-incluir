@@ -6,6 +6,11 @@ import br.com.portalincluir.model.PlanoAcao;
 import br.com.portalincluir.repository.PlanoAcaoRepository;
 import br.com.portalincluir.dto.response.PlanoAcaoResponse;
 import org.springframework.stereotype.Service;
+import br.com.portalincluir.model.Estudante;
+import br.com.portalincluir.model.Coordenador;
+import br.com.portalincluir.repository.EstudanteRepository;
+import br.com.portalincluir.repository.CoordenadorRepository;
+
 import java.util.List;
 import java.time.LocalDateTime;
 
@@ -13,15 +18,38 @@ import java.time.LocalDateTime;
 public class PlanoAcaoService {
 
     private final PlanoAcaoRepository planoAcaoRepository;
+    private final EstudanteRepository estudanteRepository;
+    private final CoordenadorRepository coordenadorRepository;
 
-    public PlanoAcaoService(PlanoAcaoRepository planoAcaoRepository) {
+    public PlanoAcaoService(
+            PlanoAcaoRepository planoAcaoRepository,
+            EstudanteRepository estudanteRepository,
+            CoordenadorRepository coordenadorRepository) {
+
         this.planoAcaoRepository = planoAcaoRepository;
+        this.estudanteRepository = estudanteRepository;
+        this.coordenadorRepository = coordenadorRepository;
     }
 
     // Criar Plano Ação
     public PlanoAcaoResponse criar(PlanoAcaoRequest request) {
 
         PlanoAcao plano = new PlanoAcao();
+
+        Estudante estudante = estudanteRepository.findById(request.getEstudanteId())
+                .orElseThrow(() -> new RuntimeException("Estudante não encontrado"));
+
+        if (!estudante.isAtivo()) {
+            throw new RuntimeException(
+                    "Não é possível vincular um plano a um estudante inativo"
+            );
+        }
+
+        Coordenador coordenador = coordenadorRepository.findById(request.getCoordenadorResponsavelId())
+                .orElseThrow(() -> new RuntimeException("Coordenador não encontrado"));
+
+        plano.setEstudante(estudante);
+        plano.setCoordenadorResponsavel(coordenador);
 
         plano.setPeriodoLetivo(request.getPeriodoLetivo());
 
@@ -102,6 +130,21 @@ public class PlanoAcaoService {
             throw new RuntimeException("Não é possível atualizar um plano arquivado");
         }
 
+        Estudante estudante = estudanteRepository.findById(request.getEstudanteId())
+                .orElseThrow(() -> new RuntimeException("Estudante não encontrado"));
+
+        if (!estudante.isAtivo()) {
+            throw new RuntimeException(
+                    "Não é possível vincular um plano a um estudante inativo"
+            );
+        }
+
+        Coordenador coordenador = coordenadorRepository.findById(request.getCoordenadorResponsavelId())
+                .orElseThrow(() -> new RuntimeException("Coordenador não encontrado"));
+
+        plano.setEstudante(estudante);
+        plano.setCoordenadorResponsavel(coordenador);
+
         plano.setPeriodoLetivo(request.getPeriodoLetivo());
 
         plano.setNomeResponsavel(request.getNomeResponsavel());
@@ -121,9 +164,7 @@ public class PlanoAcaoService {
         plano.setPossuiDocumentosComprobatorios(
                 request.getPossuiDocumentosComprobatorios()
         );
-        plano.setDocumentosComprobatorios(
-                request.getDocumentosComprobatorios()
-        );
+        plano.setDocumentosComprobatorios(request.getDocumentosComprobatorios());
 
         plano.setNecessidadesEspecificas(request.getNecessidadesEspecificas());
         plano.setConsideracoes(request.getConsideracoes());

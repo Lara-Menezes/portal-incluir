@@ -12,18 +12,19 @@ public class PlanoAcao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@ManyToOne(optional = false)
-    //@JoinColumn(name = "estudante_id", nullable = false)
-    //private Estudante estudante;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "estudante_id", nullable = false)
+    private Estudante estudante;
 
-    //@ManyToOne(optional = false)
-    //@JoinColumn(name = "coordenador_responsavel_id", nullable = false)
-    //private Coordenador coordenadorResponsavel;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "coordenador_responsavel_id", nullable = false)
+    private Coordenador coordenadorResponsavel;
 
-    //@ManyToOne
-    //@JoinColumn(name = "coordenador_assinante_id")
-    //private Coordenador coordenadorAssinante;
+    @ManyToOne
+    @JoinColumn(name = "coordenador_assinante_id")
+    private Coordenador coordenadorAssinante;
 
+    @Column(nullable = false, length = 20)
     private String periodoLetivo;
 
     @Enumerated(EnumType.STRING)
@@ -52,10 +53,19 @@ public class PlanoAcao {
     private Boolean possuiDocumentosComprobatorios;
     private String documentosComprobatorios;
 
+    @Column(length = 5000)
     private String necessidadesEspecificas;
+
+    @Column(length = 5000)
     private String consideracoes;
+
+    @Column(length = 5000)
     private String avancosDificuldadesPotencialidades;
+
+    @Column(length = 5000)
     private String principaisDemandas;
+
+    @Column(length = 5000)
     private String propostasIntervencao;
 
 
@@ -69,6 +79,18 @@ public class PlanoAcao {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Estudante getEstudante() {return estudante;}
+
+    public void setEstudante(Estudante estudante) {this.estudante = estudante;}
+
+    public Coordenador getCoordenadorResponsavel() {return coordenadorResponsavel;}
+
+    public void setCoordenadorResponsavel(Coordenador coordenadorResponsavel) {this.coordenadorResponsavel = coordenadorResponsavel;}
+
+    public Coordenador getCoordenadorAssinante() {return coordenadorAssinante;}
+
+    public void setCoordenadorAssinante(Coordenador coordenadorAssinante) {this.coordenadorAssinante = coordenadorAssinante;}
 
     public String getPeriodoLetivo() {
         return periodoLetivo;

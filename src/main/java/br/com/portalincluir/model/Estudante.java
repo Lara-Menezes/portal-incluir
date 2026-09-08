@@ -35,6 +35,9 @@ public class Estudante {
     @Column(nullable = false, length = 30)
     private String matricula;
 
+    @Column(nullable = false, length = 20)
+    private String periodoIngresso;
+
     @Column(length = 20)
     private String telefone;
 
@@ -100,6 +103,10 @@ public class Estudante {
     public void setMatricula(String matricula) {
         this.matricula = matricula;
     }
+
+    public String getPeriodoIngresso() {return periodoIngresso;}
+
+    public void setPeriodoIngresso(String periodoIngresso) {this.periodoIngresso = periodoIngresso;}
 
     public String getTelefone() {
         return telefone;

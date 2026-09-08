@@ -12,6 +12,7 @@ public class EstudanteResponse {
     private LocalDate dataNascimento;
     private String curso;
     private String matricula;
+    private String periodoIngresso;
     private String telefone;
     private String email;
     private String nomeResponsavel;
@@ -25,6 +26,7 @@ public class EstudanteResponse {
         this.dataNascimento = estudante.getDataNascimento();
         this.curso = estudante.getCurso();
         this.matricula = estudante.getMatricula();
+        this.periodoIngresso = estudante.getPeriodoIngresso();
         this.telefone = estudante.getTelefone();
         this.email = estudante.getEmail();
         this.nomeResponsavel = estudante.getNomeResponsavel();
@@ -55,6 +57,8 @@ public class EstudanteResponse {
     public String getMatricula() {
         return matricula;
     }
+
+    public String getPeriodoIngresso() {return periodoIngresso;}
 
     public String getTelefone() {
         return telefone;

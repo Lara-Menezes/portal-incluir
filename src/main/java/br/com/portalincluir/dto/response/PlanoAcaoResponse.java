@@ -3,11 +3,24 @@ package br.com.portalincluir.dto.response;
 import br.com.portalincluir.enums.StatusPlanoAcao;
 import br.com.portalincluir.model.PlanoAcao;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class PlanoAcaoResponse {
 
     private Long id;
+
+    private Long estudanteId;
+    private String estudanteNome;
+    private String estudanteMatricula;
+    private String estudantePeriodoIngresso;
+    private String estudanteCurso;
+    private LocalDate estudanteDataNascimento;
+    private String estudanteTelefone;
+    private String estudanteEmail;
+
+    private Long coordenadorResponsavelId;
+    private String coordenadorResponsavelNome;
 
     private String periodoLetivo;
 
@@ -45,6 +58,18 @@ public class PlanoAcaoResponse {
     public PlanoAcaoResponse(PlanoAcao plano) {
 
         this.id = plano.getId();
+
+        this.estudanteId = plano.getEstudante().getId();
+        this.estudanteNome = plano.getEstudante().getNome();
+        this.estudanteMatricula = plano.getEstudante().getMatricula();
+        this.estudantePeriodoIngresso = plano.getEstudante().getPeriodoIngresso();
+        this.estudanteCurso = plano.getEstudante().getCurso();
+        this.estudanteDataNascimento = plano.getEstudante().getDataNascimento();
+        this.estudanteTelefone = plano.getEstudante().getTelefone();
+        this.estudanteEmail = plano.getEstudante().getEmail();
+
+        this.coordenadorResponsavelId = plano.getCoordenadorResponsavel().getId();
+        this.coordenadorResponsavelNome = plano.getCoordenadorResponsavel().getNome();
 
         this.periodoLetivo = plano.getPeriodoLetivo();
 
@@ -86,6 +111,26 @@ public class PlanoAcaoResponse {
     public Long getId() {
         return id;
     }
+
+    public Long getEstudanteId() {return estudanteId;}
+
+    public String getEstudanteNome() {return estudanteNome;}
+
+    public String getEstudanteMatricula() {return estudanteMatricula;}
+
+    public String getEstudantePeriodoIngresso() {return estudantePeriodoIngresso;}
+
+    public String getEstudanteCurso() {return estudanteCurso;}
+
+    public LocalDate getEstudanteDataNascimento() {return estudanteDataNascimento;}
+
+    public String getEstudanteTelefone() {return estudanteTelefone;}
+
+    public String getEstudanteEmail() {return estudanteEmail;}
+
+    public Long getCoordenadorResponsavelId() {return coordenadorResponsavelId;}
+
+    public String getCoordenadorResponsavelNome() {return coordenadorResponsavelNome;}
 
     public String getPeriodoLetivo() {
         return periodoLetivo;
