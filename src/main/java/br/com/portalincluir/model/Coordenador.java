@@ -20,7 +20,7 @@ public class Coordenador {
     @Column(nullable = false, length = 150)
     private String nome;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false, unique = true, length = 150)
     private String email;
 
     @Column(length = 20)
@@ -28,7 +28,7 @@ public class Coordenador {
 
     private LocalDate dataNascimento;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, unique = true, length = 30)
     private String matricula;
 
     @Column(nullable = false, length = 120)

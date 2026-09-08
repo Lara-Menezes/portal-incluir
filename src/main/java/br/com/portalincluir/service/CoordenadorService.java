@@ -27,12 +27,25 @@ public class CoordenadorService {
         validarSenhaObrigatoria(request.getSenha());
 
         String identificadorAcesso = normalizarIdentificador(request.getIdentificadorAcesso());
+        String email = normalizarEmail(request.getEmail());
+        String matricula = normalizarMatricula(request.getMatricula());
+
         if (coordenadorRepository.existsByIdentificadorAcessoIgnoreCase(identificadorAcesso)) {
             throw new RuntimeException("Identificador de acesso já utilizado");
         }
 
+        if (coordenadorRepository.existsByEmailIgnoreCase(email)) {
+            throw new RuntimeException("E-mail já utilizado");
+        }
+
+        if (coordenadorRepository.existsByMatriculaIgnoreCase(matricula)) {
+            throw new RuntimeException("Matrícula já utilizada");
+        }
+
         Coordenador coordenador = new Coordenador();
         preencherDados(coordenador, request);
+        coordenador.setEmail(email);
+        coordenador.setMatricula(matricula);
         coordenador.setIdentificadorAcesso(identificadorAcesso);
         coordenador.setSenhaHash(passwordEncoder.encode(request.getSenha()));
         coordenador.setPerfil(PerfilUsuario.COORDENADOR);
@@ -73,12 +86,24 @@ public class CoordenadorService {
     public CoordenadorResponse atualizar(Long id, CoordenadorRequest request) {
         Coordenador coordenador = buscarEntidadePorId(id);
         String identificadorAcesso = normalizarIdentificador(request.getIdentificadorAcesso());
+        String email = normalizarEmail(request.getEmail());
+        String matricula = normalizarMatricula(request.getMatricula());
 
         if (coordenadorRepository.existsByIdentificadorAcessoIgnoreCaseAndIdNot(identificadorAcesso, id)) {
             throw new RuntimeException("Identificador de acesso já utilizado");
         }
 
+        if (coordenadorRepository.existsByEmailIgnoreCaseAndIdNot(email, id)) {
+            throw new RuntimeException("E-mail já utilizado");
+        }
+
+        if (coordenadorRepository.existsByMatriculaIgnoreCaseAndIdNot(matricula, id)) {
+            throw new RuntimeException("Matrícula já utilizada");
+        }
+
         preencherDados(coordenador, request);
+        coordenador.setEmail(email);
+        coordenador.setMatricula(matricula);
         coordenador.setIdentificadorAcesso(identificadorAcesso);
 
         if (request.getSenha() != null && !request.getSenha().isBlank()) {
@@ -140,6 +165,14 @@ public class CoordenadorService {
 
     private String normalizarIdentificador(String identificador) {
         return identificador.trim().toLowerCase();
+    }
+
+    private String normalizarEmail(String email) {
+        return email.trim().toLowerCase();
+    }
+
+    private String normalizarMatricula(String matricula) {
+        return matricula.trim();
     }
 
     private String normalizarCampoOpcional(String valor) {

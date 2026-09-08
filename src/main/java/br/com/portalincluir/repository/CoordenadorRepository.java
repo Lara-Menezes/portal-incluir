@@ -9,5 +9,9 @@ import java.util.List;
 public interface CoordenadorRepository extends JpaRepository<Coordenador, Long> {
     boolean existsByIdentificadorAcessoIgnoreCase(String identificadorAcesso);
     boolean existsByIdentificadorAcessoIgnoreCaseAndIdNot(String identificadorAcesso, Long id);
+    boolean existsByEmailIgnoreCase(String email);
+    boolean existsByEmailIgnoreCaseAndIdNot(String email, Long id);
+    boolean existsByMatriculaIgnoreCase(String matricula);
+    boolean existsByMatriculaIgnoreCaseAndIdNot(String matricula, Long id);
     List<Coordenador> findByStatus(StatusCoordenador status);
 }
