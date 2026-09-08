@@ -80,7 +80,7 @@ public class EstudanteService {
 
     // Buscar estudantes por nome
     public List<EstudanteResponse> buscarPorNome(String nome) {
-        return estudanteRepository.findByNome(nome)
+        return estudanteRepository.findByNomeContainingIgnoreCase(nome)
                 .stream()
                 .map(EstudanteResponse::new)
                 .toList();

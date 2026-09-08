@@ -9,5 +9,5 @@ public interface EstudanteRepository extends JpaRepository<Estudante, Long> {
 
     boolean existsByMatricula(String matricula);
     List<Estudante> findByAtivo(boolean ativo);
-    List<Estudante> findByNome(String nome);
+    List<Estudante> findByNomeContainingIgnoreCase(String nome);
 }
