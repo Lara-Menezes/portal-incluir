@@ -30,6 +30,7 @@ public class EstudanteService {
         estudante.setDataNascimento(request.getDataNascimento());
         estudante.setCurso(request.getCurso());
         estudante.setMatricula(request.getMatricula());
+        estudante.setPeriodoIngresso(request.getPeriodoIngresso());
         estudante.setTelefone(request.getTelefone());
         estudante.setEmail(request.getEmail());
         estudante.setNomeResponsavel(request.getNomeResponsavel());
@@ -107,6 +108,7 @@ public class EstudanteService {
         estudante.setDataNascimento(request.getDataNascimento());
         estudante.setCurso(request.getCurso());
         estudante.setMatricula(request.getMatricula());
+        estudante.setPeriodoIngresso(request.getPeriodoIngresso());
         estudante.setTelefone(request.getTelefone());
         estudante.setEmail(request.getEmail());
         estudante.setNomeResponsavel(request.getNomeResponsavel());

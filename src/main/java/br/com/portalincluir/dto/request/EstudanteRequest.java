@@ -26,6 +26,10 @@ public class EstudanteRequest {
     @Size(max = 30)
     private String matricula;
 
+    @NotBlank
+    @Size(max = 20)
+    private String periodoIngresso;
+
     @Size(max = 20)
     private String telefone;
 
@@ -73,6 +77,10 @@ public class EstudanteRequest {
     public String getMatricula() {
         return matricula;
     }
+
+    public String getPeriodoIngresso() {return periodoIngresso;}
+
+    public void setPeriodoIngresso(String periodoIngresso) {this.periodoIngresso = periodoIngresso;}
 
     public void setMatricula(String matricula) {
         this.matricula = matricula;
