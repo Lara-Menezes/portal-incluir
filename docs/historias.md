@@ -1,12 +1,10 @@
 # Histórias de Usuário: Portal Incluir
 
-As histórias estão organizadas por épico. Cada história tem critérios de aceitação que definem quando ela pode ser considerada concluída.
-
----
-
-# Gestão de Estudantes
+Histórias em ordem numérica, com épico e sprint conforme o Projects consultado em 15/09/2026. Os critérios de aceitação definem a conclusão de cada história; o status de execução consta no backlog.
 
 ## HU001: Cadastrar estudante
+
+**Épico:** Gestão de Estudantes | **Sprint:** Sprint 1
 
 **Como** coordenador,  
 **Quero** cadastrar um novo estudante com seus dados completos,  
@@ -24,6 +22,8 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ## HU002: Atualizar dados do estudante
 
+**Épico:** Gestão de Estudantes | **Sprint:** Sprint 1
+
 **Como** coordenador,  
 **Quero** atualizar os dados de um estudante cadastrado,  
 **Para** manter suas informações sempre atualizadas.
@@ -38,6 +38,8 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 ---
 
 ## HU003: Gerenciar status do estudante
+
+**Épico:** Gestão de Estudantes | **Sprint:** Sprint 1
 
 **Como** coordenador,
 **Quero** alterar o status de um estudante entre ativo e inativo,
@@ -62,9 +64,9 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ---
 
-# Gestão Pedagógica
-
 ## HU004: Registrar acompanhamento pedagógico
+
+**Épico:** Gestão Pedagógica | **Sprint:** Sprint 2
 
 **Como** professor ou coordenador,  
 **Quero** registrar entrevistas, acompanhamentos e procedimentos realizados com o estudante,  
@@ -80,9 +82,9 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ---
 
-# Documentação
-
 ## HU005: Cadastrar documento PEI
+
+**Épico:** Documentação | **Sprint:** Sprint 2
 
 **Como** coordenador,
 **Quero** cadastrar um Plano Educacional Individualizado (PEI) para um estudante,
@@ -105,6 +107,8 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ## HU006: Cadastrar documento de Plano de Ação
 
+**Épico:** Documentação | **Sprint:** Sprint 2
+
 **Como** coordenador,
 **Quero** cadastrar um Plano de Ação para um estudante,
 **Para** registrar as ações, estratégias e responsáveis necessários para seu acompanhamento e desenvolvimento.
@@ -126,9 +130,9 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ---
 
-# Relatórios
-
 ## HU007: Emitir relatório de estudantes
+
+**Épico:** Relatórios | **Sprint:** Não definida
 
 **Como** coordenador,  
 **Quero** gerar relatórios com informações dos estudantes,  
@@ -143,9 +147,9 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ---
 
-# Inclusão e Acessibilidade
-
 ## HU008: Agrupar estudantes por deficiência
+
+**Épico:** Inclusão e Acessibilidade | **Sprint:** Sprint 1
 
 **Como** coordenador,  
 **Quero** agrupar estudantes de acordo com o tipo de deficiência,  
@@ -160,9 +164,9 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ---
 
-# Consulta de Dados
-
 ## HU009: Buscar estudante
+
+**Épico:** Consulta de Dados | **Sprint:** Sprint 1
 
 **Como** usuário autorizado,  
 **Quero** buscar estudantes cadastrados,  
@@ -180,6 +184,8 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ## HU010: Visualizar informações centralizadas
 
+**Épico:** Consulta de Dados | **Sprint:** Sprint 1
+
 **Como** usuário autorizado,  
 **Quero** visualizar documentos e informações do estudante em um único local,  
 **Para** ter acesso centralizado ao seu histórico.
@@ -194,9 +200,9 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ---
 
-# Comunicação Institucional
-
 ## HU011: Comunicar-se com professores
+
+**Épico:** Comunicação Institucional | **Sprint:** Sprint 1
 
 **Como** coordenador,  
 **Quero** ter acesso aos dados de contato dos professores,  
@@ -214,6 +220,8 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ## HU012: Comunicar-se com pais e responsáveis
 
+**Épico:** Comunicação Institucional | **Sprint:** Sprint 1
+
 **Como** professor ou coordenador,  
 **Quero** ter acesso aos dados de contato dos pais ou responsáveis pelo estudante,  
 **Para** realizar comunicações necessárias por meios externos ao sistema.
@@ -229,26 +237,55 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ---
 
-# Segurança e Acesso
+## HU013: Controlar acesso por perfil - Autenticar e autorizar usuários com JWT
 
-## HU013: Controlar acesso por perfil
+**Épico:** Segurança e Acesso | **Sprint:** Sprint 1
 
-**Como** administrador,  
-**Quero** definir permissões de acesso conforme o perfil do usuário,  
-**Para** garantir que cada usuário tenha acesso somente às funcionalidades autorizadas.
+**Como** usuário do Portal Incluir,  
+**Quero** me autenticar com minhas credenciais,  
+**Para** acessar com segurança somente as funcionalidades autorizadas para o meu perfil.
 
-**Critérios de aceitação:**  
-* O sistema deve possuir diferentes perfis de usuário.  
-* Cada perfil deve possuir permissões específicas.  
-* O sistema deve impedir que um usuário acesse funcionalidades não autorizadas.  
-* O controle de acesso deve ser aplicado às informações dos estudantes.  
-* Dados protegidos devem estar disponíveis somente para usuários autorizados.
+**Critérios de aceitação:**
+
+* O sistema deve autenticar usuários por meio de credenciais válidas.
+* Após a autenticação, o sistema deve gerar um token JWT que identifique o usuário e seu perfil.
+* As rotas protegidas devem exigir um token JWT válido e recusar tokens inválidos ou expirados.
+* Credenciais inválidas não devem revelar se o login ou a senha estão incorretos.
+* As senhas devem ser armazenadas utilizando hash BCrypt.
+* O sistema deve possuir os perfis ADMINISTRADOR, COORDENADOR, PROFESSOR e EQUIPE_MULTIDISCIPLINAR.
+* Cada usuário deve possuir um perfil com permissões específicas.
+* O controle de acesso deve ser aplicado às rotas da aplicação, aos endpoints da API e aos dados dos estudantes.
+* Usuários autenticados não devem acessar funcionalidades incompatíveis com seu perfil.
+* Requisições não autenticadas devem retornar HTTP 401 Unauthorized.
+* Requisições sem a permissão necessária devem retornar HTTP 403 Forbidden.
+* O endpoint de autenticação deve ser público; os demais endpoints devem ser protegidos conforme as permissões definidas.
+* A autenticação deve ser stateless, sem armazenamento de sessão no servidor.
+* Dados sensíveis, senhas e tokens completos não devem ser registrados nos logs.
+* As permissões devem ser validadas no backend, independentemente das restrições do frontend.
+
+**Matriz inicial de permissões:**
+
+| Funcionalidade | Administrador | Coordenador | Professor | Equipe multidisciplinar |
+|---|---|---|---|---|
+| Gerenciar usuários e perfis | Sim | Não | Não | Não |
+| Cadastrar e editar coordenadores | Sim | Não | Não | Não |
+| Ativar e inativar coordenadores | Sim | Não | Não | Não |
+| Cadastrar estudantes | Sim | Sim | Não | Não |
+| Atualizar estudantes | Sim | Sim | Não | Não |
+| Ativar e inativar estudantes | Sim | Sim | Não | Não |
+| Consultar estudantes | Sim | Sim | Sim | Sim |
+| Registrar acompanhamento pedagógico | Sim | Sim | Sim | Sim |
+| Gerenciar PEI e Plano de Ação | Sim | Sim | A definir | A definir |
+| Consultar documentos e histórico | Sim | Sim | A definir | A definir |
+| Emitir relatórios | Sim | Sim | A definir | A definir |
+
+As permissões marcadas como **A definir** permanecem pendentes de definição pela equipe. O gerenciamento dos CRUDs HU020 e HU021 segue a permissão administrativa de gerenciamento de usuários.
 
 ---
 
-# Gestão de usuários
-
 ## HU014: Cadastrar coordenador
+
+**Épico:** Gestão Pedagógica | **Sprint:** Sprint 1
 
 **Como** administrador,
 **Quero** cadastrar um coordenador com seus dados de acesso e informações profissionais,
@@ -271,6 +308,8 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ## HU015: Atualizar dados do coordenador
 
+**Épico:** Gestão Pedagógica | **Sprint:** Sprint 1
+
 **Como** administrador,
 **Quero** atualizar os dados de um coordenador cadastrado,
 **Para** manter suas informações cadastrais, profissionais e de acesso atualizadas.
@@ -289,6 +328,8 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 ---
 
 ## HU016: Gerenciar status do coordenador
+
+**Épico:** Gestão Pedagógica | **Sprint:** Sprint 1
 
 **Como** administrador,
 **Quero** alterar o status de um coordenador entre ativo e inativo,
@@ -315,9 +356,9 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ---
 
-# Armazenamento e Acessibilidade
-
 ## HU017: Preservar histórico dos estudantes
+
+**Épico:** Armazenamento e Acessibilidade | **Sprint:** Sprint 1
 
 **Como** instituição de ensino,  
 **Quero** manter os dados dos estudantes armazenados após sua conclusão,  
@@ -333,6 +374,8 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ## HU018: Utilizar o sistema em diferentes dispositivos
 
+**Épico:** Armazenamento e Acessibilidade | **Sprint:** Sprint 1
+
 **Como** usuário,  
 **Quero** acessar o sistema em computadores e dispositivos móveis,  
 **Para** utilizar suas funcionalidades independentemente do dispositivo.
@@ -347,6 +390,8 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 
 ## HU019: Utilizar recursos de acessibilidade
 
+**Épico:** Armazenamento e Acessibilidade | **Sprint:** Sprint 1
+
 **Como** usuário com necessidade de acessibilidade,  
 **Quero** utilizar recursos de acessibilidade digital,  
 **Para** conseguir utilizar o sistema de forma adequada.
@@ -356,3 +401,85 @@ As histórias estão organizadas por épico. Cada história tem critérios de ac
 * Os recursos devem estar disponíveis nas principais funcionalidades do sistema.  
 * Os elementos da interface devem ser apresentados de forma clara e compreensível.  
 * A acessibilidade deve ser considerada nas funcionalidades de consulta e agrupamento de estudantes.
+
+---
+
+## HU020: Gerenciar professores (CRUD)
+
+**Épico:** Gestão Pedagógica | **Sprint:** Sprint 2
+
+**Como** administrador,  
+**Quero** cadastrar, consultar, atualizar e inativar professores,  
+**Para** manter suas informações atualizadas e controlar seu acesso ao sistema, preservando seus dados e histórico.
+
+**Critérios de aceitação:**
+
+* O sistema deve permitir ao administrador cadastrar um novo professor.
+* O formulário deve permitir informar os dados cadastrais, profissionais e de acesso do professor.
+* O sistema deve validar os campos obrigatórios e impedir o salvamento de informações inválidas.
+* O sistema deve impedir o uso de um identificador de acesso já utilizado por outro usuário.
+* O professor cadastrado deve receber o perfil e as permissões correspondentes à sua função, conforme a HU013.
+* O professor deve ser cadastrado inicialmente com status ativo.
+* Após o cadastro, o professor deve estar disponível para consulta e gerenciamento.
+* O sistema deve permitir listar professores e realizar buscas por nome ou identificador de acesso.
+* O sistema deve permitir filtrar professores por status ativo ou inativo.
+* O sistema deve permitir visualizar os dados e o status do professor, sem exibir sua senha.
+* O sistema deve informar quando nenhum professor for encontrado.
+* O sistema deve permitir editar os dados cadastrais e profissionais do professor.
+* O sistema deve permitir atualizar as informações de acesso, quando autorizado.
+* Os campos obrigatórios e a duplicidade do identificador de acesso devem ser validados durante a atualização.
+* Após salvar, os dados atualizados devem ser apresentados nas consultas.
+* A edição deve preservar o perfil, o status e os registros associados ao professor.
+* A exclusão deve ocorrer por meio da inativação do professor, sem remover definitivamente seu cadastro.
+* O sistema deve solicitar confirmação antes da inativação.
+* Um professor inativado não deve conseguir acessar o sistema.
+* O sistema deve permitir consultar e reativar professores inativados, solicitando confirmação antes da reativação.
+* Após a reativação, o professor deve poder acessar o sistema novamente, conforme as permissões de seu perfil.
+* A alteração de status deve preservar os dados, registros, documentos e históricos relacionados ao professor.
+* Somente usuários com permissão administrativa devem poder gerenciar os cadastros de professores.
+* A consulta dos dados de contato pelo coordenador, prevista na HU011, deve permanecer disponível conforme suas permissões, sem conceder acesso ao gerenciamento do cadastro.
+* Os dados cadastrais e de acesso devem ser armazenados de forma segura.
+* A interface deve ser intuitiva, acessível e funcionar em computadores e dispositivos móveis.
+
+---
+
+## HU021: Gerenciar equipe multidisciplinar (CRUD)
+
+**Épico:** Gestão Pedagógica | **Sprint:** Sprint 2
+
+**Como** administrador,  
+**Quero** cadastrar, consultar, atualizar e inativar profissionais da equipe multidisciplinar,  
+**Para** manter suas informações atualizadas e controlar seu acesso ao sistema, preservando seus dados e histórico.
+
+**Critérios de aceitação:**
+
+* O sistema deve permitir ao administrador cadastrar individualmente os profissionais da equipe multidisciplinar.
+* O formulário deve permitir informar os dados cadastrais, profissionais e de acesso de cada profissional.
+* O sistema deve permitir informar a área de atuação ou especialidade do profissional.
+* Cada profissional deve possuir suas próprias credenciais de acesso.
+* O sistema deve validar os campos obrigatórios e impedir o salvamento de informações inválidas.
+* O sistema deve impedir o uso de um identificador de acesso já utilizado por outro usuário.
+* O profissional cadastrado deve receber o perfil EQUIPE_MULTIDISCIPLINAR e as permissões correspondentes à sua função, conforme a HU013.
+* O profissional deve ser cadastrado inicialmente com status ativo.
+* Após o cadastro, o profissional deve estar disponível para consulta e gerenciamento.
+* O sistema deve permitir listar profissionais e realizar buscas por nome ou identificador de acesso.
+* O sistema deve permitir filtrar profissionais por área de atuação ou especialidade e por status ativo ou inativo.
+* O sistema deve permitir visualizar os dados e o status do profissional, sem exibir sua senha.
+* O sistema deve informar quando nenhum profissional for encontrado.
+* O sistema deve permitir editar os dados cadastrais e profissionais, incluindo a área de atuação ou especialidade.
+* O sistema deve permitir atualizar as informações de acesso, quando autorizado.
+* Os campos obrigatórios e a duplicidade do identificador de acesso devem ser validados durante a atualização.
+* Após salvar, os dados atualizados devem ser apresentados nas consultas.
+* A edição deve preservar o perfil, o status e os registros associados ao profissional.
+* A exclusão deve ocorrer por meio da inativação do profissional, sem remover definitivamente seu cadastro.
+* O sistema deve solicitar confirmação antes da inativação.
+* Um profissional inativado não deve conseguir acessar o sistema.
+* O sistema deve permitir consultar e reativar profissionais inativados, solicitando confirmação antes da reativação.
+* Após a reativação, o profissional deve poder acessar o sistema novamente, conforme as permissões de seu perfil.
+* A alteração de status deve preservar os dados, registros, documentos e históricos relacionados ao profissional.
+* Somente usuários com permissão administrativa devem poder gerenciar os cadastros da equipe multidisciplinar.
+* Os dados cadastrais e de acesso devem ser armazenados de forma segura.
+* A interface deve ser intuitiva, acessível e funcionar em computadores e dispositivos móveis.
+
+---
+
