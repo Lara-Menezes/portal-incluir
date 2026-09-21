@@ -73,17 +73,17 @@ A solução busca:
 | Artefato | Situação | Arquivo |
 |---|---|---|
 | Documento de Visão | Concluído | [docs/visao.md](docs/visao.md) |
-| Stakeholders e personas | Em elaboração | — |
-| Entrevistas e levantamento | Em elaboração | — |
-| Requisitos | Em elaboração | — |
+| Stakeholders e personas | Concluído | [docs/personas.md](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.4mtf7jhsqcxh)|
+| Entrevistas e levantamento | Concluído | [doc/entrevistas.md](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.moptu7jwpi8r)|
+| Requisitos | Concluído | [docs/requisitos.md](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.2b7duf4g431i)|
 
 ### Fase 2 — Especificação funcional
 
 | Artefato | Situação | Arquivo |
 |---|---|---|
-| Casos de uso detalhados | Em elaboração | — |
-| Matriz de rastreabilidade | Em elaboração | — |
-| Regras de negócio | Em elaboração | — |
+| Casos de uso detalhados | Concluído |[docs/casosDeUsoDetalhados.md](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.tfuwhvxogpeq)|
+| Matriz de rastreabilidade | Concluído |[docs/matrizDeRastreabilidade](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.tfuwhvxogpeq)|
+| Regras de negócio | Concluído |[docs/regrasDeNegocio](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.l3v2292fdxz5)|
 | Protótipo de interface | Concluído | [Acessar no Figma](https://www.figma.com/design/vFjSKJomALDbPFoxTb5RvQ/Prototipa%C3%A7%C3%A3o---Portal-Incluir?m=auto&t=b3gqbFZ6KjZkovY8-6) |
 | Apresentação do protótipo | Concluído | [Acessar no Figma Slides](https://www.figma.com/slides/qpQbdmK8aFWRGKVYal0dZ5/Apresenta%C3%A7%C3%A3o-Portal-Incluir---Fase-1?t=b3gqbFZ6KjZkovY8-6) |
 | Validação do protótipo | Concluído | [docs/validacao-prototipo.md](docs/validacao-prototipo.md) |
@@ -93,15 +93,15 @@ A solução busca:
 
 | Artefato | Situação | Arquivo |
 |---|---|---|
-| Definições arquiteturais | Em elaboração | — |
-| Diagrama de classes | Em elaboração | — |
-| Diagrama de objetos | Em elaboração | — |
-| Diagrama de componentes | Em elaboração | — |
-| Diagrama de implantação | Em elaboração | — |
-| Diagramas de sequência | Em elaboração | — |
-| Diagramas de comunicação | Em elaboração | — |
-| Diagramas de estados | Em elaboração | — |
-| Diagramas de atividades | Em elaboração | — |
+| Definições arquiteturais | Em elaboração |[docs/definicoesArquiteturais](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.tfuwhvxogpeq)|
+| Diagrama de classes | Em elaboração |[docs/diagramaDeClasses](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.tfuwhvxogpeq)|
+| Diagrama de objetos | Em elaboração |[docs/diagramaDeObjetos](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.tfuwhvxogpeq)|
+| Diagrama de componentes | Em elaboração |[docs/diagramasDeComponentes](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.tfuwhvxogpeq)|
+| Diagrama de implantação | Em elaboração |[docs/diagramaDeImplantacao](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.tfuwhvxogpeq)|
+| Diagramas de sequência | Em elaboração |[docs/diagramaDeSequencia](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.tfuwhvxogpeq)|
+| Diagramas de comunicação | Em elaboração |[docs/diagramaDeComunicacao](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.tfuwhvxogpeq)|
+| Diagramas de estados | Em elaboração |[docs/diagramaDeEstados](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.tfuwhvxogpeq)|
+| Diagramas de atividades | Em elaboração |[docs/diagramaDeAtividades](https://docs.google.com/document/d/19h0CnEwp9-zhAQQT_TApPJ94l-MIUkpZ0ssfRbHL3-M/edit?tab=t.tfuwhvxogpeq)|
 
 ### Fase 4 — Planejamento e backlog
 
