@@ -2,11 +2,11 @@ package br.com.portalincluir.service;
 
 import br.com.portalincluir.dto.request.CoordenadorRequest;
 import br.com.portalincluir.dto.response.CoordenadorResponse;
-import br.com.portalincluir.enums.PerfilUsuario;
 import br.com.portalincluir.enums.StatusCoordenador;
 import br.com.portalincluir.model.Coordenador;
 import br.com.portalincluir.repository.CoordenadorRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,7 +16,6 @@ import java.util.List;
 public class CoordenadorService {
 
     private final CoordenadorRepository coordenadorRepository;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public CoordenadorService(CoordenadorRepository coordenadorRepository) {
         this.coordenadorRepository = coordenadorRepository;
@@ -24,15 +23,9 @@ public class CoordenadorService {
 
     // Criar coordenador
     public CoordenadorResponse criar(CoordenadorRequest request) {
-        validarSenhaObrigatoria(request.getSenha());
 
-        String identificadorAcesso = normalizarIdentificador(request.getIdentificadorAcesso());
         String email = normalizarEmail(request.getEmail());
         String matricula = normalizarMatricula(request.getMatricula());
-
-        if (coordenadorRepository.existsByIdentificadorAcessoIgnoreCase(identificadorAcesso)) {
-            throw new RuntimeException("Identificador de acesso já utilizado");
-        }
 
         if (coordenadorRepository.existsByEmailIgnoreCase(email)) {
             throw new RuntimeException("E-mail já utilizado");
@@ -46,9 +39,6 @@ public class CoordenadorService {
         preencherDados(coordenador, request);
         coordenador.setEmail(email);
         coordenador.setMatricula(matricula);
-        coordenador.setIdentificadorAcesso(identificadorAcesso);
-        coordenador.setSenhaHash(passwordEncoder.encode(request.getSenha()));
-        coordenador.setPerfil(PerfilUsuario.COORDENADOR);
         coordenador.setStatus(StatusCoordenador.ATIVO);
         coordenador.setDataCriacao(LocalDateTime.now());
 
@@ -85,13 +75,8 @@ public class CoordenadorService {
     // Atualizar coordenador
     public CoordenadorResponse atualizar(Long id, CoordenadorRequest request) {
         Coordenador coordenador = buscarEntidadePorId(id);
-        String identificadorAcesso = normalizarIdentificador(request.getIdentificadorAcesso());
         String email = normalizarEmail(request.getEmail());
         String matricula = normalizarMatricula(request.getMatricula());
-
-        if (coordenadorRepository.existsByIdentificadorAcessoIgnoreCaseAndIdNot(identificadorAcesso, id)) {
-            throw new RuntimeException("Identificador de acesso já utilizado");
-        }
 
         if (coordenadorRepository.existsByEmailIgnoreCaseAndIdNot(email, id)) {
             throw new RuntimeException("E-mail já utilizado");
@@ -104,16 +89,18 @@ public class CoordenadorService {
         preencherDados(coordenador, request);
         coordenador.setEmail(email);
         coordenador.setMatricula(matricula);
-        coordenador.setIdentificadorAcesso(identificadorAcesso);
-
-        if (request.getSenha() != null && !request.getSenha().isBlank()) {
-            coordenador.setSenhaHash(passwordEncoder.encode(request.getSenha()));
-        }
 
         coordenador.setDataAtualizacao(LocalDateTime.now());
 
         Coordenador atualizado = coordenadorRepository.save(coordenador);
         return new CoordenadorResponse(atualizado);
+    }
+
+    // Excluir coordenador
+    public void excluir(Long id) {
+        Coordenador coordenador = coordenadorRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coordenador não encontrado"));
+        coordenadorRepository.delete(coordenador);
     }
 
     // Inativar coordenador
@@ -140,7 +127,6 @@ public class CoordenadorService {
         }
 
         coordenador.setStatus(StatusCoordenador.ATIVO);
-        coordenador.setPerfil(PerfilUsuario.COORDENADOR);
         coordenador.setDataAtualizacao(LocalDateTime.now());
 
         Coordenador reativado = coordenadorRepository.save(coordenador);
@@ -155,16 +141,6 @@ public class CoordenadorService {
         coordenador.setMatricula(request.getMatricula().trim());
         coordenador.setCargo(request.getCargo().trim());
         coordenador.setSetor(request.getSetor().trim());
-    }
-
-    private void validarSenhaObrigatoria(String senha) {
-        if (senha == null || senha.isBlank()) {
-            throw new RuntimeException("A senha é obrigatória");
-        }
-    }
-
-    private String normalizarIdentificador(String identificador) {
-        return identificador.trim().toLowerCase();
     }
 
     private String normalizarEmail(String email) {

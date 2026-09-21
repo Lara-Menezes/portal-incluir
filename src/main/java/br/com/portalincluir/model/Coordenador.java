@@ -1,6 +1,5 @@
 package br.com.portalincluir.model;
 
-import br.com.portalincluir.enums.PerfilUsuario;
 import br.com.portalincluir.enums.StatusCoordenador;
 import jakarta.persistence.*;
 
@@ -8,9 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "coordenadores", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_coordenador_identificador", columnNames = "identificador_acesso")
-})
+@Table(name = "coordenadores")
 public class Coordenador {
 
     @Id
@@ -37,15 +34,6 @@ public class Coordenador {
     @Column(nullable = false, length = 120)
     private String setor;
 
-    @Column(name = "identificador_acesso", nullable = false, length = 80)
-    private String identificadorAcesso;
-
-    @Column(name = "senha_hash", nullable = false, length = 100)
-    private String senhaHash;
-
-    @Enumerated(EnumType.STRING)
-    private PerfilUsuario perfil = PerfilUsuario.COORDENADOR;
-
     @Enumerated(EnumType.STRING)
     private StatusCoordenador status = StatusCoordenador.ATIVO;
 
@@ -68,12 +56,6 @@ public class Coordenador {
     public void setCargo(String cargo) { this.cargo = cargo; }
     public String getSetor() { return setor; }
     public void setSetor(String setor) { this.setor = setor; }
-    public String getIdentificadorAcesso() { return identificadorAcesso; }
-    public void setIdentificadorAcesso(String identificadorAcesso) { this.identificadorAcesso = identificadorAcesso; }
-    public String getSenhaHash() { return senhaHash; }
-    public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
-    public PerfilUsuario getPerfil() { return perfil; }
-    public void setPerfil(PerfilUsuario perfil) { this.perfil = perfil; }
     public StatusCoordenador getStatus() { return status; }
     public void setStatus(StatusCoordenador status) { this.status = status; }
     public LocalDateTime getDataCriacao() { return dataCriacao; }

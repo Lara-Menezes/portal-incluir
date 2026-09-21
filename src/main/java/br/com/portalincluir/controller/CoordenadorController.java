@@ -5,6 +5,7 @@ import br.com.portalincluir.dto.response.CoordenadorResponse;
 import br.com.portalincluir.enums.StatusCoordenador;
 import br.com.portalincluir.service.CoordenadorService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,6 +51,12 @@ public class CoordenadorController {
             @Valid @RequestBody CoordenadorRequest request) {
 
         return coordenadorService.atualizar(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void excluir(@PathVariable Long id) {
+        coordenadorService.excluir(id);
     }
 
     // Inativar

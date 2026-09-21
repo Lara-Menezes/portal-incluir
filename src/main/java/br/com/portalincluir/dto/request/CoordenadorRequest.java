@@ -37,13 +37,6 @@ public class CoordenadorRequest {
     @Size(max = 120)
     private String setor;
 
-    @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9._-]{4,80}$", message = "identificador de acesso inválido")
-    private String identificadorAcesso;
-
-    @Size(min = 8, max = 72)
-    private String senha;
-
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
     public String getEmail() { return email; }
@@ -58,8 +51,4 @@ public class CoordenadorRequest {
     public void setCargo(String cargo) { this.cargo = cargo; }
     public String getSetor() { return setor; }
     public void setSetor(String setor) { this.setor = setor; }
-    public String getIdentificadorAcesso() { return identificadorAcesso; }
-    public void setIdentificadorAcesso(String identificadorAcesso) { this.identificadorAcesso = identificadorAcesso; }
-    public String getSenha() { return senha; }
-    public void setSenha(String senha) { this.senha = senha; }
 }
