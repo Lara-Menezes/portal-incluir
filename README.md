@@ -107,12 +107,12 @@ A solução busca:
 
 | Artefato | Situação | Arquivo |
 |---|---|---|
-| Histórias de usuário | Em elaboração | — |
-| Story Map e definição do MVP | Em elaboração | — |
-| Product Backlog | Em elaboração | — |
-| Definition of Ready | Em elaboração | — |
-| Definition of Done | Em elaboração | — |
-| GitHub Projects | Em configuração | — |
+| Histórias de usuário | Em elaboração |[historiasDeUsuario](https://github.com/Lara-Menezes/portal-incluir/blob/main/docs/historias.md)|
+| Story Map e definição do MVP | Em elaboração |[storyMap](https://github.com/Lara-Menezes/portal-incluir/blob/main/docs/story-map.md)|
+| Product Backlog | Em elaboração |[productBacklog](https://github.com/Lara-Menezes/portal-incluir/blob/main/docs/backlog-exemplo.md)|
+| Definition of Ready | Em elaboração |[definitionOfReady](https://github.com/Lara-Menezes/portal-incluir/blob/main/docs/definition-of-ready.md)|
+| Definition of Done | Em elaboração |[definitionOfDone](https://github.com/Lara-Menezes/portal-incluir/blob/main/docs/definition-of-done.md) |
+| GitHub Projects | Em configuração |[gitProjects](https://github.com/users/Lara-Menezes/projects/1)|
 
 > Os itens marcados como “Em elaboração” receberão seus respectivos links conforme forem adicionados ao repositório.
 
