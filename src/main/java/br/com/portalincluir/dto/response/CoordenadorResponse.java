@@ -1,6 +1,5 @@
 package br.com.portalincluir.dto.response;
 
-import br.com.portalincluir.enums.PerfilUsuario;
 import br.com.portalincluir.enums.StatusCoordenador;
 import br.com.portalincluir.model.Coordenador;
 
@@ -16,8 +15,6 @@ public class CoordenadorResponse {
     private String matricula;
     private String cargo;
     private String setor;
-    private String identificadorAcesso;
-    private PerfilUsuario perfil;
     private StatusCoordenador status;
     private LocalDateTime dataCriacao;
     private LocalDateTime dataAtualizacao;
@@ -31,8 +28,6 @@ public class CoordenadorResponse {
         this.matricula = coordenador.getMatricula();
         this.cargo = coordenador.getCargo();
         this.setor = coordenador.getSetor();
-        this.identificadorAcesso = coordenador.getIdentificadorAcesso();
-        this.perfil = coordenador.getPerfil();
         this.status = coordenador.getStatus();
         this.dataCriacao = coordenador.getDataCriacao();
         this.dataAtualizacao = coordenador.getDataAtualizacao();
@@ -46,8 +41,6 @@ public class CoordenadorResponse {
     public String getMatricula() { return matricula; }
     public String getCargo() { return cargo; }
     public String getSetor() { return setor; }
-    public String getIdentificadorAcesso() { return identificadorAcesso; }
-    public PerfilUsuario getPerfil() { return perfil; }
     public StatusCoordenador getStatus() { return status; }
     public LocalDateTime getDataCriacao() { return dataCriacao; }
     public LocalDateTime getDataAtualizacao() { return dataAtualizacao; }
