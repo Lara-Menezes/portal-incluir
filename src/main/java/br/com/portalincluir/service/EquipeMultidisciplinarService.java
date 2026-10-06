@@ -102,8 +102,8 @@ public class EquipeMultidisciplinarService {
             EquipeMultidisciplinarRequest request,
             Long id
     ) {
-        String email = normalizarEmail(request.email());
-        String matricula = request.matricula().trim();
+        String email = normalizarEmail(request.getEmail());
+        String matricula = request.getMatricula().trim();
 
         boolean emailExistente = id == null
                 ? repository.existsByEmailIgnoreCase(email)
@@ -132,21 +132,21 @@ public class EquipeMultidisciplinarService {
             EquipeMultidisciplinar profissional,
             EquipeMultidisciplinarRequest request
     ) {
-        profissional.setNome(request.nome().trim());
-        profissional.setEmail(normalizarEmail(request.email()));
-        profissional.setTelefone(normalizarOpcional(request.telefone()));
-        profissional.setDataNascimento(request.dataNascimento());
-        profissional.setMatricula(request.matricula().trim());
-        profissional.setAreaAtuacao(request.areaAtuacao().trim());
-        profissional.setCargo(request.cargo().trim());
-        profissional.setSetor(request.setor().trim());
+        profissional.setNome(request.getNome().trim());
+        profissional.setEmail(normalizarEmail(request.getEmail()));
+        profissional.setTelefone(normalizarOpcional(request.getTelefone()));
+        profissional.setDataNascimento(request.getDataNascimento());
+        profissional.setMatricula(request.getMatricula().trim());
+        profissional.setAreaAtuacao(request.getAreaAtuacao().trim());
+        profissional.setCargo(request.getCargo().trim());
+        profissional.setSetor(request.getSetor().trim());
 
         profissional.setConselhoProfissional(
-                normalizarOpcional(request.conselhoProfissional())
+                normalizarOpcional(request.getConselhoProfissional())
         );
 
         profissional.setRegistroProfissional(
-                normalizarOpcional(request.registroProfissional())
+                normalizarOpcional(request.getRegistroProfissional())
         );
     }
 
