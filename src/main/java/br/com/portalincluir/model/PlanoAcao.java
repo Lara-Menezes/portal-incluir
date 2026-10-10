@@ -4,6 +4,7 @@ import br.com.portalincluir.enums.StatusPlanoAcao;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@org.hibernate.envers.Audited
 @Entity
 @Table(name = "planos_acao")
 public class PlanoAcao {
@@ -12,16 +13,23 @@ public class PlanoAcao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    @Column(nullable = false)
+    @org.hibernate.annotations.ColumnDefault("0")
+    private long versao;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "estudante_id", nullable = false)
     private Estudante estudante;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "coordenador_responsavel_id", nullable = false)
+    @org.hibernate.envers.Audited(targetAuditMode = org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED, targetNotFoundAction = org.hibernate.envers.RelationTargetNotFoundAction.IGNORE)
     private Coordenador coordenadorResponsavel;
 
     @ManyToOne
     @JoinColumn(name = "coordenador_assinante_id")
+    @org.hibernate.envers.Audited(targetAuditMode = org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED, targetNotFoundAction = org.hibernate.envers.RelationTargetNotFoundAction.IGNORE)
     private Coordenador coordenadorAssinante;
 
     @Column(nullable = false, length = 20)

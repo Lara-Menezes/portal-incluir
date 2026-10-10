@@ -18,6 +18,12 @@ public class EstudanteController {
         this.estudanteService = estudanteService;
     }
 
+    @PostMapping("/{id}/concluir")
+    public EstudanteResponse concluir(@PathVariable Long id,
+            @Valid @RequestBody br.com.portalincluir.dto.request.ConclusaoEstudanteRequest request) {
+        return estudanteService.concluir(id, request.dataConclusao());
+    }
+
     // Cadastrar
     @PostMapping
     public EstudanteResponse cadastrar(

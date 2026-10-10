@@ -14,6 +14,7 @@ import br.com.portalincluir.repository.CoordenadorRepository;
 import java.util.List;
 import java.time.LocalDateTime;
 
+@org.springframework.transaction.annotation.Transactional
 @Service
 public class PlanoAcaoService {
 
@@ -21,10 +22,13 @@ public class PlanoAcaoService {
     private final EstudanteRepository estudanteRepository;
     private final CoordenadorRepository coordenadorRepository;
 
+    private final PoliticaHistoricoService politica;
+
     public PlanoAcaoService(
             PlanoAcaoRepository planoAcaoRepository,
             EstudanteRepository estudanteRepository,
-            CoordenadorRepository coordenadorRepository) {
+            CoordenadorRepository coordenadorRepository, PoliticaHistoricoService politica) {
+        this.politica = politica;
 
         this.planoAcaoRepository = planoAcaoRepository;
         this.estudanteRepository = estudanteRepository;
@@ -48,6 +52,7 @@ public class PlanoAcaoService {
         Coordenador coordenador = coordenadorRepository.findById(request.getCoordenadorResponsavelId())
                 .orElseThrow(() -> new RuntimeException("Coordenador não encontrado"));
 
+        politica.exigirEditavel(estudante);
         plano.setEstudante(estudante);
         plano.setCoordenadorResponsavel(coordenador);
 
@@ -95,6 +100,7 @@ public class PlanoAcaoService {
     public List<PlanoAcaoResponse> listarTodos() {
         return planoAcaoRepository.findAll()
                 .stream()
+                .filter(registro -> politica.disponivel(registro.getEstudante()))
                 .map(PlanoAcaoResponse::new)
                 .toList();
     }
@@ -103,13 +109,16 @@ public class PlanoAcaoService {
     public List<PlanoAcaoResponse> listarPorStatus(StatusPlanoAcao status) {
         return planoAcaoRepository.findByStatus(status)
                 .stream()
+                .filter(registro -> politica.disponivel(registro.getEstudante()))
                 .map(PlanoAcaoResponse::new)
                 .toList();
     }
 
     //Buscar ID
     public PlanoAcaoResponse buscarPorId(Long id) {
-        return new PlanoAcaoResponse(buscarEntidadePorId(id));
+        PlanoAcao plano = buscarEntidadePorId(id);
+        politica.exigirDisponivel(plano.getEstudante());
+        return new PlanoAcaoResponse(plano);
     }
 
     private PlanoAcao buscarEntidadePorId(Long id) {
@@ -121,6 +130,8 @@ public class PlanoAcaoService {
     public PlanoAcaoResponse atualizar(Long id, PlanoAcaoRequest request) {
 
         PlanoAcao plano = buscarEntidadePorId(id);
+        politica.exigirEditavel(plano.getEstudante());
+        politica.exigirMesmoEstudante(plano.getEstudante(), request.getEstudanteId());
 
         if (plano.getStatus() == StatusPlanoAcao.ASSINADO) {
             throw new RuntimeException("Não é possível atualizar um plano assinado");
@@ -142,6 +153,7 @@ public class PlanoAcaoService {
         Coordenador coordenador = coordenadorRepository.findById(request.getCoordenadorResponsavelId())
                 .orElseThrow(() -> new RuntimeException("Coordenador não encontrado"));
 
+        politica.exigirEditavel(estudante);
         plano.setEstudante(estudante);
         plano.setCoordenadorResponsavel(coordenador);
 
@@ -185,6 +197,7 @@ public class PlanoAcaoService {
     public void excluir(Long id) {
 
         PlanoAcao plano = buscarEntidadePorId(id);
+        politica.exigirEditavel(plano.getEstudante());
 
         if (plano.getStatus() == StatusPlanoAcao.ASSINADO) {
             throw new RuntimeException("Não é possível excluir um plano assinado"); //só exclui se não estiver assinado
@@ -197,6 +210,7 @@ public class PlanoAcaoService {
     public PlanoAcaoResponse arquivar(Long id) {
 
         PlanoAcao plano = buscarEntidadePorId(id);
+        politica.exigirEditavel(plano.getEstudante());
 
         if (plano.isArquivado()) {
             throw new RuntimeException("O plano já está arquivado");
@@ -213,6 +227,7 @@ public class PlanoAcaoService {
     public PlanoAcaoResponse desarquivar(Long id) {
 
         PlanoAcao plano = buscarEntidadePorId(id);
+        politica.exigirEditavel(plano.getEstudante());
 
         if (!plano.isArquivado()) {
             throw new RuntimeException("O plano não está arquivado");
@@ -229,6 +244,7 @@ public class PlanoAcaoService {
     public PlanoAcaoResponse assinar(Long id) {
 
         PlanoAcao plano = buscarEntidadePorId(id);
+        politica.exigirEditavel(plano.getEstudante());
 
         if (plano.getStatus() == StatusPlanoAcao.ASSINADO) {
             throw new RuntimeException("O plano já está assinado");

@@ -8,6 +8,11 @@ public class EstudanteResponse {
 
     private Long id;
     private boolean ativo;
+    private LocalDate dataConclusao;
+    private LocalDate dataLimiteRetencao;
+    public LocalDate getDataConclusao() { return dataConclusao; }
+    public LocalDate getDataLimiteRetencao() { return dataLimiteRetencao; }
+    public boolean isConcluido() { return dataConclusao != null; }
     private String nomeCompleto;
     private LocalDate dataNascimento;
     private String curso;
@@ -22,6 +27,8 @@ public class EstudanteResponse {
     public EstudanteResponse(Estudante estudante) {
         this.id = estudante.getId();
         this.ativo = estudante.isAtivo();
+        this.dataConclusao = estudante.getDataConclusao();
+        this.dataLimiteRetencao = estudante.getDataLimiteRetencao();
         this.nomeCompleto = estudante.getNome();
         this.dataNascimento = estudante.getDataNascimento();
         this.curso = estudante.getCurso();

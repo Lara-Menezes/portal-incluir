@@ -8,13 +8,37 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@org.springframework.transaction.annotation.Transactional
 @Service
 public class EstudanteService {
 
     private final EstudanteRepository estudanteRepository;
 
-    public EstudanteService(EstudanteRepository estudanteRepository) {
+    private final PoliticaHistoricoService politica;
+    private final br.com.portalincluir.repository.PlanoAcaoRepository planos;
+    private final br.com.portalincluir.repository.AdaptacaoPedagogicaRepository adaptacoes;
+
+    public EstudanteService(EstudanteRepository estudanteRepository, PoliticaHistoricoService politica,
+            br.com.portalincluir.repository.PlanoAcaoRepository planos,
+            br.com.portalincluir.repository.AdaptacaoPedagogicaRepository adaptacoes) {
+        this.politica = politica;
+        this.planos = planos;
+        this.adaptacoes = adaptacoes;
         this.estudanteRepository = estudanteRepository;
+    }
+
+    public EstudanteResponse concluir(Long id, java.time.LocalDate data) {
+        if (data == null || data.isAfter(politica.hoje()) || !politica.hoje().isBefore(data.plusYears(5))) {
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST,
+                    "Data de conclusao invalida ou prazo ja encerrado");
+        }
+        Estudante estudante = politica.bloquear(id);
+        politica.exigirEditavel(estudante);
+        estudante.concluir(data);
+        // Cria uma revisao dos filhos preexistentes na mesma transacao da conclusao.
+        planos.findByEstudanteId(id).forEach(p -> p.setDataAtualizacao(politica.agora()));
+        adaptacoes.findByEstudanteId(id).forEach(a -> a.setDataAtualizacao(politica.agora()));
+        return new EstudanteResponse(estudanteRepository.save(estudante));
     }
 
     // Cadastrar
@@ -46,6 +70,7 @@ public class EstudanteService {
     public List<EstudanteResponse> listarTodos() {
         return estudanteRepository.findAll()
                 .stream()
+                .filter(politica::disponivel)
                 .map(EstudanteResponse::new)
                 .toList();
     }
@@ -53,6 +78,7 @@ public class EstudanteService {
     // Buscar por ID
     public EstudanteResponse buscarPorId(Long id) {
         Estudante estudante = buscarEntidadePorId(id);
+        politica.exigirDisponivel(estudante);
 
         return new EstudanteResponse(estudante);
     }
@@ -67,6 +93,7 @@ public class EstudanteService {
     public List<EstudanteResponse> listarAtivos() {
         return estudanteRepository.findByAtivo(true)
                 .stream()
+                .filter(politica::disponivel)
                 .map(EstudanteResponse::new)
                 .toList();
     }
@@ -75,6 +102,7 @@ public class EstudanteService {
     public List<EstudanteResponse> listarInativos() {
         return estudanteRepository.findByAtivo(false)
                 .stream()
+                .filter(politica::disponivel)
                 .map(EstudanteResponse::new)
                 .toList();
     }
@@ -83,6 +111,7 @@ public class EstudanteService {
     public List<EstudanteResponse> buscarPorNome(String nome) {
         return estudanteRepository.findByNomeContainingIgnoreCase(nome)
                 .stream()
+                .filter(politica::disponivel)
                 .map(EstudanteResponse::new)
                 .toList();
     }
@@ -91,6 +120,7 @@ public class EstudanteService {
     public EstudanteResponse atualizar(Long id, EstudanteRequest request) {
 
         Estudante estudante = buscarEntidadePorId(id);
+        politica.exigirEditavel(estudante);
 
         if (!estudante.isAtivo()) {
             throw new RuntimeException("Não é possível atualizar um estudante inativo");
@@ -124,14 +154,17 @@ public class EstudanteService {
     public void excluir(Long id) {
 
         Estudante estudante = buscarEntidadePorId(id);
+        politica.exigirEditavel(estudante);
 
-        estudanteRepository.delete(estudante);
+        throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT,
+                "Use inativacao ou conclusao; exclusao definitiva ocorre pela politica de retencao");
     }
 
     // Inativar
     public EstudanteResponse inativar(Long id) {
 
         Estudante estudante = buscarEntidadePorId(id);
+        politica.exigirEditavel(estudante);
 
         if (!estudante.isAtivo()) {
             throw new RuntimeException("O estudante já está inativo");
@@ -148,6 +181,7 @@ public class EstudanteService {
     public EstudanteResponse ativar(Long id) {
 
         Estudante estudante = buscarEntidadePorId(id);
+        politica.exigirEditavel(estudante);
 
         if (estudante.isAtivo()) {
             throw new RuntimeException("O estudante já está ativo");

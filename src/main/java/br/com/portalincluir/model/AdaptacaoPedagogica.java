@@ -3,6 +3,7 @@ package br.com.portalincluir.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@org.hibernate.envers.Audited
 @Entity
 @Table(name = "adaptacoes_pedagogicas")
 public class AdaptacaoPedagogica {
@@ -11,12 +12,18 @@ public class AdaptacaoPedagogica {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    @Column(nullable = false)
+    @org.hibernate.annotations.ColumnDefault("0")
+    private long versao;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "estudante_id", nullable = false)
     private Estudante estudante;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "professor_id", nullable = false)
+    @org.hibernate.envers.Audited(targetAuditMode = org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED, targetNotFoundAction = org.hibernate.envers.RelationTargetNotFoundAction.IGNORE)
     private Professor professor;
 
     @Column(nullable = false, length = 150)
