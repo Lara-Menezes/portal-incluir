@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface PlanoAcaoRepository extends JpaRepository<PlanoAcao, Long> {
 
+    List<PlanoAcao> findByEstudanteId(Long estudanteId);
+
     List<PlanoAcao> findByStatus(StatusPlanoAcao status);
 
 }

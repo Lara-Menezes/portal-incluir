@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@org.hibernate.envers.Audited
 @Entity
 @Table(name = "professores")
 public class Professor {

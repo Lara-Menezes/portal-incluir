@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@org.springframework.transaction.annotation.Transactional
 @Service
 public class AdaptacaoPedagogicaService {
 
@@ -20,10 +21,13 @@ public class AdaptacaoPedagogicaService {
     private final EstudanteRepository estudanteRepository;
     private final ProfessorRepository professorRepository;
 
+    private final PoliticaHistoricoService politica;
+
     public AdaptacaoPedagogicaService(
             AdaptacaoPedagogicaRepository adaptacaoRepository,
             EstudanteRepository estudanteRepository,
-            ProfessorRepository professorRepository) {
+            ProfessorRepository professorRepository, PoliticaHistoricoService politica) {
+        this.politica = politica;
 
         this.adaptacaoRepository = adaptacaoRepository;
         this.estudanteRepository = estudanteRepository;
@@ -44,6 +48,7 @@ public class AdaptacaoPedagogicaService {
 
         AdaptacaoPedagogica adaptacao = new AdaptacaoPedagogica();
 
+        politica.exigirEditavel(estudante);
         adaptacao.setEstudante(estudante);
         adaptacao.setProfessor(professor);
 
@@ -62,6 +67,7 @@ public class AdaptacaoPedagogicaService {
 
         return adaptacaoRepository.findAll()
                 .stream()
+                .filter(registro -> politica.disponivel(registro.getEstudante()))
                 .map(AdaptacaoPedagogicaResponse::new)
                 .toList();
     }
@@ -69,9 +75,9 @@ public class AdaptacaoPedagogicaService {
     //Buscar por id
     public AdaptacaoPedagogicaResponse buscarPorId(Long id) {
 
-        return new AdaptacaoPedagogicaResponse(
-                buscarEntidadePorId(id)
-        );
+        AdaptacaoPedagogica adaptacao = buscarEntidadePorId(id);
+        politica.exigirDisponivel(adaptacao.getEstudante());
+        return new AdaptacaoPedagogicaResponse(adaptacao);
     }
 
     //Buscar por estudante
@@ -80,6 +86,7 @@ public class AdaptacaoPedagogicaService {
 
         return adaptacaoRepository.findByEstudanteId(estudanteId)
                 .stream()
+                .filter(registro -> politica.disponivel(registro.getEstudante()))
                 .map(AdaptacaoPedagogicaResponse::new)
                 .toList();
     }
@@ -90,6 +97,7 @@ public class AdaptacaoPedagogicaService {
 
         return adaptacaoRepository.findByProfessorId(professorId)
                 .stream()
+                .filter(registro -> politica.disponivel(registro.getEstudante()))
                 .map(AdaptacaoPedagogicaResponse::new)
                 .toList();
     }
@@ -102,6 +110,7 @@ public class AdaptacaoPedagogicaService {
         return adaptacaoRepository
                 .findByEstudanteIdAndProfessorId(estudanteId, professorId)
                 .stream()
+                .filter(registro -> politica.disponivel(registro.getEstudante()))
                 .map(AdaptacaoPedagogicaResponse::new)
                 .toList();
     }
@@ -115,6 +124,7 @@ public class AdaptacaoPedagogicaService {
                         componenteCurricular
                 )
                 .stream()
+                .filter(registro -> politica.disponivel(registro.getEstudante()))
                 .map(AdaptacaoPedagogicaResponse::new)
                 .toList();
     }
@@ -125,6 +135,8 @@ public class AdaptacaoPedagogicaService {
             AdaptacaoPedagogicaRequest request) {
 
         AdaptacaoPedagogica adaptacao = buscarEntidadePorId(id);
+        politica.exigirEditavel(adaptacao.getEstudante());
+        politica.exigirMesmoEstudante(adaptacao.getEstudante(), request.getEstudanteId());
 
         if (adaptacao.isArquivado()) {
             throw new RuntimeException(
@@ -140,6 +152,7 @@ public class AdaptacaoPedagogicaService {
                 .orElseThrow(() ->
                         new RuntimeException("Professor não encontrado"));
 
+        politica.exigirEditavel(estudante);
         adaptacao.setEstudante(estudante);
         adaptacao.setProfessor(professor);
 
@@ -156,6 +169,7 @@ public class AdaptacaoPedagogicaService {
     //Arquivar
     public AdaptacaoPedagogicaResponse arquivar(Long id) {
         AdaptacaoPedagogica adaptacao = buscarEntidadePorId(id);
+        politica.exigirEditavel(adaptacao.getEstudante());
 
         adaptacao.setArquivado(true);
         adaptacao.setDataAtualizacao(LocalDateTime.now());
@@ -168,6 +182,7 @@ public class AdaptacaoPedagogicaService {
     //Desarquivar
     public AdaptacaoPedagogicaResponse desarquivar(Long id) {
         AdaptacaoPedagogica adaptacao = buscarEntidadePorId(id);
+        politica.exigirEditavel(adaptacao.getEstudante());
 
         adaptacao.setArquivado(false);
         adaptacao.setDataAtualizacao(LocalDateTime.now());
@@ -181,6 +196,7 @@ public class AdaptacaoPedagogicaService {
     public void excluir(Long id) {
 
         AdaptacaoPedagogica adaptacao = buscarEntidadePorId(id);
+        politica.exigirEditavel(adaptacao.getEstudante());
 
         adaptacaoRepository.delete(adaptacao);
     }

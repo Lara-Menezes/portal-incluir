@@ -3,6 +3,7 @@ package br.com.portalincluir.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
+@org.hibernate.envers.Audited
 @Entity
 @Table(name = "estudantes", uniqueConstraints = {
         @UniqueConstraint(
@@ -20,8 +21,29 @@ public class Estudante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    @Column(nullable = false)
+    @org.hibernate.annotations.ColumnDefault("0")
+    private long versao;
+
     @Column(nullable = false)
     private boolean ativo = true;
+
+    private LocalDate dataConclusao;
+    private LocalDate dataLimiteRetencao;
+
+    public LocalDate getDataConclusao() { return dataConclusao; }
+    public LocalDate getDataLimiteRetencao() { return dataLimiteRetencao; }
+    public boolean isConcluido() { return dataConclusao != null; }
+
+    public void concluir(LocalDate data) {
+        if (data == null || isConcluido()) {
+            throw new IllegalStateException("Conclusao invalida ou ja registrada");
+        }
+        dataConclusao = data;
+        dataLimiteRetencao = data.plusYears(5);
+        ativo = false;
+    }
 
     @Column(nullable = false, length = 150)
     private String nome;
