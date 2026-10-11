@@ -5,8 +5,10 @@ import br.com.portalincluir.dto.response.AdaptacaoPedagogicaResponse;
 import br.com.portalincluir.model.AdaptacaoPedagogica;
 import br.com.portalincluir.model.Estudante;
 import br.com.portalincluir.model.Professor;
+import br.com.portalincluir.model.PlanoEducacional;
 import br.com.portalincluir.repository.AdaptacaoPedagogicaRepository;
 import br.com.portalincluir.repository.EstudanteRepository;
+import br.com.portalincluir.repository.PlanoEducacionalRepository;
 import br.com.portalincluir.repository.ProfessorRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +22,22 @@ public class AdaptacaoPedagogicaService {
     private final AdaptacaoPedagogicaRepository adaptacaoRepository;
     private final EstudanteRepository estudanteRepository;
     private final ProfessorRepository professorRepository;
+    private final PlanoEducacionalRepository planoEducacionalRepository;
 
     private final PoliticaHistoricoService politica;
 
     public AdaptacaoPedagogicaService(
             AdaptacaoPedagogicaRepository adaptacaoRepository,
             EstudanteRepository estudanteRepository,
-            ProfessorRepository professorRepository, PoliticaHistoricoService politica) {
-        this.politica = politica;
+            ProfessorRepository professorRepository,
+            PlanoEducacionalRepository planoEducacionalRepository,
+            PoliticaHistoricoService politica) {
 
+        this.politica = politica;
         this.adaptacaoRepository = adaptacaoRepository;
         this.estudanteRepository = estudanteRepository;
         this.professorRepository = professorRepository;
+        this.planoEducacionalRepository = planoEducacionalRepository;
     }
 
     //Criar Adaptação Pedagogica
@@ -46,11 +52,32 @@ public class AdaptacaoPedagogicaService {
                 .orElseThrow(() ->
                         new RuntimeException("Professor não encontrado"));
 
+        PlanoEducacional plano = null;
+
+        if (request.getPlanoEducacionalId() != null) {
+            plano = planoEducacionalRepository
+                    .findById(request.getPlanoEducacionalId())
+                    .orElseThrow(() ->
+                            new RuntimeException("Plano educacional não encontrado"));
+
+            if (!plano.getEstudante().getId()
+                    .equals(request.getEstudanteId())) {
+                throw new RuntimeException(
+                        "O plano educacional não pertence ao estudante informado");
+            }
+
+            if (plano.isArquivado()) {
+                throw new RuntimeException(
+                        "Não é possível vincular uma adaptação a um PEI arquivado");
+            }
+        }
+
         AdaptacaoPedagogica adaptacao = new AdaptacaoPedagogica();
 
         politica.exigirEditavel(estudante);
         adaptacao.setEstudante(estudante);
         adaptacao.setProfessor(professor);
+        adaptacao.setPlanoEducacional(plano);
 
         preencherDados(adaptacao, request);
 

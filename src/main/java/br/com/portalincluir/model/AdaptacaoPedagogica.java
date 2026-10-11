@@ -26,6 +26,10 @@ public class AdaptacaoPedagogica {
     @org.hibernate.envers.Audited(targetAuditMode = org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED, targetNotFoundAction = org.hibernate.envers.RelationTargetNotFoundAction.IGNORE)
     private Professor professor;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "plano_educacional_id")
+    private PlanoEducacional planoEducacional;
+
     @Column(nullable = false, length = 150)
     private String componenteCurricular;
 
@@ -83,6 +87,10 @@ public class AdaptacaoPedagogica {
     public void setProfessor(Professor professor) {
         this.professor = professor;
     }
+
+    public PlanoEducacional getPlanoEducacional() {return planoEducacional;}
+
+    public void setPlanoEducacional(PlanoEducacional planoEducacional) {this.planoEducacional = planoEducacional;}
 
     public String getComponenteCurricular() {
         return componenteCurricular;
