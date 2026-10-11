@@ -12,6 +12,8 @@ public class AdaptacaoPedagogicaRequest {
     @NotNull
     private Long professorId;
 
+    private Long planoEducacionalId;
+
     @NotBlank
     @Size(max = 150)
     private String componenteCurricular;
@@ -62,6 +64,14 @@ public class AdaptacaoPedagogicaRequest {
 
     public void setProfessorId(Long professorId) {
         this.professorId = professorId;
+    }
+
+    public Long getPlanoEducacionalId() {
+        return planoEducacionalId;
+    }
+
+    public void setPlanoEducacionalId(Long planoEducacionalId) {
+        this.planoEducacionalId = planoEducacionalId;
     }
 
     public String getComponenteCurricular() {
