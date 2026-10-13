@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ProfessorRepository extends JpaRepository<Professor, Long> {
+    long countByAtivo(boolean ativo);
 
     boolean existsByEmailIgnoreCase(String email);
 

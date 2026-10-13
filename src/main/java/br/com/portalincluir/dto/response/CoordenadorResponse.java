@@ -5,8 +5,14 @@ import br.com.portalincluir.model.Coordenador;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CoordenadorResponse {
+    public record Resumo(long estudantesAtivos, long professoresAtivos, long planosAtivos,
+                         long planosArquivados, List<EstudanteResumo> estudantesRecentes) {}
+
+    public record EstudanteResumo(Long id, String nome, String curso, String matricula, boolean ativo) {}
+
     private Long id;
     private String nome;
     private String email;

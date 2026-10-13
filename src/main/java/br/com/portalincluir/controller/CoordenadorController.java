@@ -44,6 +44,11 @@ public class CoordenadorController {
         return coordenadorService.buscarPorId(id);
     }
 
+    @GetMapping("/{id}/dashboard")
+    public CoordenadorResponse.Resumo resumo(@PathVariable Long id) {
+        return coordenadorService.buscarResumo(id);
+    }
+
     // Atualizar
     @PutMapping("/{id}")
     public CoordenadorResponse atualizar(
