@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface PlanoEducacionalRepository
         extends JpaRepository<PlanoEducacional, Long> {
+    long countByCoordenadorIdAndArquivado(Long coordenadorId, boolean arquivado);
 
     List<PlanoEducacional> findByEstudanteId(Long estudanteId);
 

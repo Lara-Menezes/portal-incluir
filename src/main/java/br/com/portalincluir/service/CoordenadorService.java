@@ -2,9 +2,16 @@ package br.com.portalincluir.service;
 
 import br.com.portalincluir.dto.request.CoordenadorRequest;
 import br.com.portalincluir.dto.response.CoordenadorResponse;
+import br.com.portalincluir.dto.response.CoordenadorResponse.EstudanteResumo;
 import br.com.portalincluir.enums.StatusCoordenador;
 import br.com.portalincluir.model.Coordenador;
 import br.com.portalincluir.repository.CoordenadorRepository;
+import br.com.portalincluir.repository.EstudanteRepository;
+import br.com.portalincluir.repository.ProfessorRepository;
+import br.com.portalincluir.repository.PlanoEducacionalRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.stereotype.Service;
@@ -16,9 +23,39 @@ import java.util.List;
 public class CoordenadorService {
 
     private final CoordenadorRepository coordenadorRepository;
+    private final EstudanteRepository estudanteRepository;
+    private final ProfessorRepository professorRepository;
+    private final PlanoEducacionalRepository planoEducacionalRepository;
 
-    public CoordenadorService(CoordenadorRepository coordenadorRepository) {
+    public CoordenadorService(CoordenadorRepository coordenadorRepository,
+                              EstudanteRepository estudanteRepository,
+                              ProfessorRepository professorRepository,
+                              PlanoEducacionalRepository planoEducacionalRepository) {
         this.coordenadorRepository = coordenadorRepository;
+        this.estudanteRepository = estudanteRepository;
+        this.professorRepository = professorRepository;
+        this.planoEducacionalRepository = planoEducacionalRepository;
+    }
+
+    @Transactional(readOnly = true)
+    public CoordenadorResponse.Resumo buscarResumo(Long coordenadorId) {
+        if (!coordenadorRepository.existsById(coordenadorId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Coordenador não encontrado");
+        }
+
+        var estudantesRecentes = estudanteRepository
+                .findAll(PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "id")))
+                .stream()
+                .map(estudante -> new EstudanteResumo(estudante.getId(), estudante.getNome(),
+                        estudante.getCurso(), estudante.getMatricula(), estudante.isAtivo()))
+                .toList();
+
+        return new CoordenadorResponse.Resumo(
+                estudanteRepository.countByAtivo(true),
+                professorRepository.countByAtivo(true),
+                planoEducacionalRepository.countByCoordenadorIdAndArquivado(coordenadorId, false),
+                planoEducacionalRepository.countByCoordenadorIdAndArquivado(coordenadorId, true),
+                estudantesRecentes);
     }
 
     // Criar coordenador
