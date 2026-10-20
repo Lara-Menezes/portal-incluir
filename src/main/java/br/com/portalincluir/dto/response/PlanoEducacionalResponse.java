@@ -5,7 +5,11 @@ import br.com.portalincluir.model.PlanoEducacional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class PlanoEducacionalResponse {
 
     private Long id;
@@ -65,73 +69,5 @@ public class PlanoEducacionalResponse {
 
         this.dataCriacao = plano.getDataCriacao();
         this.dataAtualizacao = plano.getDataAtualizacao();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Long getEstudanteId() {
-        return estudanteId;
-    }
-
-    public String getEstudanteNome() {
-        return estudanteNome;
-    }
-
-    public String getEstudanteMatricula() {
-        return estudanteMatricula;
-    }
-
-    public String getEstudanteCurso() {
-        return estudanteCurso;
-    }
-
-    public Long getCoordenadorId() {
-        return coordenadorId;
-    }
-
-    public String getCoordenadorNome() {
-        return coordenadorNome;
-    }
-
-    public String getSemestreAno() {
-        return semestreAno;
-    }
-
-    public String getHistorico() {
-        return historico;
-    }
-
-    public String getNecessidadesEspecificas() {
-        return necessidadesEspecificas;
-    }
-
-    public String getConhecimentosHabilidadesInteresses() {
-        return conhecimentosHabilidadesInteresses;
-    }
-
-    public String getDificuldadesApresentadas() {
-        return dificuldadesApresentadas;
-    }
-
-    public String getPropostasAdaptacoesCurriculares() {
-        return propostasAdaptacoesCurriculares;
-    }
-
-    public List<AdaptacaoPedagogicaResponse> getAdaptacoesPedagogicas() {
-        return adaptacoesPedagogicas;
-    }
-
-    public boolean isArquivado() {
-        return arquivado;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public LocalDateTime getDataAtualizacao() {
-        return dataAtualizacao;
     }
 }

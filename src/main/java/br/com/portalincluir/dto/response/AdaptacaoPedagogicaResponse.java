@@ -4,6 +4,11 @@ import br.com.portalincluir.model.AdaptacaoPedagogica;
 
 import java.time.LocalDateTime;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class AdaptacaoPedagogicaResponse {
 
     private Long id;
@@ -59,81 +64,5 @@ public class AdaptacaoPedagogicaResponse {
 
         this.dataCriacao = adaptacao.getDataCriacao();
         this.dataAtualizacao = adaptacao.getDataAtualizacao();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Long getEstudanteId() {
-        return estudanteId;
-    }
-
-    public String getEstudanteNome() {
-        return estudanteNome;
-    }
-
-    public String getEstudanteMatricula() {
-        return estudanteMatricula;
-    }
-
-    public String getEstudanteCurso() {
-        return estudanteCurso;
-    }
-
-    public Long getProfessorId() {
-        return professorId;
-    }
-
-    public String getProfessorNome() {
-        return professorNome;
-    }
-
-    public String getComponenteCurricular() {
-        return componenteCurricular;
-    }
-
-    public String getSemestreAno() {
-        return semestreAno;
-    }
-
-    public String getObjetivoGeral() {
-        return objetivoGeral;
-    }
-
-    public String getObjetivosEspecificos() {
-        return objetivosEspecificos;
-    }
-
-    public String getConteudosProgramaticos() {
-        return conteudosProgramaticos;
-    }
-
-    public String getMetodologia() {
-        return metodologia;
-    }
-
-    public String getAvaliacao() {
-        return avaliacao;
-    }
-
-    public String getBibliografiaBasica() {
-        return bibliografiaBasica;
-    }
-
-    public String getBibliografiaComplementar() {
-        return bibliografiaComplementar;
-    }
-
-    public boolean isArquivado() {
-        return arquivado;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public LocalDateTime getDataAtualizacao() {
-        return dataAtualizacao;
     }
 }

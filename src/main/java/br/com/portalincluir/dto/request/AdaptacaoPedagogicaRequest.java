@@ -4,6 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class AdaptacaoPedagogicaRequest {
 
     @NotNull
@@ -50,99 +55,4 @@ public class AdaptacaoPedagogicaRequest {
     @Size(max = 5000)
     private String bibliografiaComplementar;
 
-    public Long getEstudanteId() {
-        return estudanteId;
-    }
-
-    public void setEstudanteId(Long estudanteId) {
-        this.estudanteId = estudanteId;
-    }
-
-    public Long getProfessorId() {
-        return professorId;
-    }
-
-    public void setProfessorId(Long professorId) {
-        this.professorId = professorId;
-    }
-
-    public Long getPlanoEducacionalId() {
-        return planoEducacionalId;
-    }
-
-    public void setPlanoEducacionalId(Long planoEducacionalId) {
-        this.planoEducacionalId = planoEducacionalId;
-    }
-
-    public String getComponenteCurricular() {
-        return componenteCurricular;
-    }
-
-    public void setComponenteCurricular(String componenteCurricular) {
-        this.componenteCurricular = componenteCurricular;
-    }
-
-    public String getSemestreAno() {
-        return semestreAno;
-    }
-
-    public void setSemestreAno(String semestreAno) {
-        this.semestreAno = semestreAno;
-    }
-
-    public String getObjetivoGeral() {
-        return objetivoGeral;
-    }
-
-    public void setObjetivoGeral(String objetivoGeral) {
-        this.objetivoGeral = objetivoGeral;
-    }
-
-    public String getObjetivosEspecificos() {
-        return objetivosEspecificos;
-    }
-
-    public void setObjetivosEspecificos(String objetivosEspecificos) {
-        this.objetivosEspecificos = objetivosEspecificos;
-    }
-
-    public String getConteudosProgramaticos() {
-        return conteudosProgramaticos;
-    }
-
-    public void setConteudosProgramaticos(String conteudosProgramaticos) {
-        this.conteudosProgramaticos = conteudosProgramaticos;
-    }
-
-    public String getMetodologia() {
-        return metodologia;
-    }
-
-    public void setMetodologia(String metodologia) {
-        this.metodologia = metodologia;
-    }
-
-    public String getAvaliacao() {
-        return avaliacao;
-    }
-
-    public void setAvaliacao(String avaliacao) {
-        this.avaliacao = avaliacao;
-    }
-
-    public String getBibliografiaBasica() {
-        return bibliografiaBasica;
-    }
-
-    public void setBibliografiaBasica(String bibliografiaBasica) {
-        this.bibliografiaBasica = bibliografiaBasica;
-    }
-
-    public String getBibliografiaComplementar() {
-        return bibliografiaComplementar;
-    }
-
-    public void setBibliografiaComplementar(String bibliografiaComplementar) {
-        this.bibliografiaComplementar = bibliografiaComplementar;
-    }
 }

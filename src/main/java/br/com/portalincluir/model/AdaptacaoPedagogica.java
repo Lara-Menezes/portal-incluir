@@ -2,7 +2,11 @@ package br.com.portalincluir.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @org.hibernate.envers.Audited
 @Entity
 @Table(name = "adaptacoes_pedagogicas")
@@ -64,127 +68,4 @@ public class AdaptacaoPedagogica {
 
     private LocalDateTime dataAtualizacao;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Estudante getEstudante() {
-        return estudante;
-    }
-
-    public void setEstudante(Estudante estudante) {
-        this.estudante = estudante;
-    }
-
-    public Professor getProfessor() {
-        return professor;
-    }
-
-    public void setProfessor(Professor professor) {
-        this.professor = professor;
-    }
-
-    public PlanoEducacional getPlanoEducacional() {return planoEducacional;}
-
-    public void setPlanoEducacional(PlanoEducacional planoEducacional) {this.planoEducacional = planoEducacional;}
-
-    public String getComponenteCurricular() {
-        return componenteCurricular;
-    }
-
-    public void setComponenteCurricular(String componenteCurricular) {
-        this.componenteCurricular = componenteCurricular;
-    }
-
-    public String getSemestreAno() {
-        return semestreAno;
-    }
-
-    public void setSemestreAno(String semestreAno) {
-        this.semestreAno = semestreAno;
-    }
-
-    public String getObjetivoGeral() {
-        return objetivoGeral;
-    }
-
-    public void setObjetivoGeral(String objetivoGeral) {
-        this.objetivoGeral = objetivoGeral;
-    }
-
-    public String getObjetivosEspecificos() {
-        return objetivosEspecificos;
-    }
-
-    public void setObjetivosEspecificos(String objetivosEspecificos) {
-        this.objetivosEspecificos = objetivosEspecificos;
-    }
-
-    public String getConteudosProgramaticos() {
-        return conteudosProgramaticos;
-    }
-
-    public void setConteudosProgramaticos(String conteudosProgramaticos) {
-        this.conteudosProgramaticos = conteudosProgramaticos;
-    }
-
-    public String getMetodologia() {
-        return metodologia;
-    }
-
-    public void setMetodologia(String metodologia) {
-        this.metodologia = metodologia;
-    }
-
-    public String getAvaliacao() {
-        return avaliacao;
-    }
-
-    public void setAvaliacao(String avaliacao) {
-        this.avaliacao = avaliacao;
-    }
-
-    public String getBibliografiaBasica() {
-        return bibliografiaBasica;
-    }
-
-    public void setBibliografiaBasica(String bibliografiaBasica) {
-        this.bibliografiaBasica = bibliografiaBasica;
-    }
-
-    public String getBibliografiaComplementar() {
-        return bibliografiaComplementar;
-    }
-
-    public void setBibliografiaComplementar(String bibliografiaComplementar) {
-        this.bibliografiaComplementar = bibliografiaComplementar;
-    }
-
-    public boolean isArquivado() {
-        return arquivado;
-    }
-
-    public void setArquivado(boolean arquivado) {
-        this.arquivado = arquivado;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public LocalDateTime getDataAtualizacao() {
-        return dataAtualizacao;
-    }
-
-    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
-        this.dataAtualizacao = dataAtualizacao;
-    }
 }

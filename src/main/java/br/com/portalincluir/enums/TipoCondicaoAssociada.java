@@ -1,0 +1,16 @@
+package br.com.portalincluir.enums;
+
+public enum TipoCondicaoAssociada {
+    EPILEPSIA,
+    ESQUIZOFRENIA,
+    TRANSTORNO_OPOSITOR_DESAFIADOR,
+    TOC,
+    TRANSTORNO_BIPOLAR,
+    ANSIEDADE,
+    DEPRESSAO,
+    BORDERLINE,
+    INTOLERANCIA_ALIMENTAR,
+    DISTURBIO_COMPORTAMENTO,
+    OUTRA
+}
+

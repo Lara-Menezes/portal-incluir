@@ -5,6 +5,10 @@ import br.com.portalincluir.dto.response.EstudanteResponse;
 import br.com.portalincluir.model.Estudante;
 import br.com.portalincluir.repository.EstudanteRepository;
 import org.springframework.stereotype.Service;
+import br.com.portalincluir.enums.TipoNecessidadeEspecifica;
+import br.com.portalincluir.enums.TipoCondicaoAssociada;
+import br.com.portalincluir.enums.TipoAtendimentoCampus;
+import br.com.portalincluir.enums.TipoAcessibilidadeFisica;
 
 import java.util.List;
 
@@ -60,6 +64,7 @@ public class EstudanteService {
         estudante.setNomeResponsavel(request.getNomeResponsavel());
         estudante.setTelefoneResponsavel(request.getTelefoneResponsavel());
         estudante.setEmailResponsavel(request.getEmailResponsavel());
+        aplicarNecessidades(estudante, request);
 
         Estudante salvo = estudanteRepository.save(estudante);
 
@@ -144,6 +149,7 @@ public class EstudanteService {
         estudante.setNomeResponsavel(request.getNomeResponsavel());
         estudante.setTelefoneResponsavel(request.getTelefoneResponsavel());
         estudante.setEmailResponsavel(request.getEmailResponsavel());
+        aplicarNecessidades(estudante, request);
 
         Estudante atualizado = estudanteRepository.save(estudante);
 
@@ -193,4 +199,41 @@ public class EstudanteService {
 
         return new EstudanteResponse(atualizado);
     }
+
+    //metodo privado para campos de seleção na identificação do estudante
+    private void aplicarNecessidades(
+            Estudante estudante,
+            EstudanteRequest request) {
+
+        estudante.setPossuiNecessidadeEspecifica(
+                request.getPossuiNecessidadeEspecifica());
+
+        estudante.setNecessidadesEspecificas(
+                request.getNecessidadesEspecificas());
+
+        estudante.setOutraNecessidadeEspecifica(
+                request.getOutraNecessidadeEspecifica());
+
+        estudante.setCondicoesAssociadas(
+                request.getCondicoesAssociadas());
+
+        estudante.setOutraCondicaoAssociada(
+                request.getOutraCondicaoAssociada());
+
+        estudante.setAtendimentosCampus(
+                request.getAtendimentosCampus());
+
+        estudante.setAcessibilidadesFisicas(
+                request.getAcessibilidadesFisicas());
+
+        estudante.setOutraAcessibilidadeFisica(
+                request.getOutraAcessibilidadeFisica());
+
+        estudante.setPossuiOutraNecessidadeAtendimento(
+                request.getPossuiOutraNecessidadeAtendimento());
+
+        estudante.setDescricaoOutraNecessidadeAtendimento(
+                request.getDescricaoOutraNecessidadeAtendimento());
+    }
+
 }

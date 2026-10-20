@@ -6,7 +6,11 @@ import org.hibernate.envers.Audited;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Audited
 @Table(name = "plano_educacional")
@@ -45,7 +49,6 @@ public class PlanoEducacional {
     @Column(nullable = false, length = 5000)
     private String propostasAdaptacoesCurriculares;
 
-
     @Column(nullable = false)
     private boolean arquivado = false;
 
@@ -53,112 +56,4 @@ public class PlanoEducacional {
 
     private LocalDateTime dataAtualizacao;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Estudante getEstudante() {
-        return estudante;
-    }
-
-    public void setEstudante(Estudante estudante) {
-        this.estudante = estudante;
-    }
-
-    public Coordenador getCoordenador() {
-        return coordenador;
-    }
-
-    public void setCoordenador(Coordenador coordenador) {
-        this.coordenador = coordenador;
-    }
-
-    public List<AdaptacaoPedagogica> getAdaptacoesPedagogicas() {
-        return adaptacoesPedagogicas;
-    }
-
-    public void setAdaptacoesPedagogicas(
-            List<AdaptacaoPedagogica> adaptacoesPedagogicas) {
-        this.adaptacoesPedagogicas = adaptacoesPedagogicas;
-    }
-
-    public String getSemestreAno() {
-        return semestreAno;
-    }
-
-    public void setSemestreAno(String semestreAno) {
-        this.semestreAno = semestreAno;
-    }
-
-    public String getHistorico() {
-        return historico;
-    }
-
-    public void setHistorico(String historico) {
-        this.historico = historico;
-    }
-
-    public String getNecessidadesEspecificas() {
-        return necessidadesEspecificas;
-    }
-
-    public void setNecessidadesEspecificas(String necessidadesEspecificas) {
-        this.necessidadesEspecificas = necessidadesEspecificas;
-    }
-
-    public String getConhecimentosHabilidadesInteresses() {
-        return conhecimentosHabilidadesInteresses;
-    }
-
-    public void setConhecimentosHabilidadesInteresses(
-            String conhecimentosHabilidadesInteresses) {
-        this.conhecimentosHabilidadesInteresses =
-                conhecimentosHabilidadesInteresses;
-    }
-
-    public String getDificuldadesApresentadas() {
-        return dificuldadesApresentadas;
-    }
-
-    public void setDificuldadesApresentadas(String dificuldadesApresentadas) {
-        this.dificuldadesApresentadas = dificuldadesApresentadas;
-    }
-
-    public String getPropostasAdaptacoesCurriculares() {
-        return propostasAdaptacoesCurriculares;
-    }
-
-    public void setPropostasAdaptacoesCurriculares(
-            String propostasAdaptacoesCurriculares) {
-        this.propostasAdaptacoesCurriculares =
-                propostasAdaptacoesCurriculares;
-    }
-
-    public boolean isArquivado() {
-        return arquivado;
-    }
-
-    public void setArquivado(boolean arquivado) {
-        this.arquivado = arquivado;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public LocalDateTime getDataAtualizacao() {
-        return dataAtualizacao;
-    }
-
-    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
-        this.dataAtualizacao = dataAtualizacao;
-    }
 }

@@ -4,7 +4,11 @@ import br.com.portalincluir.model.EquipeMultidisciplinar;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class EquipeMultidisciplinarResponse {
 
     private Long id;
@@ -39,61 +43,5 @@ public class EquipeMultidisciplinarResponse {
         this.ativo = profissional.isAtivo();
         this.dataCriacao = profissional.getDataCriacao();
         this.dataAtualizacao = profissional.getDataAtualizacao();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public String getAreaAtuacao() {
-        return areaAtuacao;
-    }
-
-    public String getCargo() {
-        return cargo;
-    }
-
-    public String getSetor() {
-        return setor;
-    }
-
-    public String getConselhoProfissional() {
-        return conselhoProfissional;
-    }
-
-    public String getRegistroProfissional() {
-        return registroProfissional;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public LocalDateTime getDataAtualizacao() {
-        return dataAtualizacao;
     }
 }
