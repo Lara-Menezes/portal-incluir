@@ -6,7 +6,11 @@ import br.com.portalincluir.model.Coordenador;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class CoordenadorResponse {
     public record Resumo(long estudantesAtivos, long professoresAtivos, long planosAtivos,
                          long planosArquivados, List<EstudanteResumo> estudantesRecentes) {}
@@ -38,16 +42,4 @@ public class CoordenadorResponse {
         this.dataCriacao = coordenador.getDataCriacao();
         this.dataAtualizacao = coordenador.getDataAtualizacao();
     }
-
-    public Long getId() { return id; }
-    public String getNome() { return nome; }
-    public String getEmail() { return email; }
-    public String getTelefone() { return telefone; }
-    public LocalDate getDataNascimento() { return dataNascimento; }
-    public String getMatricula() { return matricula; }
-    public String getCargo() { return cargo; }
-    public String getSetor() { return setor; }
-    public StatusCoordenador getStatus() { return status; }
-    public LocalDateTime getDataCriacao() { return dataCriacao; }
-    public LocalDateTime getDataAtualizacao() { return dataAtualizacao; }
 }

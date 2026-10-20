@@ -5,7 +5,11 @@ import br.com.portalincluir.model.PlanoAcao;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class PlanoAcaoResponse {
 
     private Long id;
@@ -106,122 +110,4 @@ public class PlanoAcaoResponse {
         this.principaisDemandas = plano.getPrincipaisDemandas();
         this.propostasIntervencao = plano.getPropostasIntervencao();
     }
-
-    //Getters
-    public Long getId() {
-        return id;
-    }
-
-    public Long getEstudanteId() {return estudanteId;}
-
-    public String getEstudanteNome() {return estudanteNome;}
-
-    public String getEstudanteMatricula() {return estudanteMatricula;}
-
-    public String getEstudantePeriodoIngresso() {return estudantePeriodoIngresso;}
-
-    public String getEstudanteCurso() {return estudanteCurso;}
-
-    public LocalDate getEstudanteDataNascimento() {return estudanteDataNascimento;}
-
-    public String getEstudanteTelefone() {return estudanteTelefone;}
-
-    public String getEstudanteEmail() {return estudanteEmail;}
-
-    public Long getCoordenadorResponsavelId() {return coordenadorResponsavelId;}
-
-    public String getCoordenadorResponsavelNome() {return coordenadorResponsavelNome;}
-
-    public String getPeriodoLetivo() {
-        return periodoLetivo;
-    }
-
-    public StatusPlanoAcao getStatus() {
-        return status;
-    }
-
-    public boolean isArquivado() {
-        return arquivado;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public LocalDateTime getDataAtualizacao() {
-        return dataAtualizacao;
-    }
-
-    public LocalDateTime getDataAssinatura() {
-        return dataAssinatura;
-    }
-
-    public String getNomeResponsavel() {
-        return nomeResponsavel;
-    }
-
-    public String getGrauParentesco() {
-        return grauParentesco;
-    }
-
-    public String getTelefoneResponsavel() {
-        return telefoneResponsavel;
-    }
-
-    public String getEmailResponsavel() {
-        return emailResponsavel;
-    }
-
-    public Boolean getPossuiComorbidade() {
-        return possuiComorbidade;
-    }
-
-    public String getComorbidades() {
-        return comorbidades;
-    }
-
-    public Boolean getUsaMedicacaoContinua() {
-        return usaMedicacaoContinua;
-    }
-
-    public String getMedicacoes() {
-        return medicacoes;
-    }
-
-    public Boolean getFrequentaServicoApoio() {
-        return frequentaServicoApoio;
-    }
-
-    public String getServicosApoio() {
-        return servicosApoio;
-    }
-
-    public Boolean getPossuiDocumentosComprobatorios() {
-        return possuiDocumentosComprobatorios;
-    }
-
-    public String getDocumentosComprobatorios() {
-        return documentosComprobatorios;
-    }
-
-    public String getNecessidadesEspecificas() {
-        return necessidadesEspecificas;
-    }
-
-    public String getConsideracoes() {
-        return consideracoes;
-    }
-
-    public String getAvancosDificuldadesPotencialidades() {
-        return avancosDificuldadesPotencialidades;
-    }
-
-    public String getPrincipaisDemandas() {
-        return principaisDemandas;
-    }
-
-    public String getPropostasIntervencao() {
-        return propostasIntervencao;
-    }
-
 }

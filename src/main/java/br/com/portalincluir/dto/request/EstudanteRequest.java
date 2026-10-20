@@ -5,9 +5,18 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+import java.util.Set;
+import br.com.portalincluir.enums.TipoNecessidadeEspecifica;
+import br.com.portalincluir.enums.TipoCondicaoAssociada;
+import br.com.portalincluir.enums.TipoAtendimentoCampus;
+import br.com.portalincluir.enums.TipoAcessibilidadeFisica;
 
 import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class EstudanteRequest {
 
     @NotBlank
@@ -47,82 +56,28 @@ public class EstudanteRequest {
     @Size(max = 150)
     private String emailResponsavel;
 
-    // getters e setters
+    private Boolean possuiNecessidadeEspecifica;
 
+    private Set<TipoNecessidadeEspecifica> necessidadesEspecificas;
 
-    public String getNomeCompleto() {
-        return nomeCompleto;
-    }
+    @Size(max = 500)
+    private String outraNecessidadeEspecifica;
 
-    public void setNomeCompleto(String nomeCompleto) {
-        this.nomeCompleto = nomeCompleto;
-    }
+    private Set<TipoCondicaoAssociada> condicoesAssociadas;
 
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
+    @Size(max = 500)
+    private String outraCondicaoAssociada;
 
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
+    private Set<TipoAtendimentoCampus> atendimentosCampus;
 
-    public String getCurso() {
-        return curso;
-    }
+    private Set<TipoAcessibilidadeFisica> acessibilidadesFisicas;
 
-    public void setCurso(String curso) {
-        this.curso = curso;
-    }
+    @Size(max = 500)
+    private String outraAcessibilidadeFisica;
 
-    public String getMatricula() {
-        return matricula;
-    }
+    private Boolean possuiOutraNecessidadeAtendimento;
 
-    public String getPeriodoIngresso() {return periodoIngresso;}
+    @Size(max = 1000)
+    private String descricaoOutraNecessidadeAtendimento;
 
-    public void setPeriodoIngresso(String periodoIngresso) {this.periodoIngresso = periodoIngresso;}
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getNomeResponsavel() {
-        return nomeResponsavel;
-    }
-
-    public void setNomeResponsavel(String nomeResponsavel) {
-        this.nomeResponsavel = nomeResponsavel;
-    }
-
-    public String getTelefoneResponsavel() {
-        return telefoneResponsavel;
-    }
-
-    public void setTelefoneResponsavel(String telefoneResponsavel) {
-        this.telefoneResponsavel = telefoneResponsavel;
-    }
-
-    public String getEmailResponsavel() {
-        return emailResponsavel;
-    }
-
-    public void setEmailResponsavel(String emailResponsavel) {
-        this.emailResponsavel = emailResponsavel;
-    }
 }

@@ -4,7 +4,11 @@ import br.com.portalincluir.model.Professor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ProfessorResponse {
 
     private Long id;
@@ -34,49 +38,5 @@ public class ProfessorResponse {
         this.ativo = professor.isAtivo();
         this.dataCriacao = professor.getDataCriacao();
         this.dataAtualizacao = professor.getDataAtualizacao();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public String getDisciplina() {
-        return disciplina;
-    }
-
-    public String getSetor() {
-        return setor;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public LocalDateTime getDataAtualizacao() {
-        return dataAtualizacao;
     }
 }

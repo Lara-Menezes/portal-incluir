@@ -7,7 +7,11 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class EquipeMultidisciplinarRequest {
 
     @NotBlank(message = "O nome é obrigatório")
@@ -50,83 +54,4 @@ public class EquipeMultidisciplinarRequest {
     @Size(max = 50)
     private String registroProfissional;
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
-
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
-
-    public String getAreaAtuacao() {
-        return areaAtuacao;
-    }
-
-    public void setAreaAtuacao(String areaAtuacao) {
-        this.areaAtuacao = areaAtuacao;
-    }
-
-    public String getCargo() {
-        return cargo;
-    }
-
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
-    }
-
-    public String getSetor() {
-        return setor;
-    }
-
-    public void setSetor(String setor) {
-        this.setor = setor;
-    }
-
-    public String getConselhoProfissional() {
-        return conselhoProfissional;
-    }
-
-    public void setConselhoProfissional(String conselhoProfissional) {
-        this.conselhoProfissional = conselhoProfissional;
-    }
-
-    public String getRegistroProfissional() {
-        return registroProfissional;
-    }
-
-    public void setRegistroProfissional(String registroProfissional) {
-        this.registroProfissional = registroProfissional;
-    }
 }

@@ -1,9 +1,19 @@
 package br.com.portalincluir.dto.response;
 
+import java.util.Set;
+import java.util.HashSet;
 import br.com.portalincluir.model.Estudante;
+import br.com.portalincluir.enums.TipoNecessidadeEspecifica;
+import br.com.portalincluir.enums.TipoCondicaoAssociada;
+import br.com.portalincluir.enums.TipoAtendimentoCampus;
+import br.com.portalincluir.enums.TipoAcessibilidadeFisica;
 
 import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class EstudanteResponse {
 
     private Long id;
@@ -23,6 +33,16 @@ public class EstudanteResponse {
     private String nomeResponsavel;
     private String telefoneResponsavel;
     private String emailResponsavel;
+    private Boolean possuiNecessidadeEspecifica;
+    private Set<TipoNecessidadeEspecifica> necessidadesEspecificas;
+    private String outraNecessidadeEspecifica;
+    private Set<TipoCondicaoAssociada> condicoesAssociadas;
+    private String outraCondicaoAssociada;
+    private Set<TipoAtendimentoCampus> atendimentosCampus;
+    private Set<TipoAcessibilidadeFisica> acessibilidadesFisicas;
+    private String outraAcessibilidadeFisica;
+    private Boolean possuiOutraNecessidadeAtendimento;
+    private String descricaoOutraNecessidadeAtendimento;
 
     public EstudanteResponse(Estudante estudante) {
         this.id = estudante.getId();
@@ -39,51 +59,34 @@ public class EstudanteResponse {
         this.nomeResponsavel = estudante.getNomeResponsavel();
         this.telefoneResponsavel = estudante.getTelefoneResponsavel();
         this.emailResponsavel = estudante.getEmailResponsavel();
-    }
+        this.possuiNecessidadeEspecifica =
+                estudante.getPossuiNecessidadeEspecifica();
 
-    public Long getId() {
-        return id;
-    }
+        this.necessidadesEspecificas =
+                new java.util.HashSet<>(estudante.getNecessidadesEspecificas());
 
-    public boolean isAtivo() {
-        return ativo;
-    }
+        this.outraNecessidadeEspecifica =
+                estudante.getOutraNecessidadeEspecifica();
 
-    public String getNomeCompleto() {
-        return nomeCompleto;
-    }
+        this.condicoesAssociadas =
+                new java.util.HashSet<>(estudante.getCondicoesAssociadas());
 
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
+        this.outraCondicaoAssociada =
+                estudante.getOutraCondicaoAssociada();
 
-    public String getCurso() {
-        return curso;
-    }
+        this.atendimentosCampus =
+                new java.util.HashSet<>(estudante.getAtendimentosCampus());
 
-    public String getMatricula() {
-        return matricula;
-    }
+        this.acessibilidadesFisicas =
+                new java.util.HashSet<>(estudante.getAcessibilidadesFisicas());
 
-    public String getPeriodoIngresso() {return periodoIngresso;}
+        this.outraAcessibilidadeFisica =
+                estudante.getOutraAcessibilidadeFisica();
 
-    public String getTelefone() {
-        return telefone;
-    }
+        this.possuiOutraNecessidadeAtendimento =
+                estudante.getPossuiOutraNecessidadeAtendimento();
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getNomeResponsavel() {
-        return nomeResponsavel;
-    }
-
-    public String getTelefoneResponsavel() {
-        return telefoneResponsavel;
-    }
-
-    public String getEmailResponsavel() {
-        return emailResponsavel;
+        this.descricaoOutraNecessidadeAtendimento =
+                estudante.getDescricaoOutraNecessidadeAtendimento();
     }
 }

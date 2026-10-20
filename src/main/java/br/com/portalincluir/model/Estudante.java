@@ -1,8 +1,19 @@
 package br.com.portalincluir.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import br.com.portalincluir.enums.TipoNecessidadeEspecifica;
+import br.com.portalincluir.enums.TipoCondicaoAssociada;
+import br.com.portalincluir.enums.TipoAtendimentoCampus;
+import br.com.portalincluir.enums.TipoAcessibilidadeFisica;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @org.hibernate.envers.Audited
 @Entity
 @Table(name = "estudantes", uniqueConstraints = {
@@ -75,98 +86,62 @@ public class Estudante {
     @Column(length = 150)
     private String emailResponsavel;
 
+    @Column(name = "possui_necessidade_especifica")
+    private Boolean possuiNecessidadeEspecifica;
 
-    // getters e setters
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name = "estudante_necessidades",
+            joinColumns = @JoinColumn(name = "estudante_id")
+    )
+    @Column(name = "tipo", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Set<TipoNecessidadeEspecifica> necessidadesEspecificas =
+            new HashSet<>();
 
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "outra_necessidade_especifica", length = 500)
+    private String outraNecessidadeEspecifica;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name = "estudante_condicoes_associadas",
+            joinColumns = @JoinColumn(name = "estudante_id")
+    )
+    @Column(name = "tipo", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Set<TipoCondicaoAssociada> condicoesAssociadas =
+            new HashSet<>();
 
-    public boolean isAtivo() {
-        return ativo;
-    }
+    @Column(name = "outra_condicao_associada", length = 500)
+    private String outraCondicaoAssociada;
 
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name = "estudante_atendimentos",
+            joinColumns = @JoinColumn(name = "estudante_id")
+    )
+    @Column(name = "tipo", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Set<TipoAtendimentoCampus> atendimentosCampus =
+            new HashSet<>();
 
-    public String getNome() {
-        return nome;
-    }
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name = "estudante_acessibilidades",
+            joinColumns = @JoinColumn(name = "estudante_id")
+    )
+    @Column(name = "tipo", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Set<TipoAcessibilidadeFisica> acessibilidadesFisicas =
+            new HashSet<>();
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    @Column(name = "outra_acessibilidade_fisica", length = 500)
+    private String outraAcessibilidadeFisica;
 
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
+    @Column(name = "possui_outra_necessidade_atendimento")
+    private Boolean possuiOutraNecessidadeAtendimento;
 
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
+    @Column(name = "descricao_outra_necessidade_atendimento", length = 1000)
+    private String descricaoOutraNecessidadeAtendimento;
 
-    public String getCurso() {
-        return curso;
-    }
-
-    public void setCurso(String curso) {
-        this.curso = curso;
-    }
-
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
-
-    public String getPeriodoIngresso() {return periodoIngresso;}
-
-    public void setPeriodoIngresso(String periodoIngresso) {this.periodoIngresso = periodoIngresso;}
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getNomeResponsavel() {
-        return nomeResponsavel;
-    }
-
-    public void setNomeResponsavel(String nomeResponsavel) {
-        this.nomeResponsavel = nomeResponsavel;
-    }
-
-    public String getTelefoneResponsavel() {
-        return telefoneResponsavel;
-    }
-
-    public void setTelefoneResponsavel(String telefoneResponsavel) {
-        this.telefoneResponsavel = telefoneResponsavel;
-    }
-
-    public String getEmailResponsavel() {
-        return emailResponsavel;
-    }
-
-    public void setEmailResponsavel(String emailResponsavel) {
-        this.emailResponsavel = emailResponsavel;
-    }
 }
