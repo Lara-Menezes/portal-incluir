@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.Map;
 
-@RestControllerAdvice(assignableTypes = {AuthController.class, CoordenadorController.class, GestaoUsuarioController.class})
+@RestControllerAdvice(assignableTypes = {AuthController.class, CoordenadorController.class, GestaoUsuarioController.class, VinculoEstudanteController.class})
 public class IntegracaoExceptionHandler {
     @ExceptionHandler(ResponseStatusException.class)
     ResponseEntity<?> status(ResponseStatusException e) {

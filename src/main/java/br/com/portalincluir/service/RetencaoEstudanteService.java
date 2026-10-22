@@ -24,6 +24,8 @@ public class RetencaoEstudanteService {
         if (estudante == null || politica.disponivel(estudante)) return;
         // SQL em lote evita que o proprio descarte gere novas copias no Envers.
         // Inclui revisoes de filhos excluidos anteriormente; vinculos nao podem ser transferidos.
+        executar("delete from auditoria.vinculos_estudante_profissional_aud where estudante_id = :id", id);
+        executar("delete from vinculos_estudante_profissional where estudante_id = :id", id);
         executar("delete from auditoria.planos_acao_aud where estudante_id = :id", id);
         executar("delete from auditoria.adaptacoes_pedagogicas_aud where estudante_id = :id", id);
         executar("delete from auditoria.estudantes_aud where id = :id", id);
