@@ -54,15 +54,19 @@ public class PlanoAcao {
     private String emailResponsavel;
 
     private Boolean possuiComorbidade;
+    @Column(columnDefinition = "TEXT")
     private String comorbidades;
 
     private Boolean usaMedicacaoContinua;
+    @Column(columnDefinition = "TEXT")
     private String medicacoes;
 
     private Boolean frequentaServicoApoio;
+    @Column(columnDefinition = "TEXT")
     private String servicosApoio;
 
     private Boolean possuiDocumentosComprobatorios;
+    @Column(columnDefinition = "TEXT")
     private String documentosComprobatorios;
 
     @Column(length = 5000)
