@@ -33,6 +33,7 @@ class UsuarioServiceTest {
         r.setNome(" Maria "); r.setEmail(" MARIA@EXEMPLO.COM "); r.setSenha("senha123");
         r.setPerfil(perfil); r.setMatricula("123"); r.setCargo("Coordenação");
         r.setSetor("CLAI"); r.setDisciplina("Português"); r.setAreaAtuacao("Pedagogia");
+        r.setCursosAtuacao(java.util.Set.of(br.com.portalincluir.config.CatalogoProfissional.CURSOS.get(0)));
         return r;
     }
 
@@ -64,7 +65,7 @@ class UsuarioServiceTest {
     }
 
     @Test void rejeitaCamposEspecificosAusentes() {
-        var r = cadastro(PerfilUsuario.PROFESSOR); r.setDisciplina(" ");
+        var r = cadastro(PerfilUsuario.PROFESSOR); r.setCursosAtuacao(java.util.Set.of());
         assertEquals(400, assertThrows(ResponseStatusException.class, () -> service.cadastrar(r)).getStatusCode().value());
         verifyNoInteractions(professores);
     }

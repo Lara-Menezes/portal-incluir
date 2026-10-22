@@ -24,6 +24,9 @@ public class UsuarioService {
     private final EquipeMultidisciplinarRepository equipe;
     private final PasswordEncoder encoder;
 
+    @Transactional(readOnly = true)
+    public boolean possuiContas() { return usuarios.count() > 0; }
+
     @Transactional
     public UsuarioResponse cadastrar(CadastroUsuarioRequest r) {
         r.setEmail(r.getEmail().strip().toLowerCase(Locale.ROOT));
@@ -31,6 +34,8 @@ public class UsuarioService {
         r.setMatricula(r.getMatricula().strip());
         if (usuarios.existsByEmailIgnoreCase(r.getEmail()))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "E-mail já cadastrado");
+        if (r.getPerfil() == br.com.portalincluir.enums.PerfilUsuario.PROFESSOR) r.setCursosAtuacao(br.com.portalincluir.config.CatalogoProfissional.cursos(r.getCursosAtuacao()));
+        if (r.getPerfil() == br.com.portalincluir.enums.PerfilUsuario.EQUIPE_MULTIDISCIPLINAR) r.setAreaAtuacao(br.com.portalincluir.config.CatalogoProfissional.area(r.getAreaAtuacao()));
         Usuario u = new Usuario();
         u.setEmail(r.getEmail());
         u.setSenha(encoder.encode(r.getSenha()));
@@ -43,7 +48,8 @@ public class UsuarioService {
                 u.setCoordenador(coordenadores.save(p));
             }
             case PROFESSOR -> {
-                exigir(r.getDisciplina(), "Disciplina"); exigir(r.getSetor(), "Setor");
+                exigir(r.getSetor(), "Setor");
+                r.setDisciplina(java.util.Objects.toString(r.getDisciplina(), "").strip());
                 Professor p = new Professor(); BeanUtils.copyProperties(r, p);
                 p.setDataCriacao(LocalDateTime.now());
                 u.setProfessor(professores.save(p));
@@ -77,12 +83,12 @@ public class UsuarioService {
         return resposta(u);
     }
 
-    private UsuarioResponse resposta(Usuario u) {
+    public UsuarioResponse resposta(Usuario u) {
         return switch (u.getPerfil()) {
-            case COORDENADOR -> new UsuarioResponse(u.getId(), u.getCoordenador().getNome(), u.getEmail(), u.getPerfil(), u.getCoordenador().getId());
-            case PROFESSOR -> new UsuarioResponse(u.getId(), u.getProfessor().getNome(), u.getEmail(), u.getPerfil(), u.getProfessor().getId());
-            case ADMINISTRADOR -> new UsuarioResponse(u.getId(), u.getAdministrador().getNome(), u.getEmail(), u.getPerfil(), u.getAdministrador().getId());
-            case EQUIPE_MULTIDISCIPLINAR -> new UsuarioResponse(u.getId(), u.getEquipeMultidisciplinar().getNome(), u.getEmail(), u.getPerfil(), u.getEquipeMultidisciplinar().getId());
+            case COORDENADOR -> new UsuarioResponse(u.getId(), u.getCoordenador().getNome(), u.getEmail(), u.getPerfil(), u.getCoordenador().getId(), PermissaoService.efetivas(u));
+            case PROFESSOR -> new UsuarioResponse(u.getId(), u.getProfessor().getNome(), u.getEmail(), u.getPerfil(), u.getProfessor().getId(), PermissaoService.efetivas(u));
+            case ADMINISTRADOR -> new UsuarioResponse(u.getId(), u.getAdministrador().getNome(), u.getEmail(), u.getPerfil(), u.getAdministrador().getId(), PermissaoService.efetivas(u));
+            case EQUIPE_MULTIDISCIPLINAR -> new UsuarioResponse(u.getId(), u.getEquipeMultidisciplinar().getNome(), u.getEmail(), u.getPerfil(), u.getEquipeMultidisciplinar().getId(), PermissaoService.efetivas(u));
         };
     }
     private static ResponseStatusException credenciaisInvalidas() {

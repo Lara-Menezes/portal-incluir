@@ -41,6 +41,11 @@ public class Professor {
     @Column(nullable = false)
     private boolean ativo = true;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "professor_cursos", joinColumns = @JoinColumn(name = "professor_id"))
+    @Column(name = "curso", nullable = false, length = 150)
+    private java.util.Set<String> cursosAtuacao = new java.util.LinkedHashSet<>();
+
     private LocalDateTime dataCriacao;
 
     private LocalDateTime dataAtualizacao;

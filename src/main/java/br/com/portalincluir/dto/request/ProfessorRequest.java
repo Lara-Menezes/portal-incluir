@@ -32,7 +32,6 @@ public class ProfessorRequest {
     @Size(max = 30)
     private String matricula;
 
-    @NotBlank
     @Size(max = 120)
     private String disciplina;
 
@@ -40,4 +39,5 @@ public class ProfessorRequest {
     @Size(max = 120)
     private String setor;
 
+    @jakarta.validation.constraints.Size(max=6) private java.util.Set<String> cursosAtuacao;
 }
