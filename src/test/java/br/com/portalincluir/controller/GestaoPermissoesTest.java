@@ -69,7 +69,22 @@ class GestaoPermissoesTest {
         assertTrue(professores.existsById(perfil)); assertFalse(usuarios.existsById(prof));
         mvc.perform(get("/api/auth/me").session(pessoa)).andExpect(status().isUnauthorized());
     }
-
+    @Test void saudePrivilegiosELegadoNaoPodemContornarAsPermissoes() throws Exception {
+        Long coord = criar("coord3@gestao.test", PerfilUsuario.COORDENADOR), prof = criar("prof3@gestao.test", PerfilUsuario.PROFESSOR);
+        var gestor = sessao(coord); var pessoa = sessao(prof);
+        var estudante = new br.com.portalincluir.model.Estudante(); estudante.setNome("Estudante Teste"); estudante.setDataNascimento(java.time.LocalDate.of(2000,1,1)); estudante.setCurso("Curso Teste"); estudante.setMatricula("teste-saude"); estudante.setPeriodoIngresso("2026.1"); estudante.setPossuiNecessidadeEspecifica(true); estudante.setOutraCondicaoAssociada("INFORMACAO RESTRITA");
+        Long id = estudantes.saveAndFlush(estudante).getId();
+        mvc.perform(post("/api/estudantes/"+id+"/profissionais").session(gestor).contentType(MediaType.APPLICATION_JSON).content(json.writeValueAsString(java.util.Map.of("profissionalId", prof, "motivo", "Acompanhamento de teste")))).andExpect(status().isOk());
+        mvc.perform(get("/api/estudantes/"+id).session(pessoa)).andExpect(status().isOk()).andExpect(jsonPath("outraCondicaoAssociada").isEmpty());
+        mvc.perform(get("/api/estudantes/"+id).session(gestor)).andExpect(status().isOk()).andExpect(jsonPath("outraCondicaoAssociada").value("INFORMACAO RESTRITA"));
+        mvc.perform(put("/api/usuarios/"+prof+"/permissoes").session(gestor).contentType(MediaType.APPLICATION_JSON).content("{\"ajustes\":{\"sensivel.consultar\":true}}")) .andExpect(status().isOk());
+        mvc.perform(get("/api/estudantes/"+id).session(pessoa)).andExpect(status().isOk()).andExpect(jsonPath("outraCondicaoAssociada").value("INFORMACAO RESTRITA"));
+        Long perfilId = usuarios.findById(prof).orElseThrow().getProfessor().getId();
+        mvc.perform(patch("/api/professores/"+perfilId+"/inativar").session(gestor)).andExpect(status().isConflict());
+        mvc.perform(post("/api/auth/register").session(pessoa).contentType(MediaType.APPLICATION_JSON).content("{\"nome\":\"Tentativa\",\"email\":\"tentativa@gestao.test\",\"senha\":\"senha123\",\"perfil\":\"COORDENADOR\",\"matricula\":\"tentativa\",\"cargo\":\"Gestor\",\"setor\":\"CLAI\"}")) .andExpect(status().isForbidden());
+        assertFalse(usuarios.existsByEmailIgnoreCase("tentativa@gestao.test"));
+        assertTrue(jdbc.queryForObject("select count(*) from auditoria.usuario_permissoes_aud", Long.class) > 0);
+    }
     @Test void bloqueioDoPerfilERestauracaoDoPadrao() throws Exception {
         Long coord = criar("coord2@gestao.test", PerfilUsuario.COORDENADOR), prof = criar("prof2@gestao.test", PerfilUsuario.PROFESSOR);
         var gestor = sessao(coord); var pessoa = sessao(prof);
