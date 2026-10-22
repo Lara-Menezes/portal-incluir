@@ -56,7 +56,7 @@ public class EstudanteService {
 
         estudante.setNome(request.getNomeCompleto());
         estudante.setDataNascimento(request.getDataNascimento());
-        estudante.setCurso(request.getCurso());
+        estudante.setCurso(br.com.portalincluir.config.CatalogoProfissional.cursoEstudante(request.getCurso(), estudante.getCurso()));
         estudante.setMatricula(request.getMatricula());
         estudante.setPeriodoIngresso(request.getPeriodoIngresso());
         estudante.setTelefone(request.getTelefone());
@@ -141,7 +141,7 @@ public class EstudanteService {
 
         estudante.setNome(request.getNomeCompleto());
         estudante.setDataNascimento(request.getDataNascimento());
-        estudante.setCurso(request.getCurso());
+        estudante.setCurso(br.com.portalincluir.config.CatalogoProfissional.cursoEstudante(request.getCurso(), estudante.getCurso()));
         estudante.setMatricula(request.getMatricula());
         estudante.setPeriodoIngresso(request.getPeriodoIngresso());
         estudante.setTelefone(request.getTelefone());

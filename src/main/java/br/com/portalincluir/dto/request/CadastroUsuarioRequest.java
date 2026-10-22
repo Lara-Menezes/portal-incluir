@@ -19,4 +19,5 @@ public class CadastroUsuarioRequest {
     @Size(max = 120) private String setor;
     @Size(max = 120) private String disciplina;
     @Size(max = 100) private String areaAtuacao;
+    @jakarta.validation.constraints.Size(max=6) private java.util.Set<String> cursosAtuacao;
 }

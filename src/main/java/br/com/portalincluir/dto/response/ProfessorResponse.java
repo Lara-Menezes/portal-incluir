@@ -21,6 +21,7 @@ public class ProfessorResponse {
     private String disciplina;
     private String setor;
 
+    private java.util.Set<String> cursosAtuacao;
     private boolean ativo;
 
     private LocalDateTime dataCriacao;
@@ -36,6 +37,7 @@ public class ProfessorResponse {
         this.disciplina = professor.getDisciplina();
         this.setor = professor.getSetor();
         this.ativo = professor.isAtivo();
+        this.cursosAtuacao = new java.util.TreeSet<>(professor.getCursosAtuacao());
         this.dataCriacao = professor.getDataCriacao();
         this.dataAtualizacao = professor.getDataAtualizacao();
     }

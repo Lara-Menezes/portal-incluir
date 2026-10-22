@@ -137,7 +137,7 @@ public class EquipeMultidisciplinarService {
         profissional.setTelefone(normalizarOpcional(request.getTelefone()));
         profissional.setDataNascimento(request.getDataNascimento());
         profissional.setMatricula(request.getMatricula().trim());
-        profissional.setAreaAtuacao(request.getAreaAtuacao().trim());
+        if (profissional.getId() == null || !java.util.Objects.equals(profissional.getAreaAtuacao(), request.getAreaAtuacao())) profissional.setAreaAtuacao(br.com.portalincluir.config.CatalogoProfissional.area(request.getAreaAtuacao()));
         profissional.setCargo(request.getCargo().trim());
         profissional.setSetor(request.getSetor().trim());
 

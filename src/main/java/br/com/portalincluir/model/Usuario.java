@@ -31,6 +31,12 @@ public class Usuario {
     @OneToOne @JoinColumn(unique = true)
     private EquipeMultidisciplinar equipeMultidisciplinar;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "usuario_permissoes", joinColumns = @JoinColumn(name = "usuario_id"))
+    @MapKeyColumn(name = "permissao", length = 80)
+    @Column(name = "permitido", nullable = false)
+    private java.util.Map<String, Boolean> permissoesIndividuais = new java.util.HashMap<>();
+
     @PrePersist @PreUpdate
     void validarPerfil() {
         int vinculos = (coordenador != null ? 1 : 0) + (professor != null ? 1 : 0)

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@org.springframework.transaction.annotation.Transactional
 public class ProfessorService {
 
     private final ProfessorRepository professorRepository;
@@ -31,6 +32,7 @@ public class ProfessorService {
             throw new RuntimeException("Matrícula já utilizada");
         }
 
+        br.com.portalincluir.config.CatalogoProfissional.cursos(request.getCursosAtuacao());
         Professor professor = new Professor();
 
         preencherDados(professor, request);
@@ -156,8 +158,9 @@ public class ProfessorService {
         professor.setTelefone(normalizarCampoOpcional(request.getTelefone()));
         professor.setDataNascimento(request.getDataNascimento());
         professor.setMatricula(normalizarMatricula(request.getMatricula()));
-        professor.setDisciplina(request.getDisciplina().trim());
+        professor.setDisciplina(java.util.Objects.toString(request.getDisciplina(), "").strip());
         professor.setSetor(request.getSetor().trim());
+        if (request.getCursosAtuacao() != null) professor.setCursosAtuacao(br.com.portalincluir.config.CatalogoProfissional.cursos(request.getCursosAtuacao()));
     }
 
     private String normalizarEmail(String email) {
