@@ -13,7 +13,7 @@ public class AuthController {
     private final UsuarioService service;
     private final br.com.portalincluir.service.PermissaoService acesso;
     @GetMapping("/me")
-    public UsuarioResponse sessao(HttpServletRequest http) { return service.resposta(acesso.autenticado(http)); }
+    public org.springframework.http.ResponseEntity<UsuarioResponse> sessao(HttpServletRequest http) { return org.springframework.http.ResponseEntity.ok().cacheControl(org.springframework.http.CacheControl.noStore()).body(service.resposta(acesso.autenticado(http))); }
     @PostMapping("/register") @ResponseStatus(HttpStatus.CREATED)
     public UsuarioResponse cadastrar(@Valid @RequestBody CadastroUsuarioRequest request, HttpServletRequest http) {
         if ((request.getPerfil() == br.com.portalincluir.enums.PerfilUsuario.COORDENADOR || request.getPerfil() == br.com.portalincluir.enums.PerfilUsuario.ADMINISTRADOR) && service.possuiContas()) { acesso.exigir(http, "usuarios.gerenciar"); acesso.exigir(http, "permissoes.gerenciar"); }
@@ -25,9 +25,9 @@ public class AuthController {
     }
     @PostMapping("/login")
     public UsuarioResponse login(@Valid @RequestBody LoginRequest request, HttpServletRequest http) {
+        var usuario = service.login(request);
         var anterior = http.getSession(false);
         if (anterior != null) anterior.invalidate();
-        var usuario = service.login(request);
         http.getSession(true).setAttribute("usuarioAutenticadoId", usuario.id());
         return usuario;
     }
