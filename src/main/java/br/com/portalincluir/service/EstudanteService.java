@@ -16,6 +16,8 @@ import java.util.List;
 @Service
 public class EstudanteService {
 
+    @org.springframework.beans.factory.annotation.Autowired
+    private br.com.portalincluir.repository.FluxoEstudanteRepository fluxos;
     private final EstudanteRepository estudanteRepository;
 
     private final PoliticaHistoricoService politica;
@@ -68,6 +70,11 @@ public class EstudanteService {
 
         Estudante salvo = estudanteRepository.save(estudante);
 
+        if (request.isAnamneseConcluida() && request.getPossuiNecessidadeEspecifica() == null) throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "Informe as necessidades antes de concluir a anamnese");
+        var fluxo = new br.com.portalincluir.model.FluxoEstudante();
+        fluxo.setEstudante(salvo);
+        fluxo.setAnamneseStatus(request.isAnamneseConcluida() ? "CONCLUIDA" : "RASCUNHO");
+        fluxos.save(fluxo);
         return new EstudanteResponse(salvo);
     }
 
