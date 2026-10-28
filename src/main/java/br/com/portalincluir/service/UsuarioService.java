@@ -27,8 +27,21 @@ public class UsuarioService {
     @Transactional(readOnly = true)
     public boolean possuiContas() { return usuarios.count() > 0; }
 
+    @Transactional(readOnly = true)
+    public boolean possuiGestores() { return usuarios.findAll().stream().anyMatch(u -> u.getPerfil() == br.com.portalincluir.enums.PerfilUsuario.COORDENADOR || u.getPerfil() == br.com.portalincluir.enums.PerfilUsuario.ADMINISTRADOR); }
+
     @Transactional
     public UsuarioResponse cadastrar(CadastroUsuarioRequest r) {
+        return cadastrarInterno(r, encoder.encode(r.getSenha()));
+    }
+
+    @Transactional
+    public UsuarioResponse cadastrarAprovado(CadastroUsuarioRequest r, String senhaHash) {
+        if (senhaHash == null || !senhaHash.startsWith("$2")) throw new IllegalArgumentException("Senha da solicitação inválida");
+        return cadastrarInterno(r, senhaHash);
+    }
+
+    private UsuarioResponse cadastrarInterno(CadastroUsuarioRequest r, String senhaHash) {
         r.setEmail(r.getEmail().strip().toLowerCase(Locale.ROOT));
         r.setNome(r.getNome().strip());
         r.setMatricula(r.getMatricula().strip());
@@ -38,7 +51,7 @@ public class UsuarioService {
         if (r.getPerfil() == br.com.portalincluir.enums.PerfilUsuario.EQUIPE_MULTIDISCIPLINAR) r.setAreaAtuacao(br.com.portalincluir.config.CatalogoProfissional.area(r.getAreaAtuacao()));
         Usuario u = new Usuario();
         u.setEmail(r.getEmail());
-        u.setSenha(encoder.encode(r.getSenha()));
+        u.setSenha(senhaHash);
         u.setPerfil(r.getPerfil());
         switch (r.getPerfil()) {
             case COORDENADOR -> {
@@ -70,7 +83,7 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public UsuarioResponse login(LoginRequest r) {
-        Usuario u = usuarios.findByEmailIgnoreCase(r.email().strip())
+        Usuario u = (r.email().strip().equalsIgnoreCase("root") ? usuarios.findByRootTrue() : usuarios.findByEmailIgnoreCase(r.email().strip()))
                 .orElseThrow(UsuarioService::credenciaisInvalidas);
         if (!encoder.matches(r.senha(), u.getSenha())) throw credenciaisInvalidas();
         boolean ativo = switch (u.getPerfil()) {
@@ -85,10 +98,10 @@ public class UsuarioService {
 
     public UsuarioResponse resposta(Usuario u) {
         return switch (u.getPerfil()) {
-            case COORDENADOR -> new UsuarioResponse(u.getId(), u.getCoordenador().getNome(), u.getEmail(), u.getPerfil(), u.getCoordenador().getId(), PermissaoService.efetivas(u));
-            case PROFESSOR -> new UsuarioResponse(u.getId(), u.getProfessor().getNome(), u.getEmail(), u.getPerfil(), u.getProfessor().getId(), PermissaoService.efetivas(u));
-            case ADMINISTRADOR -> new UsuarioResponse(u.getId(), u.getAdministrador().getNome(), u.getEmail(), u.getPerfil(), u.getAdministrador().getId(), PermissaoService.efetivas(u));
-            case EQUIPE_MULTIDISCIPLINAR -> new UsuarioResponse(u.getId(), u.getEquipeMultidisciplinar().getNome(), u.getEmail(), u.getPerfil(), u.getEquipeMultidisciplinar().getId(), PermissaoService.efetivas(u));
+            case COORDENADOR -> new UsuarioResponse(u.getId(), u.getCoordenador().getNome(), u.getEmail(), u.getPerfil(), u.getCoordenador().getId(), PermissaoService.efetivas(u), u.isRoot(), u.isAdministracaoAprovada());
+            case PROFESSOR -> new UsuarioResponse(u.getId(), u.getProfessor().getNome(), u.getEmail(), u.getPerfil(), u.getProfessor().getId(), PermissaoService.efetivas(u), u.isRoot(), u.isAdministracaoAprovada());
+            case ADMINISTRADOR -> new UsuarioResponse(u.getId(), u.getAdministrador().getNome(), u.getEmail(), u.getPerfil(), u.getAdministrador().getId(), PermissaoService.efetivas(u), u.isRoot(), u.isAdministracaoAprovada());
+            case EQUIPE_MULTIDISCIPLINAR -> new UsuarioResponse(u.getId(), u.getEquipeMultidisciplinar().getNome(), u.getEmail(), u.getPerfil(), u.getEquipeMultidisciplinar().getId(), PermissaoService.efetivas(u), u.isRoot(), u.isAdministracaoAprovada());
         };
     }
     private static ResponseStatusException credenciaisInvalidas() {

@@ -33,7 +33,7 @@ class GestaoPermissoesTest {
     private Long criar(String email, PerfilUsuario perfil) {
         var r = new CadastroUsuarioRequest(); r.setEmail(email); r.setNome("Pessoa Teste"); r.setSenha("senha123"); r.setPerfil(perfil); r.setMatricula(email); r.setSetor("CLAI"); r.setCargo("Coordenacao"); r.setDisciplina("Historia");
         r.setCursosAtuacao(java.util.Set.of(br.com.portalincluir.config.CatalogoProfissional.CURSOS.get(0)));
-        return service.cadastrar(r).id();
+        var id=service.cadastrar(r).id(); if (perfil==PerfilUsuario.COORDENADOR) { var u=usuarios.findById(id).orElseThrow(); u.setAdministracaoAprovada(true); PermissaoService.ADMINISTRATIVAS.forEach(c -> u.getPermissoesIndividuais().put(c,true)); usuarios.saveAndFlush(u); } return id;
     }
     private MockHttpSession sessao(Long id) { var s = new MockHttpSession(); s.setAttribute("usuarioAutenticadoId", id); return s; }
     @Test void acessoIndividualLoginEdicaoInativacaoExclusaoEAuditoria() throws Exception {
@@ -43,14 +43,14 @@ class GestaoPermissoesTest {
         mvc.perform(get("/api/usuarios")).andExpect(status().isUnauthorized());
         mvc.perform(get("/api/usuarios").session(pessoa)).andExpect(status().isForbidden());
         mvc.perform(get("/api/usuarios").session(gestor)).andExpect(status().isOk()).andExpect(jsonPath("$[0].senha").doesNotExist());
-        mvc.perform(put("/api/usuarios/"+prof+"/permissoes").session(gestor).contentType(MediaType.APPLICATION_JSON).content("{\"ajustes\":{\"usuarios\":true}}"))
-            .andExpect(status().isOk()).andExpect(jsonPath("ajustes.usuarios").value(true));
-        mvc.perform(get("/api/usuarios").session(pessoa)).andExpect(status().isOk());
+        mvc.perform(put("/api/usuarios/"+prof+"/permissoes").session(gestor).contentType(MediaType.APPLICATION_JSON).content("{\"ajustes\":{\"planos.gerar\":true}}"))
+            .andExpect(status().isOk()).andExpect(jsonPath("ajustes['planos.gerar']").value(true));
+        mvc.perform(get("/api/usuarios").session(pessoa)).andExpect(status().isForbidden());
         mvc.perform(delete("/api/usuarios/"+coord).session(pessoa)).andExpect(status().isForbidden());
         mvc.perform(get("/api/auth/me").session(pessoa)).andExpect(status().isOk()).andExpect(jsonPath("permissoes").isArray());
         mvc.perform(put("/api/usuarios/"+prof+"/permissoes").session(gestor).contentType(MediaType.APPLICATION_JSON).content("{\"ajustes\":{\"usuarios\":false,\"inexistente\":true}}"))
             .andExpect(status().isBadRequest());
-        assertTrue(usuarios.findById(prof).orElseThrow().getPermissoesIndividuais().get("usuarios"));
+        assertTrue(usuarios.findById(prof).orElseThrow().getPermissoesIndividuais().get("planos.gerar"));
         mvc.perform(put("/api/usuarios/"+prof).session(gestor).contentType(MediaType.APPLICATION_JSON).content("{\"nome\":\"Nome Atualizado\",\"email\":\"novo@gestao.test\",\"matricula\":\"prof-gestao\",\"setor\":\"Ensino\",\"disciplina\":\"Historia\"}"))
             .andExpect(status().isOk()).andExpect(jsonPath("email").value("novo@gestao.test"));
         assertEquals("novo@gestao.test", usuarios.findById(prof).orElseThrow().getProfessor().getEmail());
@@ -60,7 +60,7 @@ class GestaoPermissoesTest {
         mvc.perform(get("/api/usuarios").session(pessoa)).andExpect(status().isForbidden());
         mvc.perform(post("/api/auth/login").contentType(MediaType.APPLICATION_JSON).content("{\"email\":\"novo@gestao.test\",\"senha\":\"senha123\"}")).andExpect(status().isForbidden());
         mvc.perform(patch("/api/usuarios/"+prof+"/situacao").session(gestor).contentType(MediaType.APPLICATION_JSON).content("{\"ativo\":true}")).andExpect(status().isOk());
-        mvc.perform(get("/api/usuarios").session(pessoa)).andExpect(status().isOk());
+        mvc.perform(get("/api/usuarios").session(pessoa)).andExpect(status().isForbidden());
         mvc.perform(put("/api/usuarios/"+coord+"/permissoes").session(gestor).contentType(MediaType.APPLICATION_JSON).content("{\"ajustes\":{}}")).andExpect(status().isConflict());
         mvc.perform(patch("/api/usuarios/"+coord+"/situacao").session(gestor).contentType(MediaType.APPLICATION_JSON).content("{\"ativo\":false}")).andExpect(status().isConflict());
         mvc.perform(delete("/api/usuarios/"+coord).session(gestor)).andExpect(status().isConflict());
