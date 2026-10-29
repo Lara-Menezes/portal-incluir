@@ -12,16 +12,13 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final UsuarioService service;
     private final br.com.portalincluir.service.PermissaoService acesso;
+    @org.springframework.beans.factory.annotation.Autowired
+    private br.com.portalincluir.service.SolicitacaoAcessoService solicitacoes;
     @GetMapping("/me")
     public UsuarioResponse sessao(HttpServletRequest http) { return service.resposta(acesso.autenticado(http)); }
     @PostMapping("/register") @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioResponse cadastrar(@Valid @RequestBody CadastroUsuarioRequest request, HttpServletRequest http) {
-        if ((request.getPerfil() == br.com.portalincluir.enums.PerfilUsuario.COORDENADOR || request.getPerfil() == br.com.portalincluir.enums.PerfilUsuario.ADMINISTRADOR) && service.possuiContas()) { acesso.exigir(http, "usuarios.gerenciar"); acesso.exigir(http, "permissoes.gerenciar"); }
-        var usuario = service.cadastrar(request);
-        var anterior = http.getSession(false);
-        if (anterior != null) anterior.invalidate();
-        http.getSession(true).setAttribute("usuarioAutenticadoId", usuario.id());
-        return usuario;
+    public br.com.portalincluir.service.SolicitacaoAcessoService.Resposta cadastrar(@Valid @RequestBody CadastroUsuarioRequest request) {
+        return solicitacoes.solicitar(request);
     }
     @PostMapping("/login")
     public UsuarioResponse login(@Valid @RequestBody LoginRequest request, HttpServletRequest http) {

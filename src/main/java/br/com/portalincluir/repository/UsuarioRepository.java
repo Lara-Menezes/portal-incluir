@@ -8,4 +8,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     java.util.List<Usuario> bloquearParaGestao();
     Optional<Usuario> findByEmailIgnoreCase(String email);
     boolean existsByEmailIgnoreCase(String email);
+    Optional<Usuario> findByRootTrue();
 }

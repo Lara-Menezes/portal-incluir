@@ -13,6 +13,10 @@ import lombok.Setter;
 public class Usuario {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable=false) @org.hibernate.annotations.ColumnDefault("false")
+    private boolean root;
+    @Column(nullable=false) @org.hibernate.annotations.ColumnDefault("false")
+    private boolean administracaoAprovada;
     @Column(nullable = false, unique = true, length = 150)
     private String email;
     @JsonIgnore
