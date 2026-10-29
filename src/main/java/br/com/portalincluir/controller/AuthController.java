@@ -15,16 +15,16 @@ public class AuthController {
     @org.springframework.beans.factory.annotation.Autowired
     private br.com.portalincluir.service.SolicitacaoAcessoService solicitacoes;
     @GetMapping("/me")
-    public UsuarioResponse sessao(HttpServletRequest http) { return service.resposta(acesso.autenticado(http)); }
+    public org.springframework.http.ResponseEntity<UsuarioResponse> sessao(HttpServletRequest http) { return org.springframework.http.ResponseEntity.ok().cacheControl(org.springframework.http.CacheControl.noStore()).body(service.resposta(acesso.autenticado(http))); }
     @PostMapping("/register") @ResponseStatus(HttpStatus.CREATED)
     public br.com.portalincluir.service.SolicitacaoAcessoService.Resposta cadastrar(@Valid @RequestBody CadastroUsuarioRequest request) {
         return solicitacoes.solicitar(request);
     }
     @PostMapping("/login")
     public UsuarioResponse login(@Valid @RequestBody LoginRequest request, HttpServletRequest http) {
+        var usuario = service.login(request);
         var anterior = http.getSession(false);
         if (anterior != null) anterior.invalidate();
-        var usuario = service.login(request);
         http.getSession(true).setAttribute("usuarioAutenticadoId", usuario.id());
         return usuario;
     }
