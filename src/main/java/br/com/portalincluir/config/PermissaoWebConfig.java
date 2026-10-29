@@ -21,6 +21,8 @@ public class PermissaoWebConfig implements WebMvcConfigurer {
                 if (request.getMethod().equals("OPTIONS")) return true;
                 String path = request.getRequestURI().substring(request.getContextPath().length());
                 if (path.startsWith("/api/auth/") || !path.startsWith("/api/")) return true;
+                // O controller do fluxo valida cada operacao e a atribuicao da etapa.
+                if (path.matches("/api/estudantes/[0-9]+/fluxo(/.*)?")) { acesso.autenticado(request); return true; }
                 boolean leitura = request.getMethod().equals("GET");
                 String permission = null;
                 if (path.startsWith("/api/usuarios")) permission = path.endsWith("/permissoes") ? "permissoes.gerenciar" : leitura ? "usuarios" : "usuarios.gerenciar";

@@ -18,19 +18,15 @@ public class PlanoAcaoRequest {
     @NotNull
     private Long coordenadorResponsavelId;
 
-    @NotBlank
+    @Size(max = 20)
     private String periodoLetivo;
 
-    @NotBlank
     private String nomeResponsavel;
 
-    @NotBlank
     private String grauParentesco;
 
-    @NotBlank
     private String telefoneResponsavel;
 
-    @NotBlank
     @Email
     private String emailResponsavel;
 
@@ -54,23 +50,18 @@ public class PlanoAcaoRequest {
 
     private String documentosComprobatorios;
 
-    @NotBlank
     @Size(max = 5000)
     private String necessidadesEspecificas;
 
-    @NotBlank
     @Size(max = 5000)
     private String consideracoes;
 
-    @NotBlank
     @Size(max = 5000)
     private String avancosDificuldadesPotencialidades;
 
-    @NotBlank
     @Size(max = 5000)
     private String principaisDemandas;
 
-    @NotBlank
     @Size(max = 5000)
     private String propostasIntervencao;
 

@@ -27,6 +27,12 @@ public class RetencaoEstudanteService {
         executar("delete from auditoria.planos_acao_aud where estudante_id = :id", id);
         executar("delete from auditoria.adaptacoes_pedagogicas_aud where estudante_id = :id", id);
         executar("delete from auditoria.estudantes_aud where id = :id", id);
+        executar("delete from auditoria.fluxos_estudantes_aud where estudante_id = :id", id);
+        executar("delete from auditoria.notificacoes_fluxo_aud where estudante_id = :id", id);
+        executar("delete from notificacoes_fluxo where estudante_id = :id", id);
+        executar("delete from auditoria.vinculos_estudante_profissional_aud where estudante_id = :id", id);
+        executar("delete from vinculos_estudante_profissional where estudante_id = :id", id);
+        executar("delete from fluxos_estudantes where estudante_id = :id", id);
         executar("delete from planos_acao where estudante_id = :id", id);
         executar("delete from adaptacoes_pedagogicas where estudante_id = :id", id);
         executar("delete from estudantes where id = :id", id);

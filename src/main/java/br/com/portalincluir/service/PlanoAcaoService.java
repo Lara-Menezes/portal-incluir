@@ -53,6 +53,10 @@ public class PlanoAcaoService {
                 .orElseThrow(() -> new RuntimeException("Coordenador não encontrado"));
 
         politica.exigirEditavel(estudante);
+        boolean mesmoPeriodo = planoAcaoRepository.findByEstudanteId(estudante.getId()).stream()
+                .anyMatch(p -> !p.isArquivado() && java.util.Objects.toString(p.getPeriodoLetivo(), "").strip().equalsIgnoreCase(java.util.Objects.toString(request.getPeriodoLetivo(), "").strip()));
+        if (mesmoPeriodo) throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT,
+                "Ja existe um plano de acao ativo para este estudante e periodo. Abra o registro existente para continuar.");
         plano.setEstudante(estudante);
         plano.setCoordenadorResponsavel(coordenador);
 
@@ -250,6 +254,13 @@ public class PlanoAcaoService {
             throw new RuntimeException("O plano já está assinado");
         }
 
+        if (plano.isArquivado()) throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT, "Plano arquivado");
+        if (java.util.stream.Stream.of(plano.getPeriodoLetivo(), plano.getNomeResponsavel(), plano.getGrauParentesco(), plano.getTelefoneResponsavel(), plano.getEmailResponsavel(), plano.getNecessidadesEspecificas(), plano.getConsideracoes(), plano.getAvancosDificuldadesPotencialidades(), plano.getPrincipaisDemandas(), plano.getPropostasIntervencao()).anyMatch(v -> v == null || v.isBlank())
+          || Boolean.TRUE.equals(plano.getPossuiComorbidade()) && (plano.getComorbidades() == null || plano.getComorbidades().isBlank())
+          || Boolean.TRUE.equals(plano.getUsaMedicacaoContinua()) && (plano.getMedicacoes() == null || plano.getMedicacoes().isBlank())
+          || Boolean.TRUE.equals(plano.getFrequentaServicoApoio()) && (plano.getServicosApoio() == null || plano.getServicosApoio().isBlank())
+          || Boolean.TRUE.equals(plano.getPossuiDocumentosComprobatorios()) && (plano.getDocumentosComprobatorios() == null || plano.getDocumentosComprobatorios().isBlank()))
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "Conclua os campos obrigatorios antes de assinar o plano");
         plano.setStatus(StatusPlanoAcao.ASSINADO);
         plano.setDataAssinatura(LocalDateTime.now());
 

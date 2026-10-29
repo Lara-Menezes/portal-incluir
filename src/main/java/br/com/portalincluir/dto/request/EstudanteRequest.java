@@ -18,6 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EstudanteRequest {
+    private boolean anamneseConcluida;
 
     @NotBlank
     @Size(max = 150)
