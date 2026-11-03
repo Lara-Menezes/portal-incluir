@@ -16,6 +16,9 @@ public class NotificacaoFluxo {
     @Column(nullable = false, length = 150) private String remetente;
     @Column(nullable = false, length = 20) private String etapa;
     private Long planoId;
+    @Column(length=40) private String tipoEvento;
+    private Long solicitacaoPeaId;
+    private Long peaId;
     @Column(nullable = false, length = 2000) private String mensagem;
     @Column(name = "criada_em", nullable = false) private LocalDateTime criadaEm;
     @Column(nullable = false) private boolean lida;

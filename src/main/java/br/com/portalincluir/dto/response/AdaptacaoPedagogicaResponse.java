@@ -9,6 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@lombok.NoArgsConstructor
 public class AdaptacaoPedagogicaResponse {
 
     private Long id;

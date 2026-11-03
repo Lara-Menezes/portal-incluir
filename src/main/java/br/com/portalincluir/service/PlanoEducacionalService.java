@@ -19,14 +19,21 @@ public class PlanoEducacionalService {
     private final PlanoEducacionalRepository planoRepository;
     private final EstudanteRepository estudanteRepository;
     private final CoordenadorRepository coordenadorRepository;
+    private final AutorizacaoPeaService autorizacaoPea;
 
     public PlanoEducacionalService(
             PlanoEducacionalRepository planoRepository,
             EstudanteRepository estudanteRepository,
-            CoordenadorRepository coordenadorRepository) {
+            CoordenadorRepository coordenadorRepository,
+            AutorizacaoPeaService autorizacaoPea) {
         this.planoRepository = planoRepository;
         this.estudanteRepository = estudanteRepository;
         this.coordenadorRepository = coordenadorRepository;
+        this.autorizacaoPea = autorizacaoPea;
+    }
+
+    private PlanoEducacionalResponse resposta(PlanoEducacional plano) {
+        return autorizacaoPea.filtrarIncorporadas(new PlanoEducacionalResponse(plano), plano.getEstudante());
     }
 
     //Criar
@@ -53,20 +60,20 @@ public class PlanoEducacionalService {
 
         PlanoEducacional salvo = planoRepository.save(plano);
 
-        return new PlanoEducacionalResponse(salvo);
+        return resposta(salvo);
     }
 
     //Listar tudo
     public List<PlanoEducacionalResponse> listarTodos() {
         return planoRepository.findAll()
                 .stream()
-                .map(PlanoEducacionalResponse::new)
+                .map(this::resposta)
                 .toList();
     }
 
     //Buscar por id
     public PlanoEducacionalResponse buscarPorId(Long id) {
-        return new PlanoEducacionalResponse(buscarEntidadePorId(id));
+        return resposta(buscarEntidadePorId(id));
     }
 
     private PlanoEducacional buscarEntidadePorId(Long id) {
@@ -80,7 +87,7 @@ public class PlanoEducacionalService {
             Long estudanteId) {
         return planoRepository.findByEstudanteId(estudanteId)
                 .stream()
-                .map(PlanoEducacionalResponse::new)
+                .map(this::resposta)
                 .toList();
     }
 
@@ -89,7 +96,7 @@ public class PlanoEducacionalService {
             Long coordenadorId) {
         return planoRepository.findByCoordenadorId(coordenadorId)
                 .stream()
-                .map(PlanoEducacionalResponse::new)
+                .map(this::resposta)
                 .toList();
     }
 
@@ -99,7 +106,7 @@ public class PlanoEducacionalService {
         return planoRepository
                 .findByEstudanteIdAndSemestreAno(estudanteId, semestreAno)
                 .stream()
-                .map(PlanoEducacionalResponse::new)
+                .map(this::resposta)
                 .toList();
     }
 
@@ -108,7 +115,7 @@ public class PlanoEducacionalService {
             boolean arquivado) {
         return planoRepository.findByArquivado(arquivado)
                 .stream()
-                .map(PlanoEducacionalResponse::new)
+                .map(this::resposta)
                 .toList();
     }
 
@@ -142,7 +149,7 @@ public class PlanoEducacionalService {
 
         PlanoEducacional atualizado = planoRepository.save(plano);
 
-        return new PlanoEducacionalResponse(atualizado);
+        return resposta(atualizado);
     }
 
     //Arquivar
@@ -152,7 +159,7 @@ public class PlanoEducacionalService {
         plano.setArquivado(true);
         plano.setDataAtualizacao(LocalDateTime.now());
 
-        return new PlanoEducacionalResponse(
+        return resposta(
                 planoRepository.save(plano));
     }
 
@@ -163,7 +170,7 @@ public class PlanoEducacionalService {
         plano.setArquivado(false);
         plano.setDataAtualizacao(LocalDateTime.now());
 
-        return new PlanoEducacionalResponse(
+        return resposta(
                 planoRepository.save(plano));
     }
 

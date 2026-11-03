@@ -9,7 +9,6 @@ import br.com.portalincluir.model.PlanoEducacional;
 import br.com.portalincluir.repository.AdaptacaoPedagogicaRepository;
 import br.com.portalincluir.repository.EstudanteRepository;
 import br.com.portalincluir.repository.PlanoEducacionalRepository;
-import br.com.portalincluir.repository.ProfessorRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,36 +20,42 @@ public class AdaptacaoPedagogicaService {
 
     private final AdaptacaoPedagogicaRepository adaptacaoRepository;
     private final EstudanteRepository estudanteRepository;
-    private final ProfessorRepository professorRepository;
     private final PlanoEducacionalRepository planoEducacionalRepository;
 
     private final PoliticaHistoricoService politica;
+    private final AutorizacaoPeaService autorizacao;
+    private final br.com.portalincluir.repository.EntregaPeaRepository entregas;
+    private final NotificacaoPeaService notificacoesPea;
 
     public AdaptacaoPedagogicaService(
             AdaptacaoPedagogicaRepository adaptacaoRepository,
             EstudanteRepository estudanteRepository,
-            ProfessorRepository professorRepository,
             PlanoEducacionalRepository planoEducacionalRepository,
-            PoliticaHistoricoService politica) {
+            PoliticaHistoricoService politica,
+            AutorizacaoPeaService autorizacao,
+            br.com.portalincluir.repository.EntregaPeaRepository entregas,
+            NotificacaoPeaService notificacoesPea) {
 
         this.politica = politica;
         this.adaptacaoRepository = adaptacaoRepository;
         this.estudanteRepository = estudanteRepository;
-        this.professorRepository = professorRepository;
+        this.autorizacao = autorizacao;
+        this.entregas = entregas;
+        this.notificacoesPea = notificacoesPea;
         this.planoEducacionalRepository = planoEducacionalRepository;
     }
 
     //Criar Adaptação Pedagogica
     public AdaptacaoPedagogicaResponse criar(
             AdaptacaoPedagogicaRequest request) {
+        autorizacao.exigirEscrita();
 
         Estudante estudante = estudanteRepository.findById(request.getEstudanteId())
                 .orElseThrow(() ->
                         new RuntimeException("Estudante não encontrado"));
 
-        Professor professor = professorRepository.findById(request.getProfessorId())
-                .orElseThrow(() ->
-                        new RuntimeException("Professor não encontrado"));
+        politica.exigirEditavel(estudante);
+        Professor professor = autorizacao.exigirCriacao(estudante, request.getProfessorId());
 
         PlanoEducacional plano = null;
 
@@ -74,7 +79,6 @@ public class AdaptacaoPedagogicaService {
 
         AdaptacaoPedagogica adaptacao = new AdaptacaoPedagogica();
 
-        politica.exigirEditavel(estudante);
         adaptacao.setEstudante(estudante);
         adaptacao.setProfessor(professor);
         adaptacao.setPlanoEducacional(plano);
@@ -85,16 +89,17 @@ public class AdaptacaoPedagogicaService {
 
         AdaptacaoPedagogica salva =
                 adaptacaoRepository.save(adaptacao);
+        notificacoesPea.espontaneo(salva, autorizacao.exigirEscrita());
 
         return new AdaptacaoPedagogicaResponse(salva);
     }
 
     //Listar tudo
     public List<AdaptacaoPedagogicaResponse> listarTodos() {
-
+        var filtro = autorizacao.filtroConsulta();
         return adaptacaoRepository.findAll()
                 .stream()
-                .filter(registro -> politica.disponivel(registro.getEstudante()))
+                .filter(filtro)
                 .map(AdaptacaoPedagogicaResponse::new)
                 .toList();
     }
@@ -103,17 +108,17 @@ public class AdaptacaoPedagogicaService {
     public AdaptacaoPedagogicaResponse buscarPorId(Long id) {
 
         AdaptacaoPedagogica adaptacao = buscarEntidadePorId(id);
-        politica.exigirDisponivel(adaptacao.getEstudante());
+        autorizacao.exigirConsulta(adaptacao);
         return new AdaptacaoPedagogicaResponse(adaptacao);
     }
 
     //Buscar por estudante
     public List<AdaptacaoPedagogicaResponse> listarPorEstudante(
             Long estudanteId) {
-
+        var filtro = autorizacao.filtroConsulta();
         return adaptacaoRepository.findByEstudanteId(estudanteId)
                 .stream()
-                .filter(registro -> politica.disponivel(registro.getEstudante()))
+                .filter(filtro)
                 .map(AdaptacaoPedagogicaResponse::new)
                 .toList();
     }
@@ -121,10 +126,10 @@ public class AdaptacaoPedagogicaService {
     //Buscar por professor
     public List<AdaptacaoPedagogicaResponse> listarPorProfessor(
             Long professorId) {
-
+        var filtro = autorizacao.filtroConsulta();
         return adaptacaoRepository.findByProfessorId(professorId)
                 .stream()
-                .filter(registro -> politica.disponivel(registro.getEstudante()))
+                .filter(filtro)
                 .map(AdaptacaoPedagogicaResponse::new)
                 .toList();
     }
@@ -133,11 +138,11 @@ public class AdaptacaoPedagogicaService {
     public List<AdaptacaoPedagogicaResponse> listarPorEstudanteEProfessor(
             Long estudanteId,
             Long professorId) {
-
+        var filtro = autorizacao.filtroConsulta();
         return adaptacaoRepository
                 .findByEstudanteIdAndProfessorId(estudanteId, professorId)
                 .stream()
-                .filter(registro -> politica.disponivel(registro.getEstudante()))
+                .filter(filtro)
                 .map(AdaptacaoPedagogicaResponse::new)
                 .toList();
     }
@@ -145,13 +150,13 @@ public class AdaptacaoPedagogicaService {
     //Buscar por componente curricular
     public List<AdaptacaoPedagogicaResponse> buscarPorComponente(
             String componenteCurricular) {
-
+        var filtro = autorizacao.filtroConsulta();
         return adaptacaoRepository
                 .findByComponenteCurricularContainingIgnoreCase(
                         componenteCurricular
                 )
                 .stream()
-                .filter(registro -> politica.disponivel(registro.getEstudante()))
+                .filter(filtro)
                 .map(AdaptacaoPedagogicaResponse::new)
                 .toList();
     }
@@ -162,26 +167,20 @@ public class AdaptacaoPedagogicaService {
             AdaptacaoPedagogicaRequest request) {
 
         AdaptacaoPedagogica adaptacao = buscarEntidadePorId(id);
+        autorizacao.exigirGerenciamento(adaptacao);
+        exigirNaoEntregue(adaptacao);
         politica.exigirEditavel(adaptacao.getEstudante());
         politica.exigirMesmoEstudante(adaptacao.getEstudante(), request.getEstudanteId());
+        if (!adaptacao.getProfessor().getId().equals(request.getProfessorId())) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.CONFLICT, "Não é permitido transferir a autoria de um PEA.");
+        }
 
         if (adaptacao.isArquivado()) {
-            throw new RuntimeException(
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT,
                     "Não é possível atualizar uma adaptação pedagógica arquivada"
             );
         }
-
-        Estudante estudante = estudanteRepository.findById(request.getEstudanteId())
-                .orElseThrow(() ->
-                        new RuntimeException("Estudante não encontrado"));
-
-        Professor professor = professorRepository.findById(request.getProfessorId())
-                .orElseThrow(() ->
-                        new RuntimeException("Professor não encontrado"));
-
-        politica.exigirEditavel(estudante);
-        adaptacao.setEstudante(estudante);
-        adaptacao.setProfessor(professor);
 
         preencherDados(adaptacao, request);
 
@@ -196,6 +195,7 @@ public class AdaptacaoPedagogicaService {
     //Arquivar
     public AdaptacaoPedagogicaResponse arquivar(Long id) {
         AdaptacaoPedagogica adaptacao = buscarEntidadePorId(id);
+        autorizacao.exigirGerenciamento(adaptacao);
         politica.exigirEditavel(adaptacao.getEstudante());
 
         adaptacao.setArquivado(true);
@@ -209,6 +209,7 @@ public class AdaptacaoPedagogicaService {
     //Desarquivar
     public AdaptacaoPedagogicaResponse desarquivar(Long id) {
         AdaptacaoPedagogica adaptacao = buscarEntidadePorId(id);
+        autorizacao.exigirGerenciamento(adaptacao);
         politica.exigirEditavel(adaptacao.getEstudante());
 
         adaptacao.setArquivado(false);
@@ -223,6 +224,8 @@ public class AdaptacaoPedagogicaService {
     public void excluir(Long id) {
 
         AdaptacaoPedagogica adaptacao = buscarEntidadePorId(id);
+        autorizacao.exigirGerenciamento(adaptacao);
+        exigirNaoEntregue(adaptacao);
         politica.exigirEditavel(adaptacao.getEstudante());
 
         adaptacaoRepository.delete(adaptacao);
@@ -237,9 +240,14 @@ public class AdaptacaoPedagogicaService {
                         ));
     }
 
-    private void preencherDados(
+    private void exigirNaoEntregue(AdaptacaoPedagogica pea) {
+        if (entregas.existsByPeaId(pea.getId())) throw new org.springframework.web.server.ResponseStatusException(
+                org.springframework.http.HttpStatus.CONFLICT, "PEA entregue tem conteúdo preservado e não pode ser editado ou excluído. Correções exigem um fluxo próprio de autorização.");
+    }
+
+    static void preencherDados(
             AdaptacaoPedagogica adaptacao,
-            AdaptacaoPedagogicaRequest request) {
+            br.com.portalincluir.dto.request.ConteudoPeaRequest request) {
 
         adaptacao.setComponenteCurricular(
                 request.getComponenteCurricular().trim()

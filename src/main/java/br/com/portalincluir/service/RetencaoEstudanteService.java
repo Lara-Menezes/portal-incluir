@@ -24,6 +24,15 @@ public class RetencaoEstudanteService {
         if (estudante == null || politica.disponivel(estudante)) return;
         // SQL em lote evita que o proprio descarte gere novas copias no Envers.
         // Inclui revisoes de filhos excluidos anteriormente; vinculos nao podem ser transferidos.
+        // Mantém os critérios existentes; remove filhos e revisões somente no descarte vencido.
+        executar("delete from auditoria.entregas_pea_aud where destinatario_id in (select id from auditoria.destinatarios_solicitacao_pea_aud where solicitacao_id in (select id from auditoria.solicitacoes_pea_aud where estudante_id = :id))", id);
+        executar("delete from auditoria.destinatarios_solicitacao_pea_aud where solicitacao_id in (select id from auditoria.solicitacoes_pea_aud where estudante_id = :id)", id);
+        executar("delete from auditoria.solicitacoes_pea_aud where estudante_id = :id", id);
+        executar("delete from auditoria.eventos_pea_pendentes_aud where estudante_id = :id", id);
+        executar("delete from entregas_pea where destinatario_id in (select d.id from destinatarios_solicitacao_pea d join solicitacoes_pea s on s.id = d.solicitacao_id where s.estudante_id = :id)", id);
+        executar("delete from destinatarios_solicitacao_pea where solicitacao_id in (select id from solicitacoes_pea where estudante_id = :id)", id);
+        executar("delete from solicitacoes_pea where estudante_id = :id", id);
+        executar("delete from eventos_pea_pendentes where estudante_id = :id", id);
         executar("delete from auditoria.planos_acao_aud where estudante_id = :id", id);
         executar("delete from auditoria.adaptacoes_pedagogicas_aud where estudante_id = :id", id);
         executar("delete from auditoria.estudantes_aud where id = :id", id);

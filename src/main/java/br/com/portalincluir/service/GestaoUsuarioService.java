@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Service @RequiredArgsConstructor
 public class GestaoUsuarioService {
     private final UsuarioRepository usuarios;
+    private final jakarta.persistence.EntityManager em;
     public record Detalhe(Long id, String nome, String email, Object perfil, Long perfilId, boolean ativo, Map<String,Object> dados, Set<String> permissoesPadrao, Map<String,Boolean> ajustes, Set<String> permissoes, Set<String> cursosAtuacao, boolean root, boolean administracaoAprovada) {}
     public static Object profissional(Usuario u) {
         return switch(u.getPerfil()) {
@@ -69,7 +70,21 @@ public class GestaoUsuarioService {
     }
     @Transactional public void excluir(Long id, Long autor) {
         usuarios.bloquearParaGestao(); Usuario u = buscar(id); protegerRoot(u); impedirPropriaConta(id, autor); preservarGestao(u, false, Set.of());
-        usuarios.delete(u); usuarios.flush();
+        // Revisões preservadas também impedem remover a identidade da conta.
+        for (String consulta : List.of(
+                "select count(*) from auditoria.solicitacoes_pea_aud where solicitante_id = :id",
+                "select count(*) from auditoria.destinatarios_solicitacao_pea_aud where usuario_id = :id",
+                "select count(*) from auditoria.eventos_pea_pendentes_aud where autor_id = :id or encaminhado_por_id = :id or destinatario_id = :id",
+                "select count(*) from solicitacoes_pea where solicitante_id = :id",
+                "select count(*) from destinatarios_solicitacao_pea where usuario_id = :id",
+                "select count(*) from eventos_pea_pendentes where autor_id = :id or encaminhado_por_id = :id or destinatario_id = :id")) {
+            if (((Number) em.createNativeQuery(consulta).setParameter("id", id).getSingleResult()).longValue() > 0)
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Conta referenciada pelo histórico de PEA. Desative a conta para preservar os registros.");
+        }
+        try { usuarios.delete(u); usuarios.flush(); }
+        catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Conta referenciada por registros existentes. Desative a conta para preservar o histórico.");
+        }
         // Professional records are retained because plans, reports and audits refer to them.
     }
     @Transactional public Detalhe permissoes(Long id, Map<String,Boolean> ajustes, Long autor) {
