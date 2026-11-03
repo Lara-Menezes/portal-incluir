@@ -24,18 +24,24 @@ public class AdaptacaoPedagogicaService {
 
     private final PoliticaHistoricoService politica;
     private final AutorizacaoPeaService autorizacao;
+    private final br.com.portalincluir.repository.EntregaPeaRepository entregas;
+    private final NotificacaoPeaService notificacoesPea;
 
     public AdaptacaoPedagogicaService(
             AdaptacaoPedagogicaRepository adaptacaoRepository,
             EstudanteRepository estudanteRepository,
             PlanoEducacionalRepository planoEducacionalRepository,
             PoliticaHistoricoService politica,
-            AutorizacaoPeaService autorizacao) {
+            AutorizacaoPeaService autorizacao,
+            br.com.portalincluir.repository.EntregaPeaRepository entregas,
+            NotificacaoPeaService notificacoesPea) {
 
         this.politica = politica;
         this.adaptacaoRepository = adaptacaoRepository;
         this.estudanteRepository = estudanteRepository;
         this.autorizacao = autorizacao;
+        this.entregas = entregas;
+        this.notificacoesPea = notificacoesPea;
         this.planoEducacionalRepository = planoEducacionalRepository;
     }
 
@@ -83,6 +89,7 @@ public class AdaptacaoPedagogicaService {
 
         AdaptacaoPedagogica salva =
                 adaptacaoRepository.save(adaptacao);
+        notificacoesPea.espontaneo(salva, autorizacao.exigirEscrita());
 
         return new AdaptacaoPedagogicaResponse(salva);
     }
@@ -161,6 +168,7 @@ public class AdaptacaoPedagogicaService {
 
         AdaptacaoPedagogica adaptacao = buscarEntidadePorId(id);
         autorizacao.exigirGerenciamento(adaptacao);
+        exigirNaoEntregue(adaptacao);
         politica.exigirEditavel(adaptacao.getEstudante());
         politica.exigirMesmoEstudante(adaptacao.getEstudante(), request.getEstudanteId());
         if (!adaptacao.getProfessor().getId().equals(request.getProfessorId())) {
@@ -217,6 +225,7 @@ public class AdaptacaoPedagogicaService {
 
         AdaptacaoPedagogica adaptacao = buscarEntidadePorId(id);
         autorizacao.exigirGerenciamento(adaptacao);
+        exigirNaoEntregue(adaptacao);
         politica.exigirEditavel(adaptacao.getEstudante());
 
         adaptacaoRepository.delete(adaptacao);
@@ -231,9 +240,14 @@ public class AdaptacaoPedagogicaService {
                         ));
     }
 
-    private void preencherDados(
+    private void exigirNaoEntregue(AdaptacaoPedagogica pea) {
+        if (entregas.existsByPeaId(pea.getId())) throw new org.springframework.web.server.ResponseStatusException(
+                org.springframework.http.HttpStatus.CONFLICT, "PEA entregue tem conteúdo preservado e não pode ser editado ou excluído. Correções exigem um fluxo próprio de autorização.");
+    }
+
+    static void preencherDados(
             AdaptacaoPedagogica adaptacao,
-            AdaptacaoPedagogicaRequest request) {
+            br.com.portalincluir.dto.request.ConteudoPeaRequest request) {
 
         adaptacao.setComponenteCurricular(
                 request.getComponenteCurricular().trim()

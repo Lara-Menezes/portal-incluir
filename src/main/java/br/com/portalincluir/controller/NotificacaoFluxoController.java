@@ -16,8 +16,8 @@ public class NotificacaoFluxoController {
     private final NotificacaoFluxoRepository notificacoes;
     private final PermissaoService acesso;
     private final PoliticaHistoricoService politica;
-    public record Resposta(Long id, Long estudanteId, String estudanteNome, String etapa, Long planoId, String remetente, String mensagem, LocalDateTime criadaEm, boolean lida) {}
-    private Resposta resposta(NotificacaoFluxo n) { return new Resposta(n.getId(), n.getEstudante().getId(), n.getEstudante().getNome(), n.getEtapa(), n.getPlanoId(), n.getRemetente(), n.getMensagem(), n.getCriadaEm(), n.isLida()); }
+    public record Resposta(Long id, Long estudanteId, String estudanteNome, String etapa, Long planoId, String remetente, String mensagem, LocalDateTime criadaEm, boolean lida, String tipoEvento, Long solicitacaoPeaId, Long peaId) {}
+    private Resposta resposta(NotificacaoFluxo n) { return new Resposta(n.getId(), n.getEstudante().getId(), n.getEstudante().getNome(), n.getEtapa(), n.getPlanoId(), n.getRemetente(), n.getMensagem(), n.getCriadaEm(), n.isLida(), n.getTipoEvento(), n.getSolicitacaoPeaId(), n.getPeaId()); }
     @GetMapping public List<Resposta> listar(HttpServletRequest req) {
         var u = acesso.autenticado(req);
         return notificacoes.findByDestinatarioIdOrderByCriadaEmDescIdDesc(u.getId()).stream().filter(n -> politica.disponivel(n.getEstudante())).map(this::resposta).toList();
