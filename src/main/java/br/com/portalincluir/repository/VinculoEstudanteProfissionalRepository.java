@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import java.util.*;
 public interface VinculoEstudanteProfissionalRepository extends JpaRepository<VinculoEstudanteProfissional,Long> {
+    @Query("select (count(v) > 0) from VinculoEstudanteProfissional v where v.estudante.id=:estudanteId and v.professor.id=:professorId and v.ativo=true and v.estudante.ativo=true")
+    boolean existeVinculoDocenteAtivo(@Param("estudanteId") Long estudanteId, @Param("professorId") Long professorId);
     List<VinculoEstudanteProfissional> findByEstudanteIdOrderByAtivoDescDataInicioDesc(Long estudanteId);
     Optional<VinculoEstudanteProfissional> findByEstudanteIdAndProfessorId(Long estudanteId, Long professorId);
     Optional<VinculoEstudanteProfissional> findByEstudanteIdAndMembroId(Long estudanteId, Long membroId);

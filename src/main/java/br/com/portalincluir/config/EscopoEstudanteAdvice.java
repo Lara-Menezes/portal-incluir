@@ -21,7 +21,8 @@ public class EscopoEstudanteAdvice implements ResponseBodyAdvice<Object> {
     @Override public boolean supports(MethodParameter method, Class<? extends HttpMessageConverter<?>> converter) { return org.springframework.http.converter.json.MappingJackson2HttpMessageConverter.class.isAssignableFrom(converter); }
     @Override public Object beforeBodyWrite(Object body, MethodParameter method, MediaType type, Class<? extends HttpMessageConverter<?>> converter, ServerHttpRequest req, ServerHttpResponse response) {
         String path = request.getRequestURI().substring(request.getContextPath().length());
-        if (body == null || !request.getMethod().equals("GET") || path.contains("/profissionais") || !path.matches("/api/(estudantes|planos-acao|planos-educacionais|adaptacoes-pedagogicas)(/.*)?")) return body;
+        // Listas de PEA já são filtradas pela política própria, que preserva a consulta histórica do autor.
+        if (body == null || !request.getMethod().equals("GET") || path.contains("/profissionais") || !path.matches("/api/(estudantes|planos-acao|planos-educacionais)(/.*)?")) return body;
         if (response instanceof ServletServerHttpResponse servlet && servlet.getServletResponse().getStatus() >= 400) return body;
         var permitidos = escopo.idsPermitidos();
         if (permitidos.isEmpty()) return body;
