@@ -19,7 +19,7 @@ public class CorsConfig {
         config.setAllowedOriginPatterns(Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim).filter(origin -> !origin.isEmpty()).toList());
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Content-Type", "Accept"));
+        config.setAllowedHeaders(List.of("Content-Type", "Accept", "Idempotency-Key"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

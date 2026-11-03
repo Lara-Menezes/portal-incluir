@@ -31,6 +31,7 @@ public class SolicitacaoPeaService {
     private final EstudanteRepository estudantes;
     private final AdaptacaoPedagogicaRepository adaptacoes;
     private final VinculoEstudanteProfissionalRepository vinculos;
+    private final VinculoEstudanteService acompanhamento;
     private final PermissaoService acesso;
     private final PoliticaHistoricoService historico;
     private final NotificacaoPeaService notificacoes;
@@ -62,18 +63,16 @@ public class SolicitacaoPeaService {
         if (!e.isAtivo()) throw erro(HttpStatus.CONFLICT, "O estudante deve estar ativo.");
     }
 
-    private boolean elegivel(Usuario u, Estudante e) {
-        if (u.getPerfil() != PerfilUsuario.PROFESSOR || !PermissaoService.ativo(u)) return false;
-        if (!PermissaoService.efetivas(u).containsAll(Set.of("pedagogico.consultar", "pedagogico.editar"))) return false;
-        return vinculos.existeVinculoDocenteAtivo(e.getId(), u.getProfessor().getId())
-                || CatalogoProfissional.atuaNoCurso(u.getProfessor().getCursosAtuacao(), e.getCurso());
+    private boolean elegivel(Usuario u) {
+        return u.getPerfil() == PerfilUsuario.PROFESSOR && u.getProfessor() != null && PermissaoService.ativo(u)
+                && PermissaoService.efetivas(u).containsAll(Set.of("pedagogico.consultar", "pedagogico.editar"));
     }
 
     @Transactional(readOnly=true)
     public List<Elegivel> elegiveis(Long estudanteId, String setor) {
         coordenador(); var e = estudante(estudanteId);
         if (!e.isAtivo() || e.isConcluido()) throw erro(HttpStatus.CONFLICT, "O estudante não está disponível para novas solicitações.");
-        return usuarios.findAll().stream().filter(u -> elegivel(u, e))
+        return usuarios.findAll().stream().filter(this::elegivel)
                 .filter(u -> setor == null || normalizar(u.getProfessor().getSetor()).equals(normalizar(setor)))
                 .map(u -> new Elegivel(u.getProfessor().getId(), u.getProfessor().getNome(), u.getProfessor().getSetor(),
                         u.getProfessor().getDisciplina(), Set.copyOf(u.getProfessor().getCursosAtuacao()),
@@ -85,13 +84,25 @@ public class SolicitacaoPeaService {
     public SolicitacaoPeaResponse criar(Long estudanteId, SolicitacaoPeaRequest r, String chave) {
         var autor = coordenador(); chave = chave(chave);
         var e = historico.bloquear(estudanteId);
-        String fingerprint = hash(serializar(List.of(estudanteId, r.modalidade(), normalizar(r.contexto()),
-                Objects.toString(r.orientacoes(), "").strip(), normalizar(r.setor()), new TreeSet<>(r.professorIds() == null ? Set.of() : r.professorIds()))));
+        List<Object> parametros = new ArrayList<>(List.of(estudanteId, r.modalidade(), normalizar(r.contexto()),
+                Objects.toString(r.orientacoes(), "").strip(), normalizar(r.setor()), new TreeSet<>(r.professorIds() == null ? Set.of() : r.professorIds())));
+        // A política integra o hash: reenvios antigos permanecem sem efeitos retroativos.
+        String fingerprint = hash(serializar(List.of("VINCULO_AUTOMATICO_V1", parametros)));
+        var parametrosLegados = new ArrayList<>(parametros);
+        String fingerprintLegado = null;
+        if (!r.criarVinculoAcompanhamento()) fingerprintLegado = hash(serializar(parametrosLegados));
+        else if (r.motivoVinculo() != null && !r.motivoVinculo().isBlank()) {
+            parametrosLegados.add(List.of("VINCULO_ACOMPANHAMENTO", r.motivoVinculo().strip()));
+            fingerprintLegado = hash(serializar(parametrosLegados));
+        }
         var anterior = solicitacoes.findBySolicitanteIdAndChaveIdempotencia(autor.getId(), chave);
         if (anterior.isPresent()) {
-            if (!anterior.get().getHashRequisicao().equals(fingerprint)) throw erro(HttpStatus.CONFLICT, "Chave de idempotência já utilizada com outros dados.");
+            String original = anterior.get().getHashRequisicao();
+            if (!original.equals(fingerprint) && !original.equals(fingerprintLegado))
+                throw erro(HttpStatus.CONFLICT, "Chave de idempotência já utilizada com outros dados.");
             historico.exigirDisponivel(e); return resposta(anterior.get(), autor);
         }
+        acesso.exigir(request, "estudantes.vincular");
         exigirAtivo(e);
         Set<Long> ids = r.professorIds() == null ? Set.of() : r.professorIds();
         if (r.modalidade().equals("PROFESSORES") && (ids.isEmpty() || r.setor() != null && !r.setor().isBlank())
@@ -99,7 +110,7 @@ public class SolicitacaoPeaService {
                 || r.modalidade().equals("TODOS") && (!ids.isEmpty() || r.setor() != null && !r.setor().isBlank())) {
             throw erro(HttpStatus.BAD_REQUEST, "Informe somente os critérios da modalidade selecionada.");
         }
-        var selecionados = usuarios.findAll().stream().filter(u -> elegivel(u, e))
+        var selecionados = usuarios.findAll().stream().filter(this::elegivel)
                 .filter(u -> switch (r.modalidade()) {
                     case "PROFESSORES" -> ids.contains(u.getProfessor().getId());
                     case "SETOR" -> normalizar(u.getProfessor().getSetor()).equals(normalizar(r.setor()));
@@ -119,6 +130,11 @@ public class SolicitacaoPeaService {
         s.setSetor(r.modalidade().equals("SETOR") ? r.setor().strip() : null); s.setCriadaEm(historico.agora());
         s.setChaveIdempotencia(chave); s.setHashRequisicao(fingerprint); solicitacoes.saveAndFlush(s);
         for (var u : selecionados) {
+            // Mesma transação e bloqueio do estudante. Preserva vínculos já ativos.
+            if (!vinculos.existeVinculoDocenteAtivo(e.getId(), u.getProfessor().getId())) {
+                acompanhamento.associar(e.getId(), u.getId(), "Vínculo automático pela solicitação de PEA #" + s.getId()
+                        + " — contexto: " + s.getContexto(), autor.getId());
+            }
             var d = new DestinatarioSolicitacaoPea(); d.setSolicitacao(s); d.setProfessor(u.getProfessor()); d.setUsuario(u);
             d.setSetorNoEnvio(u.getProfessor().getSetor()); d.setChavePendente(pendencia(e.getId(), u.getProfessor().getId(), r.contexto()));
             destinatarios.saveAndFlush(d); notificacoes.solicitada(d);

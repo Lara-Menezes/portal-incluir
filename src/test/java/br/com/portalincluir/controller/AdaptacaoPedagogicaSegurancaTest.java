@@ -164,6 +164,9 @@ class AdaptacaoPedagogicaSegurancaTest {
         }
         mvc.perform(get(BASE + "/" + proprio.getId()).session(docente)).andExpect(status().isOk());
         mvc.perform(get(BASE + "/" + alheio.getId()).session(docente)).andExpect(status().isForbidden());
+        // Alterar o professor na URL nunca revela documentos alheios.
+        mvc.perform(get(BASE + "/estudante/" + estudante.getId() + "/professor/" + outro.getProfessor().getId()).session(docente))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(0));
         mvc.perform(get(BASE + "/professor/" + outro.getProfessor().getId()).session(docente)).andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(0));
         mvc.perform(post(BASE + "/" + proprio.getId() + "/arquivar").session(docente)).andExpect(status().isForbidden());
         mvc.perform(post(BASE + "/" + proprio.getId() + "/desarquivar").session(docente)).andExpect(status().isForbidden());
