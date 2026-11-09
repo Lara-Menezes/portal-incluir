@@ -37,6 +37,7 @@ public class PermissaoWebConfig implements WebMvcConfigurer {
                 else if (path.startsWith("/api/planos-acao")) permission = "planos.gerar";
                 else if (path.startsWith("/api/planos-educacionais")) permission = leitura ? "pei.consultar" : "pei.editar";
                 else if (path.startsWith("/api/adaptacoes-pedagogicas")) permission = leitura ? "pedagogico.consultar" : "pedagogico.editar";
+                else if (path.startsWith("/api/conteudos-academicos")) permission = "academico.gerar";
                 if (permission != null) {
                     if (!leitura && path.startsWith("/api/estudantes") && (path.equals("/api/estudantes") || request.getMethod().equals("PUT"))) { acesso.exigir(request, "anamnese"); acesso.exigir(request, "sensivel.consultar"); }
                     if (!leitura && (path.startsWith("/api/planos-acao") || path.startsWith("/api/planos-educacionais")) && (request.getMethod().equals("DELETE") || path.endsWith("/arquivar") || path.endsWith("/desarquivar"))) { acesso.exigir(request, "documentos.gerenciar"); return true; }

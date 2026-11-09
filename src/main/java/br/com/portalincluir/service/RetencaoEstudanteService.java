@@ -25,6 +25,8 @@ public class RetencaoEstudanteService {
         // SQL em lote evita que o proprio descarte gere novas copias no Envers.
         // Inclui revisoes de filhos excluidos anteriormente; vinculos nao podem ser transferidos.
         // Mantém os critérios existentes; remove filhos e revisões somente no descarte vencido.
+        executar("delete from auditoria.arquivos_conteudo_academico_aud where conteudo_id in (select id from auditoria.conteudos_academicos_aud where estudante_id = :id)", id);
+        executar("delete from auditoria.conteudos_academicos_aud where estudante_id = :id", id);
         executar("delete from auditoria.entregas_pea_aud where destinatario_id in (select id from auditoria.destinatarios_solicitacao_pea_aud where solicitacao_id in (select id from auditoria.solicitacoes_pea_aud where estudante_id = :id))", id);
         executar("delete from auditoria.destinatarios_solicitacao_pea_aud where solicitacao_id in (select id from auditoria.solicitacoes_pea_aud where estudante_id = :id)", id);
         executar("delete from auditoria.solicitacoes_pea_aud where estudante_id = :id", id);
