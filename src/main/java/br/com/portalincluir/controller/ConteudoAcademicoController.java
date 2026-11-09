@@ -42,6 +42,11 @@ public class ConteudoAcademicoController {
     public ResponseEntity<Void> excluir(@PathVariable Long id, @RequestParam Long versao) {
         service.excluir(id, versao); return ResponseEntity.noContent().build();
     }
+    @PutMapping("/{id}/favorito")
+    public ConteudoAcademicoResponse definirFavorito(@PathVariable Long id, @RequestParam Long versao,
+            @RequestParam boolean favorito) {
+        return service.definirFavorito(id, versao, favorito);
+    }
     @PutMapping(value = "/{id}/arquivo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ConteudoAcademicoResponse enviarArquivo(@PathVariable Long id, @RequestParam Long versao,
             @RequestPart("arquivo") MultipartFile arquivo) {

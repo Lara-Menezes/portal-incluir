@@ -111,6 +111,31 @@ class ConteudoAcademicoTest {
         mvc.perform(put(BASE + "/" + id).session(sessao(outro)).contentType(MediaType.APPLICATION_JSON).content(json.writeValueAsBytes(r))).andExpect(status().isNotFound());
         mvc.perform(delete(BASE + "/" + id).param("versao", "0").session(sessao(outro))).andExpect(status().isNotFound());
     }
+    @Test void favoritosSaoPersistentesPrivadosEProtegidosPorVersao() throws Exception {
+        var c = criar(dados()); long id = c.get("id").asLong();
+        assertFalse(c.get("favorito").asBoolean());
+        mvc.perform(put(BASE + "/" + id + "/favorito").param("versao", "0").param("favorito", "true").session(sessao(outro)))
+                .andExpect(status().isNotFound());
+        var atualizado = json.readTree(mvc.perform(put(BASE + "/" + id + "/favorito").param("versao", "0").param("favorito", "true").session(sessao(professor)))
+                .andExpect(status().isOk()).andExpect(jsonPath("favorito").value(true)).andReturn().getResponse().getContentAsString());
+        assertEquals(c.get("dataAtualizacao"), atualizado.get("dataAtualizacao"));
+        assertEquals(c.get("titulo"), atualizado.get("titulo"));
+        em.clear();
+        mvc.perform(get(BASE + "/" + id).session(sessao(professor))).andExpect(jsonPath("favorito").value(true));
+        mvc.perform(put(BASE + "/" + id + "/favorito").param("versao", "0").param("favorito", "false").session(sessao(professor)))
+                .andExpect(status().isConflict());
+        mvc.perform(put(BASE + "/" + id + "/favorito").param("versao", atualizado.get("versao").asText()).param("favorito", "false").session(sessao(professor)))
+                .andExpect(status().isOk()).andExpect(jsonPath("favorito").value(false));
+    }
+    @Test void favoritarNaoLiberaEdicaoDeHistoricoSemVinculo() throws Exception {
+        var e = estudante(); var v = vincular(e); var r = dados(); r.put("estudanteId", e.getId()); var c = criar(r);
+        v.setAtivo(false); vinculos.saveAndFlush(v);
+        mvc.perform(put(BASE + "/" + c.get("id").asLong() + "/favorito").param("versao", "0").param("favorito", "true").session(sessao(professor)))
+                .andExpect(status().isOk());
+        r.put("versao", 1);
+        mvc.perform(put(BASE + "/" + c.get("id").asLong()).session(sessao(professor)).contentType(MediaType.APPLICATION_JSON).content(json.writeValueAsBytes(r)))
+                .andExpect(status().isForbidden());
+    }
     @Test void validaCamposTiposLimitesELinks() throws Exception {
         for (var entrada : Map.<String, Object>of("titulo", " ", "descricao", "x".repeat(5001), "componenteCurricular", "x".repeat(151), "tipo", "INVALIDO").entrySet()) {
             var r = dados(); r.put(entrada.getKey(), entrada.getValue());

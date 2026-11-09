@@ -97,6 +97,12 @@ public class ConteudoAcademicoService {
     }
 
     public record Download(String nome, String tipo, byte[] dados) { }
+    public ConteudoAcademicoResponse definirFavorito(Long id, Long versao, boolean favorito) {
+        var c = buscar(id, true, true);
+        exigirVersao(c, versao);
+        c.setFavorito(favorito);
+        return new ConteudoAcademicoResponse(conteudos.saveAndFlush(c));
+    }
     @Transactional(readOnly = true)
     public Download baixarArquivo(Long id) {
         var c = buscar(id, false);
@@ -105,13 +111,18 @@ public class ConteudoAcademicoService {
     }
 
     private ConteudoAcademico buscar(Long id, boolean escrita) {
+        return buscar(id, escrita, false);
+    }
+
+    private ConteudoAcademico buscar(Long id, boolean escrita, boolean preferencia) {
         var autor = professor();
         var c = (escrita ? conteudos.buscarParaAlteracao(id) : conteudos.findById(id))
                 .orElseThrow(() -> erro(HttpStatus.NOT_FOUND, "Material não encontrado."));
         if (!c.getProfessor().getId().equals(autor.getId())) throw erro(HttpStatus.NOT_FOUND, "Material não encontrado.");
         if (c.getEstudante() != null) {
             historico.exigirDisponivel(c.getEstudante());
-            if (escrita) {
+            // Favoritar organiza a biblioteca pessoal; nao altera o documento nem exige vinculo atual.
+            if (escrita && !preferencia) {
                 exigirVinculo(c.getEstudante().getId(), autor.getId());
                 historico.exigirEditavel(c.getEstudante());
             }

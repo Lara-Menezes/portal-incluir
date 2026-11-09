@@ -5,14 +5,14 @@ import br.com.portalincluir.model.ConteudoAcademico;
 import java.time.LocalDateTime;
 
 public record ConteudoAcademicoResponse(
-        Long id, long versao, Long professorId, String professorNome,
+        Long id, long versao, boolean favorito, Long professorId, String professorNome,
         Long estudanteId, String estudanteNome, String estudanteMatricula,
         String titulo, TipoConteudoAcademico tipo, String componenteCurricular,
         String descricao, String orientacoesAdaptacao, String link,
         String arquivoNome, String arquivoTipo, Long arquivoTamanho,
         LocalDateTime dataCriacao, LocalDateTime dataAtualizacao) {
     public ConteudoAcademicoResponse(ConteudoAcademico c) {
-        this(c.getId(), c.getVersao(), c.getProfessor().getId(), c.getProfessor().getNome(),
+        this(c.getId(), c.getVersao(), c.isFavorito(), c.getProfessor().getId(), c.getProfessor().getNome(),
                 c.getEstudante() == null ? null : c.getEstudante().getId(),
                 c.getEstudante() == null ? null : c.getEstudante().getNome(),
                 c.getEstudante() == null ? null : c.getEstudante().getMatricula(),

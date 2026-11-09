@@ -17,6 +17,9 @@ public class ConteudoAcademico {
     private Long id;
     @Version
     private long versao;
+    @Column(nullable = false)
+    @org.hibernate.annotations.ColumnDefault("false")
+    private boolean favorito;
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "professor_id", nullable = false)
     @org.hibernate.envers.Audited(targetAuditMode = org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED,

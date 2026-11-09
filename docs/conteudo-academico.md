@@ -25,6 +25,7 @@ Base: `/api/conteudos-academicos`.
 | --- | --- | --- |
 | GET `/` | Listar os próprios materiais, ordenados pela atualização | 200, lista |
 | GET `/{id}` | Consultar um material | 200 |
+| PUT `/{id}/favorito?versao={versao}&favorito={true ou false}` | Definir favorito do próprio material | 200 |
 | POST `/` com JSON | Cadastrar material textual ou com link | 201 + Location |
 | POST `/` multipart | Cadastrar material e anexo atomicamente | 201 + Location |
 | PUT `/{id}` com JSON | Editar metadados, incluindo a versão consultada | 200 |
@@ -60,6 +61,13 @@ separadamente; nesse caso são duas transações e uma falha no upload não desf
 cadastro anterior.
 
 ## Campos e validações
+
+`favorito` é retornado como booleano, inicialmente false. A preferência fica salva
+na conta do autor e é auditada; não altera conteúdo ou data de atualização. Exige a
+mesma permissão e autoria, mas não exige vínculo atual para organizar um material
+histórico ainda disponível. Não libera edição do documento. A versão consultada é
+obrigatória e a resposta deve substituir a versão local. A coluna é criada com
+default false para preservar materiais já existentes.
 
 - Obrigatórios: título (150 caracteres), tipo, componente curricular (150) e
   descrição (5.000). Textos são aparados com `trim()`.
