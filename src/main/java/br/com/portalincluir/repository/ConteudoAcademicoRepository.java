@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ConteudoAcademicoRepository extends JpaRepository<ConteudoAcademico, Long> {
     List<ConteudoAcademico> findByProfessorIdOrderByDataAtualizacaoDescIdDesc(Long professorId);
+    List<ConteudoAcademico> findAllByOrderByDataAtualizacaoDescIdDesc();
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select c from ConteudoAcademico c where c.id = :id")
     Optional<ConteudoAcademico> buscarParaAlteracao(@Param("id") Long id);

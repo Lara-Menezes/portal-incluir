@@ -23,6 +23,7 @@ public class ConteudoAcademicoService {
     private final VinculoEstudanteProfissionalRepository vinculos;
     private final PermissaoService permissoes;
     private final PoliticaHistoricoService historico;
+    private final EscopoEstudanteService escopo;
     private final HttpServletRequest request;
 
     private Professor professor() {
@@ -33,13 +34,40 @@ public class ConteudoAcademicoService {
 
     @Transactional(readOnly = true)
     public List<ConteudoAcademicoResponse> listar() {
-        return conteudos.findByProfessorIdOrderByDataAtualizacaoDescIdDesc(professor().getId()).stream()
+        var usuario = usuarioConsulta();
+        boolean docente = usuario.getPerfil() == PerfilUsuario.PROFESSOR;
+        var registros = docente ? conteudos.findByProfessorIdOrderByDataAtualizacaoDescIdDesc(usuario.getProfessor().getId())
+                : conteudos.findAllByOrderByDataAtualizacaoDescIdDesc();
+        var ids = docente ? Optional.<Set<Long>>empty() : escopo.idsPermitidos();
+        return registros.stream()
+                .filter(c -> c.getEstudante() == null || ids.map(permitidos -> permitidos.contains(c.getEstudante().getId())).orElse(true))
                 .filter(c -> c.getEstudante() == null || historico.disponivel(c.getEstudante()))
-                .map(ConteudoAcademicoResponse::new).toList();
+                .map(c -> new ConteudoAcademicoResponse(c, docente)).toList();
     }
 
     @Transactional(readOnly = true)
-    public ConteudoAcademicoResponse consultar(Long id) { return new ConteudoAcademicoResponse(buscar(id, false)); }
+    public ConteudoAcademicoResponse consultar(Long id) {
+        var usuario = usuarioConsulta();
+        return new ConteudoAcademicoResponse(buscarConsulta(usuario, id), usuario.getPerfil() == PerfilUsuario.PROFESSOR);
+    }
+
+    private Usuario usuarioConsulta() {
+        var usuario = permissoes.exigir(request, "academico.gerar");
+        if (usuario.getPerfil() != PerfilUsuario.PROFESSOR && usuario.getPerfil() != PerfilUsuario.COORDENADOR)
+            throw erro(HttpStatus.FORBIDDEN, "Seu perfil não pode consultar estes materiais.");
+        return usuario;
+    }
+
+    private ConteudoAcademico buscarConsulta(Usuario usuario, Long id) {
+        var c = conteudos.findById(id).orElseThrow(() -> erro(HttpStatus.NOT_FOUND, "Material não encontrado."));
+        if (usuario.getPerfil() == PerfilUsuario.PROFESSOR && !c.getProfessor().getId().equals(usuario.getProfessor().getId()))
+            throw erro(HttpStatus.NOT_FOUND, "Material não encontrado.");
+        if (c.getEstudante() != null) {
+            if (usuario.getPerfil() == PerfilUsuario.COORDENADOR) escopo.exigir(c.getEstudante().getId());
+            historico.exigirDisponivel(c.getEstudante());
+        }
+        return c;
+    }
 
     public ConteudoAcademicoResponse criar(ConteudoAcademicoRequest r) {
         var c = new ConteudoAcademico();
@@ -115,6 +143,7 @@ public class ConteudoAcademicoService {
     }
 
     private ConteudoAcademico buscar(Long id, boolean escrita, boolean preferencia) {
+        if (!escrita) return buscarConsulta(usuarioConsulta(), id);
         var autor = professor();
         var c = (escrita ? conteudos.buscarParaAlteracao(id) : conteudos.findById(id))
                 .orElseThrow(() -> erro(HttpStatus.NOT_FOUND, "Material não encontrado."));

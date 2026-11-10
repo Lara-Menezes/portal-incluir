@@ -1,14 +1,21 @@
 # Conteúdo acadêmico adaptado — contrato da API
 
-Esta etapa implementa somente o backend. Nenhuma tela ou integração frontend foi alterada.
+Contrato utilizado pela biblioteca do professor e pela consulta somente leitura da coordenação.
 
 ## Autorização
 
-Todas as operações exigem sessão HttpSession ativa, perfil PROFESSOR e a permissão
-existente `academico.gerar`. A listagem retorna exclusivamente materiais do professor
-autenticado; nenhum identificador de autor é aceito como autorização. Consultar ou
-alterar material alheio retorna 404, inclusive no download. Não há compartilhamento
-automático com coordenação, outros professores ou estudantes nesta etapa.
+Todas as operações exigem sessão HttpSession ativa e a permissão existente
+`academico.gerar`. O perfil PROFESSOR consulta e gerencia somente seus próprios
+materiais; consultar ou alterar material de outro professor retorna 404, inclusive
+no download. Nenhum identificador de autor enviado pelo cliente autoriza acesso.
+
+O perfil COORDENADOR pode utilizar somente os GET existentes para listar, consultar
+detalhes e baixar anexos. A listagem inclui materiais de professores com estudante
+no escopo autorizado e materiais reutilizáveis sem estudante. A retenção continua
+sendo aplicada à consulta e ao download; favoritos pessoais são retornados como
+false nessa visão. Criar, editar, excluir, alterar anexos ou favoritar continuam
+exclusivos do professor autor. ADMINISTRADOR, equipe e outros professores não
+ganham acesso adicional. Nenhuma permissão administrativa de usuários é exigida.
 
 O estudante é opcional: sem ele, o material integra a biblioteca reutilizável do
 professor. Quando informado, exige vínculo docente ativo para cadastrar e gerenciar.
@@ -23,7 +30,7 @@ Base: `/api/conteudos-academicos`.
 
 | Método e caminho | Operação | Resposta |
 | --- | --- | --- |
-| GET `/` | Listar os próprios materiais, ordenados pela atualização | 200, lista |
+| GET `/` | Listar materiais próprios (professor) ou autorizados (coordenação) | 200, lista |
 | GET `/{id}` | Consultar um material | 200 |
 | PUT `/{id}/favorito?versao={versao}&favorito={true ou false}` | Definir favorito do próprio material | 200 |
 | POST `/` com JSON | Cadastrar material textual ou com link | 201 + Location |
