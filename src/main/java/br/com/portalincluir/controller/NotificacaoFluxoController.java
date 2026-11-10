@@ -15,16 +15,19 @@ import java.util.List;
 public class NotificacaoFluxoController {
     private final NotificacaoFluxoRepository notificacoes;
     private final PermissaoService acesso;
+    private final br.com.portalincluir.service.EscopoEstudanteService escopo;
     private final PoliticaHistoricoService politica;
-    public record Resposta(Long id, Long estudanteId, String estudanteNome, String etapa, Long planoId, String remetente, String mensagem, LocalDateTime criadaEm, boolean lida, String tipoEvento, Long solicitacaoPeaId, Long peaId) {}
-    private Resposta resposta(NotificacaoFluxo n) { return new Resposta(n.getId(), n.getEstudante().getId(), n.getEstudante().getNome(), n.getEtapa(), n.getPlanoId(), n.getRemetente(), n.getMensagem(), n.getCriadaEm(), n.isLida(), n.getTipoEvento(), n.getSolicitacaoPeaId(), n.getPeaId()); }
+    public record Resposta(Long id, Long estudanteId, String estudanteNome, String etapa, Long planoId, String remetente, String mensagem, LocalDateTime criadaEm, boolean lida, String tipoEvento, Long solicitacaoPeaId, Long peaId, Long ocorrenciaId) {}
+    private Resposta resposta(NotificacaoFluxo n) { return new Resposta(n.getId(), n.getEstudante().getId(), n.getEstudante().getNome(), n.getEtapa(), n.getPlanoId(), n.getRemetente(), n.getMensagem(), n.getCriadaEm(), n.isLida(), n.getTipoEvento(), n.getSolicitacaoPeaId(), n.getPeaId(), n.getOcorrenciaId()); }
     @GetMapping public List<Resposta> listar(HttpServletRequest req) {
         var u = acesso.autenticado(req);
-        return notificacoes.findByDestinatarioIdOrderByCriadaEmDescIdDesc(u.getId()).stream().filter(n -> politica.disponivel(n.getEstudante())).map(this::resposta).toList();
+        return notificacoes.findByDestinatarioIdOrderByCriadaEmDescIdDesc(u.getId()).stream().filter(n -> politica.disponivel(n.getEstudante()))
+                .filter(n -> !"OCORRENCIA".equals(n.getEtapa()) || escopo.idsPermitidos().map(ids -> ids.contains(n.getEstudante().getId())).orElse(true)).map(this::resposta).toList();
     }
     @PatchMapping("/{id}/lida") public Resposta ler(@PathVariable Long id, HttpServletRequest req) {
         var u = acesso.autenticado(req);
         var n = notificacoes.findByIdAndDestinatarioId(id, u.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        if ("OCORRENCIA".equals(n.getEtapa())) escopo.exigir(n.getEstudante().getId());
         politica.exigirDisponivel(n.getEstudante()); n.setLida(true);
         return resposta(notificacoes.save(n));
     }
