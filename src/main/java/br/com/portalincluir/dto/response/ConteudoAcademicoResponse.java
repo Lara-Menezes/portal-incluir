@@ -12,7 +12,10 @@ public record ConteudoAcademicoResponse(
         String arquivoNome, String arquivoTipo, Long arquivoTamanho,
         LocalDateTime dataCriacao, LocalDateTime dataAtualizacao) {
     public ConteudoAcademicoResponse(ConteudoAcademico c) {
-        this(c.getId(), c.getVersao(), c.isFavorito(), c.getProfessor().getId(), c.getProfessor().getNome(),
+        this(c, true);
+    }
+    public ConteudoAcademicoResponse(ConteudoAcademico c, boolean incluirFavorito) {
+        this(c.getId(), c.getVersao(), incluirFavorito && c.isFavorito(), c.getProfessor().getId(), c.getProfessor().getNome(),
                 c.getEstudante() == null ? null : c.getEstudante().getId(),
                 c.getEstudante() == null ? null : c.getEstudante().getNome(),
                 c.getEstudante() == null ? null : c.getEstudante().getMatricula(),

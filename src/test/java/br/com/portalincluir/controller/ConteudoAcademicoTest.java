@@ -89,7 +89,7 @@ class ConteudoAcademicoTest {
 
     @Test void exigeSessaoPerfilPermissaoEContaAtiva() throws Exception {
         mvc.perform(get(BASE)).andExpect(status().isUnauthorized());
-        mvc.perform(get(BASE).session(sessao(coordenador))).andExpect(status().isForbidden());
+        mvc.perform(get(BASE).session(sessao(coordenador))).andExpect(status().isOk());
         professor.getPermissoesIndividuais().put("academico.gerar", false); usuarios.saveAndFlush(professor);
         mvc.perform(get(BASE).session(sessao(professor))).andExpect(status().isForbidden());
         mvc.perform(post(BASE).session(sessao(professor)).contentType(MediaType.APPLICATION_JSON).content(json.writeValueAsBytes(dados())))
@@ -135,6 +135,38 @@ class ConteudoAcademicoTest {
         r.put("versao", 1);
         mvc.perform(put(BASE + "/" + c.get("id").asLong()).session(sessao(professor)).contentType(MediaType.APPLICATION_JSON).content(json.writeValueAsBytes(r)))
                 .andExpect(status().isForbidden());
+    }
+    @Test void coordenacaoConsultaMateriaisEArquivosMasNaoGerenciaNemVeFavoritos() throws Exception {
+        var c = enviar(criar(dados()), txt("Material consultavel")); long id = c.get("id").asLong();
+        c = json.readTree(mvc.perform(put(BASE + "/" + id + "/favorito").param("versao", c.get("versao").asText()).param("favorito", "true").session(sessao(professor)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+        mvc.perform(get(BASE).session(sessao(coordenador))).andExpect(status().isOk()).andExpect(jsonPath("$[0].favorito").value(false));
+        mvc.perform(get(BASE + "/" + id).session(sessao(coordenador))).andExpect(status().isOk()).andExpect(jsonPath("favorito").value(false));
+        mvc.perform(get(BASE + "/" + id + "/arquivo").session(sessao(coordenador))).andExpect(status().isOk())
+                .andExpect(content().bytes("Material consultavel".getBytes()));
+        mvc.perform(post(BASE).session(sessao(coordenador)).contentType(MediaType.APPLICATION_JSON).content(json.writeValueAsBytes(dados()))).andExpect(status().isForbidden());
+        var r = dados(); r.put("versao", c.get("versao").asLong());
+        mvc.perform(put(BASE + "/" + id).session(sessao(coordenador)).contentType(MediaType.APPLICATION_JSON).content(json.writeValueAsBytes(r))).andExpect(status().isForbidden());
+        mvc.perform(delete(BASE + "/" + id).session(sessao(coordenador)).param("versao", c.get("versao").asText())).andExpect(status().isForbidden());
+        mvc.perform(put(BASE + "/" + id + "/favorito").session(sessao(coordenador)).param("versao", c.get("versao").asText()).param("favorito", "false")).andExpect(status().isForbidden());
+        mvc.perform(delete(BASE + "/" + id + "/arquivo").session(sessao(coordenador)).param("versao", c.get("versao").asText())).andExpect(status().isForbidden());
+        mvc.perform(multipart(BASE + "/" + id + "/arquivo").file(txt("Troca"))
+                .with(req -> { req.setMethod("PUT"); return req; }).param("versao", c.get("versao").asText()).session(sessao(coordenador))).andExpect(status().isForbidden());
+        mvc.perform(get(BASE + "/" + id).session(sessao(outro))).andExpect(status().isNotFound());
+        mvc.perform(get(BASE).session(sessao(conta(PerfilUsuario.ADMINISTRADOR)))).andExpect(status().isForbidden());
+    }
+    @Test void consultaCoordenacaoRespeitaPermissaoERetencao() throws Exception {
+        var e = estudante(); vincular(e); var r = dados(); r.put("estudanteId", e.getId());
+        var c = enviar(criar(r), txt("Privado")); long id = c.get("id").asLong();
+        mvc.perform(get(BASE + "/" + id).session(sessao(coordenador))).andExpect(status().isOk());
+        e.setDataLimiteRetencao(LocalDate.now().minusDays(1)); estudantes.saveAndFlush(e);
+        mvc.perform(get(BASE).session(sessao(coordenador))).andExpect(jsonPath("$[?(@.id == " + id + ")]").isEmpty());
+        mvc.perform(get(BASE + "/" + id).session(sessao(coordenador))).andExpect(status().isGone());
+        mvc.perform(get(BASE + "/" + id + "/arquivo").session(sessao(coordenador))).andExpect(status().isGone());
+        coordenador.getPermissoesIndividuais().put("academico.gerar", false); usuarios.saveAndFlush(coordenador);
+        mvc.perform(get(BASE).session(sessao(coordenador))).andExpect(status().isForbidden());
+        mvc.perform(get(BASE + "/" + id).session(sessao(coordenador))).andExpect(status().isForbidden());
+        mvc.perform(get(BASE + "/" + id + "/arquivo").session(sessao(coordenador))).andExpect(status().isForbidden());
     }
     @Test void validaCamposTiposLimitesELinks() throws Exception {
         for (var entrada : Map.<String, Object>of("titulo", " ", "descricao", "x".repeat(5001), "componenteCurricular", "x".repeat(151), "tipo", "INVALIDO").entrySet()) {
