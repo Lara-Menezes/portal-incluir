@@ -35,6 +35,10 @@ public class RetencaoEstudanteService {
         executar("delete from destinatarios_solicitacao_pea where solicitacao_id in (select id from solicitacoes_pea where estudante_id = :id)", id);
         executar("delete from solicitacoes_pea where estudante_id = :id", id);
         executar("delete from eventos_pea_pendentes where estudante_id = :id", id);
+        executar("delete from auditoria.arquivos_ocorrencia_aud where ocorrencia_id in (select id from auditoria.ocorrencias_aud where estudante_id = :id)", id);
+        executar("delete from arquivos_ocorrencia where ocorrencia_id in (select id from ocorrencias where estudante_id = :id)", id);
+        executar("delete from auditoria.ocorrencias_aud where estudante_id = :id", id);
+        executar("delete from ocorrencias where estudante_id = :id", id);
         executar("delete from auditoria.planos_acao_aud where estudante_id = :id", id);
         executar("delete from auditoria.adaptacoes_pedagogicas_aud where estudante_id = :id", id);
         executar("delete from auditoria.estudantes_aud where id = :id", id);
