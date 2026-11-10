@@ -16,7 +16,7 @@ import java.util.*;
 public class PermissaoService {
     private final UsuarioRepository usuarios;
     public static final Set<String> ADMINISTRATIVAS = Set.of("usuarios", "usuarios.gerenciar", "permissoes", "permissoes.gerenciar", "auditorias");
-    public static final Set<String> CATALOGO = Set.of("estudantes.vincular", "estudantes.consultar", "estudantes.editar", "pedagogico.consultar", "pedagogico.editar", "academico.gerar", "sensivel.consultar", "suporte.consultar", "suporte.registrar", "anamnese", "planos.gerar", "pei.consultar", "documentos", "relatorios", "usuarios", "usuarios.gerenciar", "permissoes", "permissoes.gerenciar", "auditorias", "documentos.gerenciar", "pei.editar");
+    public static final Set<String> CATALOGO = Set.of("estudantes.vincular", "estudantes.consultar", "estudantes.editar", "pedagogico.consultar", "pedagogico.editar", "academico.gerar", "sensivel.consultar", "suporte.consultar", "suporte.registrar", "anamnese", "planos.gerar", "pei.consultar", "documentos", "relatorios", "usuarios", "usuarios.gerenciar", "permissoes", "permissoes.gerenciar", "auditorias", "documentos.gerenciar", "pei.editar", "emails.enviar");
     public static Set<String> padrao(PerfilUsuario perfil) {
         return switch (perfil) {
             case COORDENADOR, ADMINISTRADOR -> { var p=new TreeSet<>(CATALOGO); p.removeAll(ADMINISTRATIVAS); yield p; }
