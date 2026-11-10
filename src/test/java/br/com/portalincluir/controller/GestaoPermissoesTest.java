@@ -82,7 +82,7 @@ class GestaoPermissoesTest {
     @Test void bloquearConsultaTambemBloqueiaOsDadosDoPainel() throws Exception {
         Long gestor = criar("gestor4@gestao.test", PerfilUsuario.COORDENADOR), alvo = criar("coord4@gestao.test", PerfilUsuario.COORDENADOR);
         Long perfilId = usuarios.findById(alvo).orElseThrow().getCoordenador().getId();
-        mvc.perform(put("/api/usuarios/"+alvo+"/permissoes").session(sessao(gestor)).contentType(MediaType.APPLICATION_JSON).content("{\"ajustes\":{\"estudantes.consultar\":false,\"estudantes.editar\":false,\"anamnese\":false}}")) .andExpect(status().isOk());
+        mvc.perform(put("/api/usuarios/"+alvo+"/permissoes").session(sessao(gestor)).contentType(MediaType.APPLICATION_JSON).content("{\"ajustes\":{\"estudantes.consultar\":false,\"estudantes.editar\":false,\"anamnese\":false,\"emails.enviar\":false}}")) .andExpect(status().isOk());
         mvc.perform(get("/api/coordenadores/"+perfilId+"/dashboard").session(sessao(alvo))).andExpect(status().isForbidden());
         mvc.perform(put("/api/usuarios/"+alvo+"/permissoes").session(sessao(gestor)).contentType(MediaType.APPLICATION_JSON).content("{\"ajustes\":{}}")) .andExpect(status().isOk());
         mvc.perform(get("/api/coordenadores/"+perfilId+"/dashboard").session(sessao(alvo))).andExpect(status().isOk());

@@ -32,6 +32,7 @@ public class PermissaoWebConfig implements WebMvcConfigurer {
                 if (path.startsWith("/api/usuarios")) permission = path.endsWith("/permissoes") ? "permissoes.gerenciar" : leitura ? "usuarios" : "usuarios.gerenciar";
                 else if (path.startsWith("/api/auditorias")) permission = "auditorias";
                 else if (path.matches("/api/estudantes/[0-9]+/historico(/.*)?")) permission = "auditorias";
+                else if (path.matches("/api/estudantes/[0-9]+/email")) { acesso.autenticado(request); return true; }
                 else if (path.matches("/api/estudantes/[0-9]+/profissionais(/.*)?")) permission = leitura && !path.endsWith("/disponiveis") ? "estudantes.consultar" : "estudantes.vincular";
                 else if (path.startsWith("/api/estudantes")) permission = leitura ? "estudantes.consultar" : "estudantes.editar";
                 else if (path.startsWith("/api/planos-acao")) permission = "planos.gerar";
