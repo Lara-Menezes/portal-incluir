@@ -105,7 +105,9 @@ public class OcorrenciaService {
             if (!coordenador && !professor) continue;
             var n = new NotificacaoFluxo(); n.setDestinatario(u); n.setEstudante(o.getEstudante()); n.setRemetente(o.getAutorNome());
             n.setEtapa("OCORRENCIA"); n.setTipoEvento("OCORRENCIA_REGISTRADA"); n.setOcorrenciaId(o.getId());
-            n.setMensagem("Nova ocorrência registrada pela equipe multidisciplinar. Abra o registro para consultar os detalhes.");
+            String resumo = o.getDescricao().strip().replaceAll("\\s+", " ");
+            if (resumo.length() > 240) resumo = resumo.substring(0, 240) + "…";
+            n.setMensagem("Ocorrência em " + o.getOcorridaEm().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + ": " + resumo);
             n.setCriadaEm(politica.agora()); notificacoes.save(n);
         }
     }

@@ -36,10 +36,11 @@ public class EmailEstudanteService {
     public EmailEnviadoResponse enviar(Long estudanteId, EmailEstudanteRequest request, Usuario remetente) {
         Estudante estudante = estudantes.findById(estudanteId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudante não encontrado."));
-        String destinatario = Optional.ofNullable(estudante.getEmail()).orElse("").strip();
+        boolean responsavel = request.destinatario() == EmailEstudanteRequest.Destinatario.RESPONSAVEL;
+        String destinatario = Optional.ofNullable(responsavel ? estudante.getEmailResponsavel() : estudante.getEmail()).orElse("").strip();
         if (!emailValido(destinatario)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "O estudante não possui um endereço de e-mail válido cadastrado.");
+                    responsavel ? "O responsável não possui um endereço de e-mail válido cadastrado." : "O estudante não possui um endereço de e-mail válido cadastrado.");
         }
         if (!emailClient.isConfigurado()) {
             String variaveisAusentes = String.join(", ", emailClient.variaveisNaoConfiguradas());

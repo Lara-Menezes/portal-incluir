@@ -83,6 +83,7 @@ class OcorrenciaTest {
         assertEquals(equipe.getId(), o.get("autorId").asLong());
         for (var u : List.of(coordenador, professor)) {
             mvc.perform(get("/api/notificacoes").session(sessao(u))).andExpect(status().isOk())
+                .andExpect(result -> assertTrue(json.readTree(result.getResponse().getContentAsString()).get(0).get("mensagem").asText().contains("Estudante relatou dificuldade")))
                 .andExpect(jsonPath("$[0].etapa").value("OCORRENCIA")).andExpect(jsonPath("$[0].ocorrenciaId").value(o.get("id").asLong()));
         }
         mvc.perform(get("/api/notificacoes").session(sessao(outroProfessor))).andExpect(jsonPath("$.length()").value(0));

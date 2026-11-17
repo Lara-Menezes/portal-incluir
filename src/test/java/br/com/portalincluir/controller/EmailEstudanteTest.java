@@ -218,4 +218,18 @@ class EmailEstudanteTest {
         verify(emailClient, never()).enviar(anyString(), anyString(), anyString());
         assertTrue(envios.findAll().isEmpty());
     }
+
+    @Test void selecionaResponsavelSemAceitarEnderecoLivre() throws Exception {
+        Long coordenador=criarUsuario(PerfilUsuario.COORDENADOR);Long id=criarEstudante(null);
+        var e=estudantes.findById(id).orElseThrow();String responsavel="responsavel-"+UUID.randomUUID()+"@test.example";e.setEmailResponsavel(responsavel);estudantes.saveAndFlush(e);
+        var body=json.writeValueAsString(java.util.Map.of("assunto","Contato","mensagem","Mensagem ao responsável","destinatario","RESPONSAVEL"));
+        mvc.perform(post("/api/estudantes/"+id+"/email").session(sessao(coordenador)).contentType(MediaType.APPLICATION_JSON).content(body)).andExpect(status().isOk());
+        verify(emailClient).enviar(responsavel,"Contato","Mensagem ao responsável");assertEquals(responsavel,envios.findAll().getFirst().getDestinatarioEmail());
+    }
+    @Test void responsavelSemEmailNaoEnviaMensagem() throws Exception {
+        Long coordenador=criarUsuario(PerfilUsuario.COORDENADOR);Long id=criarEstudante("estudante-"+UUID.randomUUID()+"@test.example");
+        var body=json.writeValueAsString(java.util.Map.of("assunto","Contato","mensagem","Mensagem","destinatario","RESPONSAVEL"));
+        mvc.perform(post("/api/estudantes/"+id+"/email").session(sessao(coordenador)).contentType(MediaType.APPLICATION_JSON).content(body)).andExpect(status().isBadRequest()).andExpect(jsonPath("$.message").value("O responsável não possui um endereço de e-mail válido cadastrado."));
+        verify(emailClient,never()).enviar(anyString(),anyString(),anyString());
+    }
 }
