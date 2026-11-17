@@ -30,14 +30,14 @@ class FluxoEstudanteTest {
  @Autowired NotificacaoFluxoRepository notificacoes;
  private void permitir(Long id, String... codigos) { var u = contas.findById(id).orElseThrow(); for (var codigo : codigos) u.getPermissoesIndividuais().put(codigo,true); contas.saveAndFlush(u); }
  private Long usuario(String email, PerfilUsuario perfil) {
-   var r = new CadastroUsuarioRequest(); r.setNome("Teste " + email); r.setEmail(email); r.setSenha("senha123"); r.setMatricula(email); r.setSetor("Ensino"); r.setCargo("Coordenacao"); r.setPerfil(perfil);
+   var r = new CadastroUsuarioRequest(); r.setNome("Teste " + email); r.setEmail(email); r.setSenha("senha123"); r.setMatricula(email); r.setSetor("Ensino"); r.setCargo("Coordenacao"); r.setPerfil(perfil); if (perfil == PerfilUsuario.EQUIPE_MULTIDISCIPLINAR) r.setAreaAtuacao("Pedagogia");
    if(perfil == PerfilUsuario.PROFESSOR) { r.setDisciplina("Historia"); r.setCursosAtuacao(Set.of(CatalogoProfissional.CURSOS.get(0))); }
    return usuarios.cadastrar(r).id();
  }
  private MockHttpSession sessao(Long id) { var s = new MockHttpSession(); s.setAttribute("usuarioAutenticadoId", id); return s; }
  @Test void rascunhoRetomadaAtribuicaoEConclusao() throws Exception {
    var coord = sessao(usuario("coord-fluxo@teste.invalid", PerfilUsuario.COORDENADOR));
-   Long profissional = usuario("prof-fluxo@teste.invalid", PerfilUsuario.PROFESSOR);
+   Long profissional = usuario("prof-fluxo@teste.invalid", PerfilUsuario.EQUIPE_MULTIDISCIPLINAR);
    permitir(profissional, "planos.gerar", "sensivel.consultar");
    var prof = sessao(profissional);
    var outro = sessao(usuario("outro-fluxo@teste.invalid", PerfilUsuario.PROFESSOR));
@@ -71,7 +71,7 @@ class FluxoEstudanteTest {
  }
  @Test void encaminhamentoExigePermissaoENotificaSomenteDestinatario() throws Exception {
    var coord = sessao(usuario("coord-encaminhar@teste.invalid", PerfilUsuario.COORDENADOR));
-   Long profissional = usuario("prof-encaminhar@teste.invalid", PerfilUsuario.PROFESSOR);
+   Long profissional = usuario("prof-encaminhar@teste.invalid", PerfilUsuario.EQUIPE_MULTIDISCIPLINAR);
    var prof = sessao(profissional);
    var outro = sessao(usuario("outro-encaminhar@teste.invalid", PerfilUsuario.PROFESSOR));
    Map<String,Object> estudante = new HashMap<>();

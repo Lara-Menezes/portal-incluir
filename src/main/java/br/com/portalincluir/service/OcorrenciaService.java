@@ -93,15 +93,10 @@ public class OcorrenciaService {
         var professores = new HashSet<Long>();
         for (var v : vinculos.findByEstudanteIdOrderByAtivoDescDataInicioDesc(o.getEstudante().getId()))
             if (v.isAtivo() && v.getProfessor() != null) professores.add(v.getProfessor().getId());
-        var atribuidos = new HashSet<Long>();
-        fluxos.findById(o.getEstudante().getId()).ifPresent(f -> {
-            for (var u : Arrays.asList(f.getAnamneseResponsavel(), f.getPlanoResponsavel(), f.getPeiResponsavel()))
-                if (u != null && u.getPerfil() == PerfilUsuario.PROFESSOR) atribuidos.add(u.getId());
-        });
         for (var u : usuarios.findAll()) {
             if (!PermissaoService.ativo(u) || !PermissaoService.efetivas(u).contains("estudantes.consultar")) continue;
             boolean coordenador = u.getPerfil() == PerfilUsuario.COORDENADOR && PermissaoService.efetivas(u).contains("suporte.consultar");
-            boolean professor = u.getPerfil() == PerfilUsuario.PROFESSOR && (professores.contains(u.getProfessor().getId()) || atribuidos.contains(u.getId()));
+            boolean professor = u.getPerfil() == PerfilUsuario.PROFESSOR && professores.contains(u.getProfessor().getId());
             if (!coordenador && !professor) continue;
             var n = new NotificacaoFluxo(); n.setDestinatario(u); n.setEstudante(o.getEstudante()); n.setRemetente(o.getAutorNome());
             n.setEtapa("OCORRENCIA"); n.setTipoEvento("OCORRENCIA_REGISTRADA"); n.setOcorrenciaId(o.getId());

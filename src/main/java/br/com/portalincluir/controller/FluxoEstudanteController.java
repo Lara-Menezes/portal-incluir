@@ -26,8 +26,11 @@ public class FluxoEstudanteController {
   private final EstudanteService estudanteService;
   private final PlanoAcaoService planoService;
   private final NotificacaoFluxoRepository notificacoes;
+  private final RelatorioRaiRepository rais;
+  private final RelatorioRaiService raiService;
+  public record PeriodoConcluido(String anoLetivo, String periodicidade, String numeroPeriodo, java.time.LocalDateTime concluidoEm) {}
   public record Responsavel(Long usuarioId, String nome, String perfil, Set<String> permissoes) {}
-  public record Resposta(Long estudanteId, String anamneseStatus, String planoStatus, boolean peiRegistrado, Map<String, Responsavel> responsaveis) {}
+  public record Resposta(Long estudanteId, String anamneseStatus, String planoStatus, boolean peiRegistrado, Map<String, Responsavel> responsaveis, List<PeriodoConcluido> periodosConcluidos) {}
   public record Atribuicao(Long usuarioId, @jakarta.validation.constraints.Size(max=2000) String mensagem, Long planoId) {}
   public record Anamnese(@NotNull @Valid EstudanteRequest dados, boolean concluir) {}
   public record Plano(@NotNull @Valid PlanoAcaoRequest dados, Long planoId) {}
@@ -75,7 +78,8 @@ public class FluxoEstudanteController {
     var ativos = planos.findByEstudanteId(id).stream().filter(p -> !p.isArquivado()).toList();
     String planoStatus = ativos.stream().anyMatch(p -> p.getStatus() == br.com.portalincluir.enums.StatusPlanoAcao.ASSINADO) ? "ASSINADO" : ativos.isEmpty() ? null : "RASCUNHO";
     boolean temPei = peis.findByEstudanteId(id).stream().anyMatch(p -> !p.isArquivado());
-    return new Resposta(id, f.getAnamneseStatus(), planoStatus, temPei, r);
+    var periodos = rais.findByEstudanteIdOrderByDataAtualizacaoDescIdDesc(id).stream().filter(rai -> rai.getConcluidoEm() != null).map(rai -> { var d = raiService.dados(rai); return new PeriodoConcluido(d.anoLetivo(), d.periodicidade(), d.numeroPeriodo(), rai.getConcluidoEm()); }).toList();
+    return new Resposta(id, f.getAnamneseStatus(), planoStatus, temPei, r, periodos);
   }
   @GetMapping public Resposta consultar(@PathVariable Long id, HttpServletRequest req) {
     acesso.exigir(req, "estudantes.consultar");
@@ -83,7 +87,7 @@ public class FluxoEstudanteController {
   }
   @GetMapping("/profissionais") public List<Responsavel> profissionais(@PathVariable Long id, HttpServletRequest req) {
     acesso.exigir(req, "estudantes.vincular"); obter(id, false);
-    return usuarios.findAll().stream().filter(PermissaoService::ativo).filter(u -> Set.of("PROFESSOR", "EQUIPE_MULTIDISCIPLINAR").contains(u.getPerfil().name())).map(this::responsavel).sorted(Comparator.comparing(Responsavel::nome)).toList();
+    return usuarios.findAll().stream().filter(PermissaoService::ativo).filter(u -> Set.of("EQUIPE_MULTIDISCIPLINAR").contains(u.getPerfil().name())).map(this::responsavel).sorted(Comparator.comparing(Responsavel::nome)).toList();
   }
   @PutMapping("/responsaveis/{etapa}") public Resposta atribuir(@PathVariable Long id, @PathVariable String etapa, @Valid @RequestBody Atribuicao r, HttpServletRequest req) {
     Usuario autor = acesso.exigir(req, "estudantes.vincular");

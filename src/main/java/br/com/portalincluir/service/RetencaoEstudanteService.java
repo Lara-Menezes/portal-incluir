@@ -50,6 +50,8 @@ public class RetencaoEstudanteService {
         executar("delete from fluxos_estudantes where estudante_id = :id", id);
         executar("delete from planos_acao where estudante_id = :id", id);
         executar("delete from adaptacoes_pedagogicas where estudante_id = :id", id);
+        executar("delete from auditoria.relatorios_rai_aud where estudante_id = :id", id);
+        executar("delete from relatorios_rai where estudante_id = :id", id);
         executar("delete from estudantes where id = :id", id);
         em.clear();
     }

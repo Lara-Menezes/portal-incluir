@@ -24,7 +24,7 @@ public class EscopoEstudanteService {
             case EQUIPE_MULTIDISCIPLINAR -> vinculos.estudantesDoMembro(usuario.getEquipeMultidisciplinar().getId());
             default -> Set.of();
         };
-        var permitidos = new HashSet<>(ids); permitidos.addAll(fluxos.estudantesAtribuidos(usuario.getId())); return Optional.of(permitidos);
+        var permitidos = new HashSet<>(ids); if (usuario.getPerfil() != br.com.portalincluir.enums.PerfilUsuario.PROFESSOR) permitidos.addAll(fluxos.estudantesAtribuidos(usuario.getId())); return Optional.of(permitidos);
     }
     public void exigir(Long estudanteId) {
         if (estudanteId == null || idsPermitidos().map(ids -> !ids.contains(estudanteId)).orElse(false)) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Este estudante não está vinculado ao seu acompanhamento.");
