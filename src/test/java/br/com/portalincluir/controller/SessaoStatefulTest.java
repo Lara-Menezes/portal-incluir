@@ -26,7 +26,7 @@ class SessaoStatefulTest {
     @Test void loginInvalidoPreservaSessaoExistente() throws Exception {
         var service = mock(UsuarioService.class);
         var acesso = mock(PermissaoService.class);
-        when(service.login(any(LoginRequest.class))).thenThrow(new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+        when(service.autenticar(any(LoginRequest.class))).thenThrow(new ResponseStatusException(HttpStatus.UNAUTHORIZED));
         var mvc = MockMvcBuilders.standaloneSetup(new AuthController(service, acesso)).build();
         var anterior = new MockHttpSession();
         anterior.setAttribute("usuarioAutenticadoId", 7L);
@@ -40,7 +40,7 @@ class SessaoStatefulTest {
         var service = mock(UsuarioService.class);
         var acesso = mock(PermissaoService.class);
         var usuario = new UsuarioResponse(9L, "Pessoa", "pessoa@example.invalid", PerfilUsuario.PROFESSOR, 3L, Set.of("estudantes.consultar"));
-        when(service.login(any(LoginRequest.class))).thenReturn(usuario);
+        when(service.autenticar(any(LoginRequest.class))).thenReturn(new UsuarioService.LoginAutenticado(usuario, 0));
         var mvc = MockMvcBuilders.standaloneSetup(new AuthController(service, acesso)).build();
         var anterior = new MockHttpSession();
         anterior.setAttribute("usuarioAutenticadoId", 7L);
@@ -51,6 +51,7 @@ class SessaoStatefulTest {
         assertNotNull(atual);
         assertNotEquals(anterior.getId(), atual.getId());
         assertEquals(9L, atual.getAttribute("usuarioAutenticadoId"));
+        assertEquals(0L, atual.getAttribute("versaoCredenciais"));
         mvc.perform(post("/api/auth/logout").session(atual)).andExpect(status().isNoContent());
         assertTrue(atual.isInvalid());
         mvc.perform(post("/api/auth/logout")).andExpect(status().isNoContent());

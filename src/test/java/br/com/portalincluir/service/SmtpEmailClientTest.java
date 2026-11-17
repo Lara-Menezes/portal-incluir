@@ -71,6 +71,22 @@ class SmtpEmailClientTest {
         assertEquals(causa, erro.getCause());
     }
 
+    @Test
+    void recuperacaoIncluiLinkClicavelETextoAlternativoSemEnviarEmailReal() throws Exception {
+        JavaMailSender sender = mock(JavaMailSender.class);
+        MimeMessage email = new JavaMailSenderImpl().createMimeMessage();
+        when(sender.createMimeMessage()).thenReturn(email);
+        var client = new SmtpEmailClient(sender, "smtp.test", "user", "pass", "portal@example.test");
+        String link = "https://portal.example.test/redefinir-senha#token=" + "a".repeat(43);
+        client.enviarRecuperacaoSenha("pessoa@example.test", link);
+        String conteudo = lerConteudo(email.getContent());
+        assertTrue(conteudo.contains("href=\"" + link + "\""));
+        assertTrue(conteudo.contains("30 minutos"));
+        assertTrue(conteudo.contains("portal-logo"));
+        assertEquals("pessoa@example.test", email.getAllRecipients()[0].toString());
+        verify(sender).send(email);
+    }
+
     private static String lerConteudo(Object conteudo) throws Exception {
         if (conteudo instanceof Multipart multipart) {
             StringBuilder resultado = new StringBuilder();

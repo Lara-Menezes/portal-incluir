@@ -83,6 +83,13 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public UsuarioResponse login(LoginRequest r) {
+        return autenticar(r).usuario();
+    }
+
+    public record LoginAutenticado(UsuarioResponse usuario, long versaoCredenciais) { }
+
+    @Transactional(readOnly = true)
+    public LoginAutenticado autenticar(LoginRequest r) {
         Usuario u = (r.email().strip().equalsIgnoreCase("root") ? usuarios.findByRootTrue() : usuarios.findByEmailIgnoreCase(r.email().strip()))
                 .orElseThrow(UsuarioService::credenciaisInvalidas);
         if (!encoder.matches(r.senha(), u.getSenha())) throw credenciaisInvalidas();
@@ -93,7 +100,7 @@ public class UsuarioService {
             case EQUIPE_MULTIDISCIPLINAR -> u.getEquipeMultidisciplinar().isAtivo();
         };
         if (!ativo) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Perfil inativo");
-        return resposta(u);
+        return new LoginAutenticado(resposta(u), u.getVersaoCredenciais());
     }
 
     public UsuarioResponse resposta(Usuario u) {

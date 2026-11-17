@@ -23,6 +23,9 @@ public class Usuario {
     @org.hibernate.envers.NotAudited
     @Column(nullable = false)
     private String senha;
+    @JsonIgnore @Column(nullable = false)
+    @org.hibernate.annotations.ColumnDefault("0")
+    private long versaoCredenciais;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PerfilUsuario perfil;
