@@ -22,10 +22,12 @@ public class AuthController {
     }
     @PostMapping("/login")
     public UsuarioResponse login(@Valid @RequestBody LoginRequest request, HttpServletRequest http) {
-        var usuario = service.login(request);
+        var autenticacao = service.autenticar(request);
+        var usuario = autenticacao.usuario();
         var anterior = http.getSession(false);
         if (anterior != null) anterior.invalidate();
         http.getSession(true).setAttribute("usuarioAutenticadoId", usuario.id());
+        http.getSession(false).setAttribute("versaoCredenciais", autenticacao.versaoCredenciais());
         return usuario;
     }
     @PostMapping("/logout") @ResponseStatus(HttpStatus.NO_CONTENT)

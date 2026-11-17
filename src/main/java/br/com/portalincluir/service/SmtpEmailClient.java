@@ -47,6 +47,22 @@ public class SmtpEmailClient {
     }
 
     public void enviar(String destinatario, String assunto, String mensagem) {
+        enviarConteudo(destinatario, assunto, mensagem, montarHtml(mensagem));
+    }
+
+    public void enviarRecuperacaoSenha(String destinatario, String link) {
+        String mensagem = "Recebemos um pedido para redefinir sua senha no Portal Incluir.\n\n"
+                + "Acesse o link em até 30 minutos:\n" + link + "\n\n"
+                + "Se você não solicitou a recuperação, ignore esta mensagem. Sua senha permanece a mesma.";
+        String html = montarTemplate("<p>Recebemos um pedido para redefinir sua senha no Portal Incluir.</p>"
+                + "<p>O link é válido por 30 minutos e pode ser utilizado uma única vez.</p>"
+                + "<p><a style=\"display:inline-block;background:#14532d;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none\" href=\""
+                + HtmlUtils.htmlEscape(link) + "\">Redefinir minha senha</a></p>"
+                + "<p>Se você não solicitou a recuperação, ignore esta mensagem. Sua senha permanece a mesma.</p>");
+        enviarConteudo(destinatario, "Recuperação de senha · Portal Incluir", mensagem, html);
+    }
+
+    private void enviarConteudo(String destinatario, String assunto, String mensagem, String html) {
         try {
             MimeMessage email = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(
@@ -54,7 +70,7 @@ public class SmtpEmailClient {
             helper.setFrom(remetente);
             helper.setTo(destinatario);
             helper.setSubject(assunto);
-            helper.setText(mensagem, montarHtml(mensagem));
+            helper.setText(mensagem, html);
             helper.addInline("portal-logo", new ClassPathResource("email/logo-portal.png"), "image/png");
             mailSender.send(email);
         } catch (MailException | MessagingException erro) {
@@ -64,6 +80,10 @@ public class SmtpEmailClient {
 
     private static String montarHtml(String mensagem) {
         String conteudo = HtmlUtils.htmlEscape(mensagem).replace("\r\n", "\n").replace("\n", "<br>");
+        return montarTemplate(conteudo);
+    }
+
+    private static String montarTemplate(String conteudo) {
         return """
                 <!doctype html>
                 <html lang="pt-BR">

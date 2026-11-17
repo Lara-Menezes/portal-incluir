@@ -45,6 +45,13 @@ public class PermissaoService {
         Object id = sessao == null ? null : sessao.getAttribute("usuarioAutenticadoId");
         if (!(id instanceof Long usuarioId)) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Entre novamente para continuar.");
         Usuario usuario = usuarios.findById(usuarioId).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Esta conta não está mais disponível."));
+        Object versao = sessao.getAttribute("versaoCredenciais");
+        // Sessoes legadas pertencem a versao inicial; a primeira redefinicao tambem as revoga.
+        long versaoSessao = versao instanceof Long valor ? valor : 0;
+        if (versaoSessao != usuario.getVersaoCredenciais()) {
+            sessao.invalidate();
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sua senha foi alterada. Entre novamente.");
+        }
         if (!ativo(usuario)) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Esta conta está inativa.");
         // Initialize the audited collection while the transaction is open.
         usuario.getPermissoesIndividuais().size();
