@@ -26,8 +26,16 @@ public class PermissaoWebConfig implements WebMvcConfigurer {
                     acesso.autenticado(request); return true;
                 }
                 // O controller do fluxo valida cada operacao e a atribuicao da etapa.
-                if (path.matches("/api/estudantes/[0-9]+/fluxo(/.*)?")) { acesso.autenticado(request); return true; }
+                if (path.matches("/api/estudantes/[0-9]+/fluxo(/.*)?")) {
+                    var u = acesso.autenticado(request);
+                    if (u.getPerfil() == br.com.portalincluir.enums.PerfilUsuario.PROFESSOR) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "O fluxo de cadastro é gerenciado pela coordenação. Professores utilizam as solicitações de PEA.");
+                    return true;
+                }
                 boolean leitura = request.getMethod().equals("GET");
+                if (!leitura && (path.matches("/api/estudantes(?:/[0-9]+(?:/(?:ativar|inativar|concluir))?)?") || path.startsWith("/api/planos-acao") || path.startsWith("/api/planos-educacionais"))) {
+                    var u = acesso.autenticado(request);
+                    if (u.getPerfil() == br.com.portalincluir.enums.PerfilUsuario.PROFESSOR) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Professores registram PEAs; o cadastro e o planejamento geral são gerenciados pela coordenação.");
+                }
                 String permission = null;
                 if (path.startsWith("/api/usuarios")) permission = path.endsWith("/permissoes") ? "permissoes.gerenciar" : leitura ? "usuarios" : "usuarios.gerenciar";
                 else if (path.startsWith("/api/auditorias")) permission = "auditorias";
