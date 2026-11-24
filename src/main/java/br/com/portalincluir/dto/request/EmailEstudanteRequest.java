@@ -1,0 +1,7 @@
+package br.com.portalincluir.dto.request;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+public record EmailEstudanteRequest(@NotBlank @Size(max=200) String assunto, @NotBlank @Size(max=10000) String mensagem, Destinatario destinatario) {
+ public enum Destinatario { ESTUDANTE, RESPONSAVEL }
+ public EmailEstudanteRequest(String assunto,String mensagem) { this(assunto,mensagem,Destinatario.ESTUDANTE); }
+}
